@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+ /*
+function ditamap_import_schema() {
+  $schema = array();
+
+  return $schema;
+}
+*/
+
+
+/**
+ * Implements hook_install().
+ *
+ * Creates the default taxonomy vocabulary for importing topicrefs.
+ * Adds the "original id" field to Taxonomy terms.
+ *
+ */
+function ditamap_import_install() {
+  // Create the default taxonomy if it doesn't exist:
+  $exists = false;
+  $v = taxonomy_get_vocabularies();
+  foreach($v as $vocabulary) {
+    if($vocabulary->machine_name == "ditamap_import_def") {
+      $exists = true;
+    }
+  }
+
+  if(!$exists) {
+    $vocabulary = new StdClass();
+    $vocabulary->name = "DITA map import default taxonomy";
+    $vocabulary->machine_name = "ditamap_import_def";
+    $vocabulary->description = "Automatically generated taxonomy vocabulary that can be used as the DITA map import target vocabulary.";
+    $vocabulary->hierarchy = 0;
+    $vocabulary->module = 'ditamap_import';
+    taxonomy_vocabulary_save($vocabulary);
+    variable_set('ditamap_import_default_vocabulary', $vocabulary->vid);
+  }
+  
+  foreach (ditamap_import_get_fields() as $field) {
+    field_create_field($field);
+  }
+
+  foreach (ditamap_import_get_instances() as $instance) {
+    field_create_instance($instance);
+  }
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function ditamap_import_uninstall() {
+  foreach (ditamap_import_get_instances() as $instance) {
+    field_delete_instance($instance, TRUE);
+  }
+  
+  foreach (ditamap_import_get_fields() as $field) {
+    field_delete_field($field['field_name']);
+  }
+  
+  field_purge_batch(40);
+}
+
+
+function ditamap_import_get_fields() {
+  return array(
+    'ditamap_import_term_original_id' => array(
+      'field_name' => 'ditamap_import_term_original_id',
+      'type' => 'text',
+      'cardinality' => 1,
+    ),
+    'node_dita_ditamap_term_ref' => array(
+      'field_name' => 'node_dita_ditamap_term_ref',
+      'cardinality' => 1,
+      'type'        => 'taxonomy_term_reference',      
+      'settings' => array(
+        'allowed_values' => array(
+          array(
+            'vocabulary' => 'ditamap_import_def',
+            'parent' => 0,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+
+/** 
+ * "ditamap_import_term_original_id" stores the value from the DITA XML file's
+ * id attribute.
+ *
+ * "node_dita_ditamap_term_ref" stores a term reference to a taxonomy term 
+ * that belongs to the vocabulary that was used to generate the TOC from the 
+ * DITA map file(s).
+ *
+ */
+function ditamap_import_get_instances() {
+  return array(
+    'ditamap_import_term_original_id' => array(
+      'field_name' => 'ditamap_import_term_original_id',
+      'entity_type' => 'taxonomy_term',
+      'bundle' => 'ditamap_import_def',
+      'label' => t('Original XML id'),
+      'description' => t('The unique XML id from the DITA map document'),
+      'widget' => array(
+        'type' => 'text_textfield',
+        'weight' => 10,
+      ),
+    ),
+    'node_dita_ditamap_term_ref' => array(
+      'field_name' => 'node_dita_ditamap_term_ref',
+      'entity_type' => 'node',
+      'bundle' => 'dita',
+      'label'      => t('DITA map term reference'),
+      'widget'     => array(
+        'type'       => 'select',
+      ),
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'type' => 'hidden',
+        ),
+      ),
+    ),
+  );
+}

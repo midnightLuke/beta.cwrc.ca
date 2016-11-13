@@ -1,0 +1,15 @@
+name = DITA integration
+description = Provides the dita content type and basic functions
+package = DITA
+core = 7.x
+dependencies[] = ctools
+dependencies[] = graphmind_service
+dependencies[] = taxonomy
+
+
+; Information added by drupal.org packaging script on 2013-09-30
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "dita"
+datestamp = "1380569689"
+

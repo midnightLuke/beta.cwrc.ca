@@ -1,0 +1,742 @@
+<?php
+/**
+ * @file
+ *
+ */
+
+/**
+ * Implements hook_menu().
+ *
+ */
+function ditamap_import_menu() {
+  $items = array();
+
+  $item = array(
+    'title' => 'Upload DITA map document',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ditamap_import_upload_form'),
+    'access arguments' => array('import ditamap'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => -10,
+  );
+  $items['admin/structure/ditamap_import/upload'] = $item;
+  $items['admin/dita/ditamap_import_upload'] = $item;
+
+  $item = array(
+    'title' => 'DITA map import settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ditamap_import_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 30,
+  );
+  $items['admin/config/content/ditamap_import'] = $item;
+  $items['admin/dita/ditamap_import_config'] = $item;
+
+  return $items;
+}
+
+
+/**
+ * Admin upload form for ditamap files.
+ *
+ */
+function ditamap_import_upload_form($form_state) {
+  global $base_url;
+  $f = array();
+
+  $f['#attributes'] = array('enctype' => 'multipart/form-data');
+
+  $f['instructions'] = array(
+    '#type' => 'item',
+    '#markup' => 'The DITA map importer allows you to import your DITA document structure into taxonomy vocabularies. Each "topicref" in the DITA map will become a taxonomy term. Try to upload the DITA maps in order; If you upload a sub category DITA map before the main category DITA map, you\'ll have to manually fix the term hierarchy under <a href="' . $base_url . '/admin/structure/taxonomy">Taxonomy</a>.',
+  );
+
+  $f['ditamap_file'] = array(
+    '#type' => 'file',
+    '#title' => t('A DITA map file'),
+  );
+
+  $options = array();
+  $vocabularies = taxonomy_get_vocabularies();
+  foreach ($vocabularies as $vid => $vocabulary) {
+    $instances = field_info_instances('taxonomy_term', $vocabulary->machine_name);
+
+    if (isset($instances['ditamap_import_term_original_id'])) {
+      if (user_access('edit terms in ' . $vocabulary->vid)) {
+        $options[$vid] = $vocabulary->name;
+      }
+    }
+  }
+
+  $f['vocabulary'] = array(
+    '#type' => 'select',
+    '#title' => t('Select taxonomy vocabulary to import the topicrefs to'),
+    '#options' => $options,
+    '#default_value' => variable_get('ditamap_import_default_vocabulary', FALSE),
+    '#description' => t('Note that only vocabularies that have the extra field "Original XML id" field set are listed. Add the field to a vocabulary in <a href="' . $base_url . '/admin/structure/taxonomy">taxonomy administration</a> if you wish to add a vocabulary to the list.'),
+  );
+
+  $f['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Upload'),
+  );
+
+  return $f;
+}
+
+
+/**
+ * Submit handler for ditamap uploads
+ *
+ */
+function ditamap_import_upload_form_submit($form, &$form_state) {
+  global $base_url;
+  global $ditamap_import_count;
+  global $ditamap_import_errors;
+  $ditamap_import_errors = array();
+
+  // Handle the uploaded XML file.
+  $validators = array(
+    'file_validate_extensions' => array('ditamap'),
+  );
+
+  $file = file_save_upload('ditamap_file', $validators, file_default_scheme() . '://', FILE_EXISTS_REPLACE);
+  if (!$file) {
+    drupal_set_message(t('File upload failed'), 'error');
+    return;
+  }
+  $absolute_path = drupal_realpath(file_default_scheme() . '://') . '/' . $file->filename;
+  $body = file_get_contents($absolute_path);
+  $xml = new SimpleXMLElement($body);
+
+  // Save the vocabulary id to which the terms are created.
+  $vid = $form['vocabulary']['#value'];
+
+  // Check if the uploaded file already has a place in the selected vocabulary.
+  // We expect the filename to match the ids / hrefs in other files:
+  $file_id = substr($file->filename, 0, strrpos($file->filename, '.'));
+  $temp = taxonomy_get_tree($vid, 0, NULL, TRUE);
+  // Default of "no parent", saving the contents of the ditamap to vocabulary
+  // root.
+  $parent = 0;
+  foreach ($temp as $term) {
+    // Note that if there are terms in the taxonomy that _don't_ have the
+    // special unique id field, but that match any imported term, the system
+    // will import duplicate terms.
+    if (isset($term->ditamap_import_term_original_id['und'][0]['value'])) {
+      if ($file_id == $term->ditamap_import_term_original_id['und'][0]['value']) {
+        // We've found a term that matches the filename, so terms in this file
+        // will be imported under that term.
+        $parent = $term->tid;
+      }
+    }
+  }
+
+  // Create the terms.
+  $ditamap_import_count = array(
+    '@created' => 0,
+    '@existing' => 0,
+    '@error' => 0,
+    '@element_count' => 0,
+  );
+  
+  $translation_message = ditamap_import_create_terms($xml, $parent, $vid);
+
+  drupal_set_message(t('DITA map import complete. Processed @element_count elements elements. Created @created new terms, handled @existing existing terms, and was unable to handle @error terms. <a href="' . $base_url . '/admin/dita/ditamap_import_upload">Upload more</a>', $ditamap_import_count));
+
+  drupal_set_message($translation_message);
+
+  if ($ditamap_import_count['@error']) {
+    foreach ($ditamap_import_errors as $e) {
+      drupal_set_message($e, 'error');
+    }
+  }
+
+  // Redirect.
+  $machine_names = array();
+  $vocabularies = taxonomy_get_vocabularies();
+  foreach ($vocabularies as $vid_index => $vocabulary) {
+    $machine_names[$vid_index] = $vocabulary->machine_name;
+  }
+}
+
+
+/**
+ * Reads the ditamap structure and creates taxonomy terms from the topicrefs.
+ * The href attribute of the topicref is saved in a special field in the
+ * taxonomy term, this allows us to correctly connect separately uploaded
+ * ditamaps that have matching topicrefs. The navtitle of the topicref is saved
+ * as the taxonomy term itself, but we can't use that to connect the topicrefs,
+ * since the navtitles are not necessarily unique.
+ *
+ * @param Object $xml A SimpleXMLElement object.
+ * @param Integer $parent The tid of the parent term of the terms to be created
+ * @param Integer $vid The vocabulary id to which the terms are to be added.
+ *
+ * @return String a message stating the number of edited translations.
+ *
+ */
+function ditamap_import_create_terms($xml, $parent, $vid) {
+  global $ditamap_import_count;
+  global $ditamap_import_errors;
+  static $depth = 0;
+
+  $translated_message = '';
+
+  // To prevent importing duplicate terms, we create an array that is indexed
+  // with the ditamap_import_term_original_id -values of the already imported
+  // taxonomy terms.
+  //
+  // We can then check against this array when deciding if we should import the
+  // currently processed terms or not. Statically cached so we don't need to
+  // redo this for each recursive function call.
+  static $existing_terms;
+  if (!$existing_terms) {
+    $existing_terms = ditamap_import_get_existing_terms($vid);
+  }
+
+  // Extract language
+  // The language attribute is only available on the first level; We must save
+  // it then for all the other levels.
+  static $lang;
+  if (!$lang) {
+    $attributes = $xml->attributes('xml', 1);
+    $lang = $attributes['lang'];
+    $lang = strtolower(substr($lang, 0, strrpos($lang, "-")));
+    
+    if (!$lang) {
+      $lang = 'en';
+      drupal_set_message(t('Could not find language definition in the map file; Assuming English. Define language in the "lang" attribute of the "map" element, if needed.'), 'warning');
+    }
+  }
+
+  $weight = 0;
+  foreach ($xml as $key => $element) {
+    $ditamap_import_count['@element_count']++;
+    $a = $element->attributes();
+
+    if (isset($a['href'])) {
+      // Grab the filename to be used as the "original id" for matching
+      // topicrefs.
+      $href = reset($a['href']);
+      $last_slash = strrpos($href, '/') + 1;
+      $href = substr($href, ($last_slash == 1 ? 0 : $last_slash));
+
+      $oid = substr($href, 0, strrpos($href, '.'));
+      
+      $navtitle = $href;
+    }
+    elseif (isset($a['id'])) {
+      // ..unless we only have an id. This should mean that a child element will
+      // have an href.
+      $oid = reset($a['id']);
+      
+      $navtitle = $oid;
+    }
+    else {
+      // Oh, no.
+      $oid = FALSE;
+      
+      $navtitle = 'Default title';
+    }
+
+    // If available, "navtitle" becomes the actual taxonomy term.
+    if (is_array($a['navtitle'])) {
+      $navtitle = reset($a['navtitle']);    
+    }
+
+    if ($oid) {
+      // Check that this term doesn't exist already. The unique identifier is
+      // the ditamap_import_term_original_id -field.
+      $create_new_term = FALSE;
+
+      if (!isset($existing_terms[$oid . ':' . $parent])) {
+        $create_new_term = TRUE;
+      }
+
+      if ($create_new_term) {
+        // Make sure that the to-be-imported term belongs to the site default
+        // language.
+        if (language_default('language') == $lang) {
+          $term = new StdClass();
+          $term->vid = $vid;
+          $term->name = $navtitle;
+          $term->parent = $parent;
+          $term->weight = $weight;
+          // $term->language = $lang;
+          // Setting the correct language appears to make the terms
+          // untranslatable.
+          $term->language = 'und';
+
+          // Add custom field for original xml id.
+          $term->ditamap_import_term_original_id = array(
+            'und' => array(
+              0 => array(
+                'value' => $oid,
+              ),
+            ),
+          );
+
+          taxonomy_term_save($term);
+          $existing_terms[$oid . ':' . $parent] = $term->tid;
+          $new_parent = $term->tid;
+          $ditamap_import_count['@created']++;
+        }
+        else {
+          drupal_set_message('The term to be imported does not belong to the site default language (' . language_default('name') . '), and the term does not exist in the default language yet. Please upload the DITA map in the default language first.', 'warning', FALSE);
+
+          // Not sure if this is correct.
+          $new_parent = FALSE;
+        }
+      }
+      else {
+        // We still want to check the children of existing terms, since they may
+        // have new children.
+        $term = taxonomy_term_load($existing_terms[$oid . ':' . $parent]);
+
+        // Check and process language versions.
+        $translation_string = i18n_string('taxonomy:term:' . $term->tid . ':name', $term->name, array('langcode' => $lang));
+        if ($translation_string == $term->name && $translation_string != $navtitle) {
+          // The returned translation is the same as the term base name, but
+          // different from the navtitle we're importing. This means that the
+          // translation needs to be inserted / updated.
+          $translated_message = _ditamap_import_add_term_translation($term, $lang, $navtitle);
+        }
+
+        $new_parent = $existing_terms[$oid . ':' . $parent];
+        $ditamap_import_count['@existing']++;
+      }
+    }
+    else {
+      // The element didn't have an id or an href attribute.
+      // This is actually untested, not sure if it'll work.
+      $new_parent = $parent;
+      $ditamap_import_errors[] = '<p>Element has no href or id attribute:</p><pre>' . htmlspecialchars($element->saveXML()) . '</pre>';
+      $ditamap_import_count['@error']++;
+    }
+
+    if (isset($element->topicref)) {
+      $depth++;
+      ditamap_import_create_terms($element, $new_parent, $vid);
+      $depth--;
+    }
+
+    // Keep the terms in the same order they were in the XML. Unfortunately we
+    // can't add +10 to leave some margin for moving the items, since Drupal
+    // prints out _all_ weights between the actual values, when on the "list
+    // terms" page. This causes the "weight"-selects to have up to 1700 options
+    // on larger DITA maps...
+    $weight = $weight + 1;
+
+  }
+
+  return $translated_message;
+}
+
+
+/**
+ * Admin settings form
+ *
+ */
+function ditamap_import_settings() {
+  $form = array();
+
+  $options = array();
+  $vocabularies = taxonomy_get_vocabularies();
+  foreach ($vocabularies as $vid => $vocabulary) {
+    $options[$vid] = $vocabulary->name;
+  }
+
+  $form['ditamap_import_default_vocabulary'] = array(
+    '#type' => 'select',
+    '#title' => t('Select default taxonomy for DITA map imports'),
+    '#options' => $options,
+    '#default_value' => variable_get('ditamap_import_default_vocabulary', FALSE),
+  );
+
+  return system_settings_form($form);
+}
+
+
+/**
+ * Add vocabulary selection to DITA topic file upload forms.
+ *
+ * Implements hook_form_alter
+ *
+ */
+function ditamap_import_form_alter(&$form, &$form_state, $form_id) {
+  global $base_url;
+
+  if ($form_id == 'dita_upload_form' || $form_id == 'dita_upload_archive_form') {
+    $options = array();
+    $vocabularies = taxonomy_get_vocabularies();
+    foreach ($vocabularies as $vid => $vocabulary) {
+      $instances = field_info_instances('taxonomy_term', $vocabulary->machine_name);
+
+      if (isset($instances['ditamap_import_term_original_id'])) {
+        if (user_access('edit terms in ' . $vocabulary->vid)) {
+          $options[$vid] = $vocabulary->name;
+        }
+      }
+    }
+
+    if (count($options)) {
+      $form['vocabulary'] = array(
+        '#type' => 'select',
+        '#title' => t('Select taxonomy vocabulary to import the topic to'),
+        '#options' => $options,
+        '#default_value' => variable_get('ditamap_import_default_vocabulary', FALSE),
+        '#description' => t('This selects which taxonomy menu the node will appear under. Note that only vocabularies that have the extra field "Original XML id" field set are listed. Add the field to a vocabulary in <a href="' . $base_url . '/admin/structure/taxonomy">taxonomy administration</a> if you wish to add a vocabulary to the list.'),
+        '#weight' => -10,
+      );
+
+      $form['dita_topic']['#description'] = 'The topic will be automatically added to the correct place in the document hierarchy, if you have already uploaded the required DITA maps.';
+    }
+    else {
+      drupal_set_message('You do not have any Taxonomy Vocabularies that you are allowed to edit. As such, you can not import your DITA document into the menu tree. You can still import the document itself, but you must add it to a menu tree manually.
+      <br/><br/>
+      Request permission to edit the DITA Vocabulary from an administrator, if you want to import the documents directly to the menu tree (recommended).', 'warning');
+    }
+
+    // Add submit handler to be run before the main handler.
+    if ($form_id == 'dita_upload_form') {
+      array_unshift($form['#submit'], 'ditamap_import_dita_upload_submit');
+    }
+    elseif ($form_id == 'dita_upload_archive_form') {
+      array_unshift($form['#submit'], 'ditamap_import_dita_upload_archive_submit');
+    }
+  }
+}
+
+
+/**
+ * Additional submit handler for the dita topic file upload form. This is run
+ * before the main submit handler. It adds the selected taxonomy vocabulary vid
+ * in the form_state so the main handler can invoke the menu item attachment
+ * hook with the correct vid. See dita.module:dita_upload_form_submit().
+ *
+ * Note that a similar thing is done by the cron archive handler, but that finds
+ * the correct vocabulary machine name from the path of the file being handled.
+ *
+ */
+function ditamap_import_dita_upload_submit($form, &$form_state) {
+  $form_state['ditamap_importer_vid'] = $form['vocabulary']['#value'];
+}
+
+/**
+ * Submit handler for a zip file upload.
+ *
+ */
+function ditamap_import_dita_upload_archive_submit($form, &$form_state) {
+  $form_state['ditamap_importer_vid'] = $form['vocabulary']['#value'];
+}
+
+
+/**
+ * Implements hook_perm().
+ *
+ */
+function ditamap_import_permission() {
+  $permissions = array(
+    'import ditamap' => array(
+      'title' => 'Import DITA map',
+    ),
+    'administer ditamap import settings' => array(
+      'title' => 'DITA map import settings',
+    ),
+  );
+
+  return $permissions;
+}
+
+
+/**
+ * Helper function. Note that the vid given must have the custom field storing
+ * the XML id.
+ *
+ * @param Integer $vid Vocabulary id
+ *
+ * @return Array A list of term ids, indexed by the DITA XML id.
+ *
+ */
+function ditamap_import_get_existing_terms($vid) {
+  $existing_terms = array();
+  $temp = taxonomy_get_tree($vid, 0, NULL, TRUE);
+  foreach ($temp as $term) {
+    if (isset($term->ditamap_import_term_original_id['und'][0]['value'])) {
+      // The terms are indexed by the XML id and the term parent, to allow for
+      // the same term to exist in multiple locations in the DITA map.
+      $existing_terms[$term->ditamap_import_term_original_id['und'][0]['value'] . ':' . $term->parents[0]] = $term->tid;
+    }
+  }
+  return $existing_terms;
+}
+
+
+/**
+ * Implements hook_ditamap_attach_menu_item.
+ *
+ * @param String $id The unique document id from the DITA XML document. Matches
+ * a custom field in Taxonomy terms.
+ * @param Array $form_state A Drupal form state array.
+ *
+ * @return Boolean/Integer A taxonomy term id that belongs to the correct
+ * taxonomy menu.
+ *
+ */
+function ditamap_import_ditamap_attach_menu_item($id, $form_state) {
+  if (isset($form_state['ditamap_importer_vid'])) {
+    $vid = $form_state['ditamap_importer_vid'];
+    $efq = new EntityFieldQuery();
+    $result = $efq
+      ->entityCondition('entity_type', 'taxonomy_term')
+      ->propertyCondition('vid', $vid, '=')
+      ->fieldCondition('ditamap_import_term_original_id', 'value', $id, '=')
+      ->execute();
+
+    if ($result) {
+      $temp = $result['taxonomy_term'];
+      $temp = reset($temp);
+      $tid = $temp->tid;
+      return $tid;
+    }
+    else {
+      return FALSE;
+    }
+  }
+  else {
+    // No defined taxonomy vocabulary, can't attach.
+    return FALSE;
+  }
+}
+
+
+/**
+ * Inserts / updates a locale translation for a Taxonomy term.
+ *
+ * @param Object $term A taxonomy term object
+ * @param String $lang A two-letter language code
+ * @param String $translation The new translation for the term
+ *
+ * @return String A message stating the numbers of edited translations for this
+ * run.
+ *
+ * A lot of the code was copied from
+ * locale.admin.inc:locale_translate_edit_form_submit()
+ *
+ */
+function _ditamap_import_add_term_translation($term, $lang, $translation) {
+  static $translated_insert_count = 0;
+  static $translated_update_count = 0;
+
+  // Generate the "location" found in the locales_source table.
+  $location = 'taxonomy:term:' . $term->tid . ':name';
+  // Get lid from locales_source with "location".
+  $lid = db_query("SELECT lid FROM {locales_source} WHERE location = :location", array(':location' => $location))->fetchField();
+
+  if (!$lid) {
+    return FALSE;
+  }
+
+  $query = "
+    SELECT translation
+    FROM {locales_target}
+    WHERE lid = :lid
+    AND language = :language
+  ";
+  $old_translation = db_query($query, array(':lid' => $lid, ':language' => $lang))->fetchField();
+
+  if (!$old_translation) {
+    // Insert new translation.
+    db_insert('locales_target')
+      ->fields(array(
+        'lid' => $lid,
+        'translation' => $translation,
+        'language' => $lang,
+      ))
+      ->execute();
+
+    $translated_insert_count++;
+  }
+  else {
+    // Update existing translation.
+    db_update('locales_target')
+    ->fields(array(
+      'translation' => $translation,
+    ))
+    ->condition('lid', $lid)
+    ->condition('language', $lang)
+    ->execute();
+
+    $translated_update_count++;
+  }
+
+  // Clear locale cache.
+  _locale_invalidate_js($lang);
+  cache_clear_all('locale:', 'cache', TRUE);
+
+  $translated_message = t('Added :inserted translation:ip and updated :updated translation:up for taxonomy terms.', array(
+    ':inserted' => $translated_insert_count,
+    ':updated' => $translated_update_count,
+    ':ip' => ($translated_insert_count == 1 ? '' : 's'),
+    ':up' => ($translated_update_count == 1 ? '' : 's'),
+  ));
+
+  return $translated_message;
+}
+
+
+/**
+ * Implements hook_url_inbound_alter().
+ *
+ * For the DITA map taxonomy menus, shows the correct node page directly instead
+ * of the list of matching nodes.
+ *
+ */
+function ditamap_import_url_inbound_alter(&$path, $original_path, $path_language) {
+  global $language;
+
+  if (preg_match('|^taxonomy/term/([0-9]*)?$|', $path, $matches)) {
+    $tid = $matches[1];
+    $term = taxonomy_term_load($tid);
+
+    // Test against a list of DITA import vocabularies.
+    // Get list of vocabularies that have the special field in the terms.
+    // If the term belongs to one of the vocabularies, we'll process the path.
+    $query = "
+      SELECT bundle
+      FROM {field_config_instance}
+      WHERE field_name = 'ditamap_import_term_original_id'
+      AND entity_type = 'taxonomy_term'
+    ";
+    $v_machine_names = db_query($query, array())->fetchAll();
+    $dita_vocabularies = array();
+    foreach ($v_machine_names as $v_machine_name) {
+      $vocabulary = taxonomy_vocabulary_machine_name_load($v_machine_name->bundle);
+      if ($vocabulary) {
+        $dita_vocabularies[] = $vocabulary->vid;
+      }
+    }
+
+    if (in_array($term->vid, $dita_vocabularies)) {
+      // Note: $path_language doesn't seem to ever get set, so we need to use
+      // the currently selected language.
+      $lang = $language->language;
+      $efq = new EntityFieldQuery();
+      $result = $efq
+        ->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'dita')
+        //->fieldCondition('node_dita_ditamap_term_ref', 'tid', $tid, '=')
+        ->fieldCondition('field_node_dita_ditamap_term_ref', 'value', $tid, '=')
+        //->propertyCondition('language', $lang, '=')
+        ->execute();
+        
+      if ($result) {
+        $nodes = $result['node'];
+        // Need to link to the _correct_ node, also based on other metadata,
+        // not just the first returned node. This is done in another custom
+        // hook.
+        $node = reset($nodes);
+        $selected_nid = $node->nid;
+        $selected_lang_nodes = array();
+        
+        foreach ($nodes as $n) {
+        	$n_obj = node_load($n->nid);
+        
+        	if ($n_obj->language == $lang) {
+        		$selected_nid = $n_obj->nid;
+        		$n_skim_obj = array(
+        			'nid' => $n_obj->nid,
+        			'language' => $n_obj->language,
+        			'field_rev' => $n_obj->field_rev,
+        		);
+        		
+        		$selected_lang_nodes = (object) $n_skim_obj;
+        	} 
+        }	
+        
+        if (count($selected_lang_nodes) > 1) {
+          // I'd love to module_invoke_all(), but it doesn't support references.
+          // module_invoke_all('ditamap_import_menu_filter_nodes',
+          // $selected_nid, $nodes);
+          $hook = 'ditamap_import_menu_filter_nodes';
+          foreach (module_implements($hook) as $module) {
+            $function = $module . '_' . $hook;
+            $function($selected_nid, $selected_lang_nodes);
+          }
+        }
+
+        $url = drupal_lookup_path('alias', 'node/' . $selected_nid, $lang);
+        drupal_goto($url);
+        die();
+      }
+      else {
+        // Get parent item
+        $mlid = db_select('menu_links', 'm')
+          ->fields('m', array('plid'))
+          ->condition('m.link_path', $path)
+          ->execute()
+          ->fetchCol();
+        
+        if(!empty($mlid) && $mlid[0] != 0) {
+          $parent_path = menu_link_load($mlid[0]);
+          drupal_goto($parent_path['href']);
+          die();
+        }
+        else {
+          return $path;
+        }
+      }
+    } // End if in_array.
+  } // End if preg_match.
+}
+
+
+/**
+ * Implements hook_node_load.
+ *
+ */
+function ditamap_import_node_load($nodes, $types) {
+  if (!in_array('dita', $types)) {
+    return FALSE;
+  }
+  if (count($nodes) > 1) {
+    return FALSE;
+  }
+  $node = reset($nodes);
+  $d = drupal_get_destination();
+  if (substr($d['destination'], 0, 5) != 'node/') {
+    return FALSE;
+  }
+  // This should make sure that we run the menu expander only when loading
+  // the single node.
+  //
+  // Dig the menu name out using the DITA map menu taxonomy term reference.
+  //if (isset($node->node_dita_ditamap_term_ref['und'][0]['tid'])) {
+  if (isset($node->field_node_dita_ditamap_term_ref['und'][0]['value'])) {
+    //$tid = $node->node_dita_ditamap_term_ref['und'][0]['tid'];
+    $tid = $node->field_node_dita_ditamap_term_ref['und'][0]['value'];
+    $t = taxonomy_term_load($tid);
+    if ($t) {
+      $vid = $t->vid;
+      $v = taxonomy_vocabulary_load($vid);
+      $vocabulary_name = $v->machine_name;
+
+      // Since there doesn't seem to be an easy way of finding menus that are
+      // taxonomy menus, we calmly expand all menus (apart from "navigation",
+      // which we recognize by the wildcards) that have menu items pointing to
+      // taxonomy terms:
+      $result = db_query("
+        SELECT DISTINCT(menu_name)
+        FROM {menu_links}
+        WHERE link_path LIKE 'tax%'
+        AND link_path NOT LIKE 'taxonomy/term/\%%';
+      ");
+      foreach ($result as $record) {
+        menu_tree_set_path($record->menu_name, 'taxonomy/term/' . $tid);
+      }
+
+    }
+  }
+}

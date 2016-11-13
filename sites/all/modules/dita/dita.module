@@ -1,0 +1,1149 @@
+<?php
+/**
+ * @file
+ * DITA integration module main file.
+ */
+
+/**
+ * Implements hook_init().
+ */
+function dita_init() {
+  // Graphmind module hack.
+  if (arg(0) == 'node' && arg(1) && is_numeric(arg(1))) {
+    $node = node_load((int) arg(1));
+    if ($node->type == 'ditamap') {
+      global $user;
+      $user->graphmindEditable = node_access('update', $node) ? '1' : '0';
+    }
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function dita_menu() {
+  $items = array();
+
+  $items['admin/dita'] = array(
+    'title' => 'DITA',
+    'access arguments' => array('import dita'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['admin/dita/dita_xml_upload'] = array(
+    'title' => 'Upload DITA topic document',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dita_upload_form'),
+    'access arguments' => array('import dita'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'dita.pages.inc',
+    'weight' => -20,
+  );
+
+  $items['admin/dita/dita_archive_upload'] = array(
+    'title' => 'Upload DITA topic archive',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dita_upload_archive_form'),
+    'access arguments' => array('import dita'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'dita.pages.inc',
+    'weight' => -20,
+  );
+
+  $items['admin/dita/dita_archive_status'] = array(
+    'title' => 'Check status on uploaded topic archives',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dita_upload_archive_status_form'),
+    'access arguments' => array('import dita'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'dita.pages.inc',
+    'weight' => -20,
+  );
+
+  $item = array(
+    'title' => 'DITA settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dita_admin_form'),
+    'access arguments' => array('administer dita settings'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'dita.admin.inc',
+    'weight' => 20,
+  );
+  $items['admin/dita/dita_settings'] = $item;
+  $items['admin/config/content/dita_settings'] = $item;
+
+  $items['dita/node_redirect/%/%/%/%'] = array(
+    'title' => 'DITA node redirect',
+    'page callback' => 'dita_node_redirect',
+    'access arguments' => array('access content'),
+    'page arguments' => array(2, 3, 4, 5),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['dita_test/%'] = array(
+    'title' => 'Test callback',
+    'page callback' => 'dita_test',
+    'page arguments' => array(1, 2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/dita/dita_settings/autocomplete'] = array(
+    'page callback' => 'dita_settings_author_autocomplete',
+    'access arguments' => array('administer dita settings'),
+    'type' => MENU_CALLBACK,
+    'file' => 'dita.admin.inc',
+  );
+
+  // TODO remove, for testing only.
+  $items['dita_process'] = array(
+    'title' => 'Test callback for processing asrchive files',
+    'page callback' => 'dita_process_dita_archive_file',
+    'file' => 'dita.pages.inc',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Temporary test callback.
+ *
+ * @param String $type
+ *   TODO
+ * @param Integer $id
+ *   TODO
+ */
+function dita_test($type, $id) {
+  die();
+
+  switch ($type) {
+    case 'node':
+      $object = node_load($id);
+      break;
+
+    case 'term':
+      $object = taxonomy_term_load($id);
+      break;
+
+    case 'user':
+      $object = user_load($id);
+      break;
+
+    default:
+      $object = new StdClass();
+      break;
+  }
+
+  echo '<pre>';
+  print_r($object);
+  echo '</pre>';
+}
+
+
+/**
+ * Implements hook_cron().
+ */
+function dita_cron() {
+  module_load_include('inc', 'dita', 'dita.pages');
+  for ($i = 0; $i < variable_get('dita_cron_number_of_files', 5); $i++) {
+    if (!dita_process_dita_archive_file()) {
+      break;
+    }
+  }
+}
+
+
+/**
+ * Loader function for the ditamap content type.
+ *
+ * @param int $nid
+ *   TODO
+ *
+ * @return stdClass
+ *   TODO
+ */
+function ditamap_node_load($nid) {
+  $node = node_load($nid);
+  if ($node->type == 'ditamap') {
+    return $node;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Default implementation of theme_ditamap_preview().
+ */
+function theme_ditamap_preview($xml) {
+  return '<pre id="ditamap-in-xml">' . htmlentities(urldecode($xml)) . '<br /></pre>';
+}
+
+
+/**
+ * Implements hook_permission().
+ */
+function dita_permission() {
+  return array(
+    'import dita' => array(
+      'title' => 'Import DITA document',
+    ),
+    'administer dita settings' => array(
+      'title' => 'Administer DITA settings',
+    ),
+  );
+}
+
+/**
+ * Helper access function for the content types.
+ *
+ * @param string $content_type
+ *   TODO
+ * @param string $op
+ *   TODO
+ * @param stdClass $node
+ *   TODO
+ * @param stdClass $account
+ *   TODO
+ *
+ * @return bool
+ *   TODO
+ */
+function dita_meta_access($content_type, $op, $node, $account) {
+  switch ($op) {
+    case 'create':
+      return user_access("create $content_type", $account) &&
+        $account->uid ? TRUE : NULL;
+    default:
+      return user_access("$op any $content_type", $account) ||
+        (user_access("$op own $content_type", $account) &&
+          ($node->uid == $account->uid)) ? TRUE : NULL;
+  }
+}
+
+/**
+ * Implements hook_access().
+ */
+function dita_access($op, $node, $account) {
+  return dita_meta_access('dita', $op, $node, $account);
+}
+
+/**
+ * Implements hook_load().
+ */
+function dita_load($node) {
+  module_load_include('export.inc', 'dita');
+
+  $additions = new stdClass();
+
+  $additions->doctype = dita_get_doctype($node);
+
+  return $additions;
+}
+
+/**
+ * Implements hook_form().
+ */
+function dita_form(&$node) {
+  $form = array();
+
+  $type = node_get_types('type', $node);
+
+  $form['body_field'] = node_body_field($node,
+    $type->body_label, $type->min_word_count);
+
+  return $form;
+}
+
+/**
+ * Implements hook_validate().
+ */
+function dita_validate($node, &$form) {
+  $dom = new DOMDocument();
+  $xml = $form['body_field']['body']['#value'];
+  module_load_include('inc', 'dita', 'dita.filter');
+  $xml = dita_rewrite_dtd($xml);
+  // The error suppression operator is needed here,
+  // because if the XML is not valid, then the
+  // 'loadXML' returns false and issues a PHP warning.
+  if (!@$dom->loadXML($xml)) {
+    form_set_error('body', t('The given XML is not valid.'));
+    return FALSE;
+  }
+
+  $mydom = new MyDOMDocument($dom);
+
+  $mydom->validate();
+  if (!$mydom->validate()) {
+    form_set_error('body', t("The document doesn't follow the DITA \"@version\" specifics.", array('@version' => variable_get('dita_selected_dtd', 'dtd/1.2/technicalContent'))));
+    $i = 0;
+    foreach ($mydom->errors as $error) {
+      $i++;
+      form_set_error('dita_validation_error_' . $i, $error);
+    }
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Implements hook_nodeapi().
+ *
+ * I would rather use hook_presave(), since I define a content type here,
+ * but for the 'presave' op, there is no other way.
+ */
+function dita_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'presave':
+      if ($node->type == 'dita') {
+        $doc = new SimpleXMLElement($node->body);
+
+        $node->title = (string) array_shift($doc->xpath('/*/title[1]'));
+        // Teaser is not needed right now.
+        $node->teaser = NULL;
+
+        $node->format = db_result(
+          db_query('SELECT format FROM {filter_formats} WHERE name = \'DITA\''));
+      }
+      break;
+  }
+
+  // Hack for the graphmind stuff.
+  if ($node->type == 'ditamap') {
+    $node->type = 'graphmind';
+    graphmind_service_nodeapi($node, $op, $a3, $a4);
+    $node->type = 'ditamap';
+  }
+}
+
+/**
+ * Implements hook_link().
+ */
+function dita_link($type, $object, $teaser = FALSE) {
+  $links = array();
+
+  switch ($type) {
+    case 'node':
+      $node = $object;
+      if ($node->type == 'ditamap') {
+        module_load_include('inc', 'dita');
+        $tasks = ditatask_load_multiple_by_nid($node->nid);
+        foreach ($tasks as $task) {
+          $handler = dita_get_output_handler($task->type, $task);
+          $links['dita-task-' . $task->dtid] = array(
+            'title' => t('@format format with @vocabulary reltable', array(
+              '@format' => $task->type,
+              '@vocabulary' => dita_taxonomy_vocabulary_name($task->vocabularies),
+            )),
+            'href' => $handler->getOutputDocumentPath(),
+          );
+        }
+      }
+      break;
+  }
+
+  return $links;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dita_theme() {
+  return array(
+    'node' => array(
+      'arguments' => array('node' => NULL, 'teaser' => FALSE, 'page' => FALSE),
+      'template' => 'node',
+    ),
+    'ditamap_preview' => array(
+      'arguments' => array('xml' => ''),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_form_alter().
+ */
+function dita_form_alter(&$form, $form_state, $form_id) {
+  switch ($form_id) {
+    case 'dita_node_form':
+      $form['body_field']['format']['#access'] = FALSE;
+      break;
+  }
+}
+
+
+/**
+ * Returns the available DITA output types.
+ *
+ * @return array
+ *   TODO
+ */
+function dita_get_output_types() {
+  $cache = &drupal_static(__FUNCTION__, NULL);
+
+  if ($cache === NULL) {
+    module_load_include('inc', 'dita');
+    $cache = module_invoke_all('dita_output_type');
+  }
+
+  return $cache;
+}
+
+/**
+ * Returns the output handler for a given output type.
+ *
+ * This function also includes the defined file if necessary.
+ *
+ * @param string $type
+ *   TODO
+ *
+ * @return DITAOutputPlugin
+ *   TODO
+ */
+function dita_get_output_handler($type, $dtid) {
+  $output_types = dita_get_output_types();
+
+  if (isset($output_types[$type])) {
+    $t = $output_types[$type];
+
+    if (!empty($t['file'])) {
+      call_user_func_array('module_load_include', $t['file']);
+    }
+
+    return new $t['handler']($dtid);
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Returns the class for the given type.
+ *
+ * @param string $type
+ *   TODO
+ *
+ * @return class
+ *   TODO
+ */
+function dita_get_output_converter_class($type) {
+  $output_types = dita_get_output_types();
+
+  if (isset($output_types[$type])) {
+    $data = $output_types[$type];
+
+    if (!empty($data['file'])) {
+      call_user_func_array('module_load_include', $data['file']);
+    }
+
+    if (isset($data['converter'])) {
+      return $data['converter'];
+    }
+  }
+}
+
+/**
+ * Returns a ditamap converter object.
+ *
+ * This function also includes the defined file if necessary.
+ *
+ * @param string $type
+ *   TODO
+ * @param string $ditamap
+ *   TODO
+ * @param array $builder
+ *   TODO
+ *
+ * @return DitamapConverter
+ *   TODO
+ */
+function dita_get_output_converter($type, $ditamap, $builder = array()) {
+  $converter_class = dita_get_output_converter_class($type);
+
+  if (class_exists($converter_class)) {
+    $converter = new $converter_class($ditamap);
+    $converter->type = $type;
+
+    foreach ($builder as $key => $value) {
+      $converter->$key = $value;
+    }
+
+    return $converter;
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Returns the list of registered converter objects.
+ *
+ * This function also includes the defined files if necessary.
+ *
+ * @return Array
+ *   TODO
+ */
+function dita_get_output_converters() {
+  $output_types = dita_get_output_types();
+
+  $converters = array();
+
+  foreach ($output_types as $ot) {
+    if (!empty($ot['file'])) {
+      call_user_func_array('module_load_include', $ot['file']);
+    }
+
+    if (!empty($ot['converter'])) {
+      $converters[$ot['converter']] = TRUE;
+    }
+  }
+
+  return array_keys($converters);
+}
+
+/**
+ * Returns the working directory for the given type.
+ *
+ * @param string $type
+ *   TODO
+ *
+ * @return string
+ *   TODO
+ */
+function dita_get_working_directory($type) {
+  $converter = dita_get_output_converter_class($type);
+  if ($converter === NULL) {
+    return NULL;
+  }
+  $varname = call_user_func(array($converter, 'getVariableName'));
+  return empty($varname) ? NULL : variable_get($varname, '.');
+}
+
+/**
+ * Implements hook_dita_output_type().
+ */
+function dita_dita_output_type() {
+  return array(
+    'pdf2' => array(
+      'handler' => 'DITAPDF2OutputPlugin',
+      'file' => array('inc', 'dita'),
+      'converter' => 'OTDitamapConverter',
+    ),
+    'xhtml' => array(
+      'handler' => 'DITAXHTMLOutputPlugin',
+      'file' => array('inc', 'dita'),
+      'converter' => 'OTDitamapConverter',
+    ),
+    'htmlhelp' => array(
+      'handler' => 'DITAHTMLHelpOutputPlugin',
+      'file' => array('inc', 'dita'),
+      'converter' => 'OTDitamapConverter',
+    ),
+    'zip' => array(
+      'handler' => 'DITAZIPOutputPlugin',
+      'file' => array('inc', 'dita'),
+      'converter' => 'ArchiveDitamapConverter',
+    ),
+    'tgz' => array(
+      'handler' => 'DITATGZOutputPlugin',
+      'file' => array('inc', 'dita'),
+      'converter' => 'ArchiveDitamapConverter',
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_filter().
+ */
+function dita_filter($op, $delta = 0, $format = -1, $text = '') {
+  module_load_include('filter.inc', 'dita');
+
+  switch ($op) {
+    case 'list':
+      return array(0 => t('DITA document'));
+
+    case 'process':
+      return dita_filter_transform($text);
+
+    default:
+      return $text;
+  }
+}
+
+/**
+ * Helper class to extend DOMDocument error handling
+ */
+class MyDOMDocument {
+  private $delegate;
+  private $validationErrors;
+
+  /**
+   * The constructor.
+   */
+  public function __construct(DOMDocument $p_document) {
+    $this->delegate = $p_document;
+    $this->validationErrors = array();
+  }
+
+
+  /**
+   * TODO document.
+   */
+  public function __call($p_method_name, $p_args) {
+    if ($p_method_name == "validate") {
+      $eh = set_error_handler(array($this, "onValidateError"));
+      $rv = $this->delegate->validate();
+      if ($eh) {
+        set_error_handler($eh);
+      }
+      return $rv;
+    }
+    else {
+      return call_user_func_array(array($this->delegate, $p_method_name), $p_args);
+    }
+  }
+
+
+  /**
+   * TODO document.
+   */
+  public function __get($p_member_name) {
+    if ($p_member_name == "errors") {
+      return $this->validationErrors;
+    }
+    else {
+      return $this->delegate->$p_member_name;
+    }
+  }
+
+
+  /**
+   * TODO document.
+   */
+  public function __set($p_member_name, $p_value) {
+    $this->delegate->$p_member_name = $p_value;
+  }
+
+
+  /**
+   * TODO document.
+   */
+  public function onValidateError($p_no, $p_string, $p_file = NULL, $p_line = NULL, $p_context = NULL) {
+    $this->validationErrors[] = preg_replace("/^.+: */", "", $p_string);
+  }
+}
+
+
+/**
+ * Determines the doctype of an xml document.
+ *
+ * @param object $node
+ *   A node object wich contains a valid xml in its body.
+ *
+ * @return string
+ *   The doctype.
+ */
+function dita_get_doctype($node) {
+  $xml_object = new DomDocument();
+  $xml_object->loadXML(is_object($node) ? $node->body : $node);
+  $dtype = $xml_object->doctype;
+  return $dtype->nodeName;
+}
+
+
+/**
+ * Creates a DomDocument object from an xml string.
+ *
+ * Creates a DomDocument object from an xml string, with the desired
+ * doctype declaration.
+ *
+ * @param string $xml
+ *   input xml string
+ * @param string $doctype
+ *   The qualified name of the document type to create
+ * @param string $public_id
+ *   The external subset public identifier
+ * @param string $system_id
+ *   The external subset system identifier
+ *
+ * @return object
+ *   A DomDocument object
+ */
+function dita_create_xml_object($xml, $doctype, $public_id, $system_id) {
+  $implementation = new DOMImplementation();
+
+  $dtd = $implementation->createDocumentType($doctype,
+        $public_id,
+        $system_id);
+
+  $xml_object = $implementation->createDocument('', '', $dtd);
+
+  $map_original = new DomDocument();
+  $map_original->loadXML($xml);
+
+  $child = $xml_object->importNode($map_original->documentElement, TRUE);
+  $xml_object->appendChild($child);
+  return $xml_object;
+}
+
+
+/**
+ * Applies an xslt schema to an xml file.
+ *
+ * @param string $xml_string
+ *   The xml
+ * @param string $xslt_string
+ *   The xslt
+ * @param String $external_dtd
+ *   An external DTD to be used, if any.
+ * @param string $working_dir
+ *   Change working dir for the transformation. If false no directory change
+ *   applies
+ *
+ * @return string
+ *   The output after conversion
+ */
+function dita_apply_xslt($xml_string, $xslt_string, $external_dtd = FALSE, $working_dir = FALSE) {
+  module_load_include('filter.inc', 'dita');
+
+  if (!$xml_string) {
+    return FALSE;
+  }
+
+  if (!$xslt_string) {
+    drupal_set_message('No xslt given in dita_apply_xslt', 'warning');
+    return $xml_string;
+  }
+
+  if ($rewritten_xml = dita_rewrite_dtd($xml_string)) {
+    $xml_string = $rewritten_xml;
+  }
+
+  $orig_dir = getcwd();
+
+  if ($working_dir) {
+    chdir($working_dir);
+  }
+
+  $xml_object = new DOMDocument();
+  if ($external_dtd) {
+    $xml_object->loadXML($xml_string, LIBXML_DTDATTR);
+  }
+  else {
+    $xml_object->loadXML($xml_string);
+  }
+  if (!$xml_object) {
+    if ($working_dir) {
+      chdir($orig_dir);
+    }
+    return FALSE;
+  }
+
+  $xslt_object = new DOMDocument();
+  $xslt_object->loadXML($xslt_string);
+  if (!$xslt_object) {
+    if ($working_dir) {
+      chdir($orig_dir);
+    }
+    return FALSE;
+  }
+
+  $xslt_processor = new XSLTProcessor();
+  $xslt_processor->importStylesheet($xslt_object);
+  if (!$xslt_processor) {
+    if ($working_dir) {
+      chdir($orig_dir);
+    }
+    return FALSE;
+  }
+
+  if ($working_dir) {
+    chdir($orig_dir);
+  }
+  return $xslt_processor->transformToXML($xml_object);
+}
+
+
+/**
+ * Looks for duplicates.
+ *
+ * Checks if there are duplicate DITA nodes based on the conditions in the
+ * given entity field request.
+ *
+ * @param Object $efq
+ *   An entity field query object
+ *
+ * @return Integer
+ *   The nid of a duplicate node, or 0.
+ */
+function dita_check_for_duplicates($efq) {
+  $duplicate_nid = 0;
+  $result = $efq->execute();
+  if (isset($result['node'])) {
+    $node_data = reset($result['node']);
+    $duplicate_nid = $node_data->nid;
+  }
+  return $duplicate_nid;
+}
+
+
+/**
+ * Sanitize a term name.
+ *
+ * Makes term name as machine name to make folder name without any special
+ * characters.
+ *
+ * @param String $text
+ *   The input string.
+ *
+ * @return String
+ *   The processed string.
+ */
+function dita_slugify($text) {
+  $text = str_replace('&', ' and ', $text);
+
+  if (strlen($text) > 100) {
+    $text = substr($text, 0, 100);
+  }
+
+  // Convert all characters to ascii equivalent.
+  $map = array(
+    '/à|á|å|â/' => 'a',
+    '/è|é|ê|ẽ|ë/' => 'e',
+    '/ì|í|î/' => 'i',
+    '/ò|ó|ô|ø/' => 'o',
+    '/ù|ú|ů|û/' => 'u',
+    '/ç/' => 'c',
+    '/ñ/' => 'n',
+    '/ä|æ/' => 'ae',
+    '/ö/' => 'oe',
+    '/ü/' => 'ue',
+    '/Ä/' => 'Ae',
+    '/Ü/' => 'Ue',
+    '/Ö/' => 'Oe',
+    '/ß/' => 'ss',
+    '/[^\w\s]/' => ' ',
+  );
+
+  // Remove any non letter or digit.
+  $text = preg_replace(array_keys($map), array_values($map), $text);
+  $text = preg_replace('~[^\w\d]+~u', '_', $text);
+
+  $text = trim($text, '_');
+
+  $text = strtolower($text);
+
+  return $text;
+}
+
+
+/**
+ * Processes images' src attributes.
+ *
+ * Alters img elements' src attributes in a given XHTML string so that the
+ * attributes match locations where the related images were uploaded.
+ *
+ * @param String $xhtml
+ *   The XHTML source string
+ * @param Object $node
+ *   The node whose body we are processsing.
+ *
+ * @return String
+ *   XHTML with the src attributes of the img elements altered
+ */
+function dita_image_links($xhtml, $node) {
+  // Get the full vocabulary object whose vid this DITA node has in the ditamap
+  // ref field.
+  $v_name = '_';
+
+  if (isset($node->field_node_dita_ditamap_term_ref['und']['0']['value'])) {
+    $tid = $node->field_node_dita_ditamap_term_ref['und']['0']['value'];
+    $t = taxonomy_term_load($tid);
+    $vid = $t->vid;
+    $v = taxonomy_vocabulary_load($vid);
+    $v_name = $v->machine_name;
+  }
+
+  // Get software version name.
+  $sw_name = '_';
+  if (isset($node->field_rev['und']['0']['tid'])) {
+    $tid = $node->field_rev['und']['0']['tid'];
+    $t = taxonomy_term_load($tid);
+    $sw_name = dita_slugify($t->name);
+  }
+
+  $dest_dir = "/" . file_stream_wrapper_get_instance_by_uri('public://')->getDirectoryPath() . "/dita/images/" . $v_name . "/$sw_name/";
+
+  $html_obj = new DomDocument();
+  $html_obj->loadXML($xhtml);
+  $nodelist = $html_obj->getElementsByTagName('img');
+
+  if ($nodelist->length) {
+    $l = $nodelist->length;
+    for ($i = 0; $i < $l; $i++) {
+
+      $anchor = $nodelist->item($i);
+      $src = $anchor->getAttribute('src');
+      // Don't touch external links.
+      if (substr($src, 0, 4) != 'http') {
+        // Replace any \ with / .
+        $src = str_replace('\\', '/', $src);
+        // Delete as many "../"s from the beginning of the source as there might
+        // be.
+        $src = str_replace('../', '', $src);
+        $src = $dest_dir . $src;
+        // drupal_set_message($src);
+      }
+
+      $anchor->setAttribute('src', $src);
+    }
+  }
+
+  $xhtml = $html_obj->saveXML();
+
+  return $xhtml;
+}
+
+
+/**
+ * Alters anchor elements' src attributes.
+ *
+ * Alters anchor elements' src attributes in a given XHTML string so that the
+ * attributes point to a redirection script that can find the correct node.
+ *
+ * @param String $xhtml
+ *   The XHTML source string
+ * @param Object $node
+ *   The node this XHTML belongs to.
+ *
+ * @return String
+ *   XHTML with the src attributes of the a-elements altered
+ */
+function dita_anchor_links($xhtml, $node) {
+  global $base_url;
+
+  $v_name = '_';
+  if (isset($node->field_node_dita_ditamap_term_ref['und']['0']['value'])) {
+    $tid = $node->field_node_dita_ditamap_term_ref['und']['0']['value'];
+    $t = taxonomy_term_load($tid);
+    $vid = $t->vid;
+    $v = taxonomy_vocabulary_load($vid);
+    $v_name = $v->machine_name;
+  }
+
+  $dom = new DomDocument();
+  $dom->loadXML($xhtml);
+  $nodelist = $dom->getElementsByTagName('a');
+
+  if ($nodelist->length) {
+    $l = $nodelist->length;
+    for ($i = 0; $i < $l; $i++) {
+      $anchor = $nodelist->item($i);
+      $href = $anchor->getAttribute('href');
+      // Don't touch external links.
+      if (substr($href, 0, 4) != 'http') {
+        // Drop any "../"s from the beginning of the href.
+        while (substr($href, 0, 3) == '../') {
+          $href = substr($href, 3);
+        }
+        // Separate the part after "#" to its own variable:
+        $anchor_string = substr($href, strpos($href, '#') + 1);
+        $href = substr($href, 0, strpos($href, '#'));
+        // And finally drop any file extension. What's left should be the XML
+        // id.
+        $href = substr($href, 0, strrpos($href, '.'));
+
+        // We redirect to a redirector script that then determines the correct
+        // URL. We can't do this directly, since the target document might not
+        // be uploaded yet.
+        //
+        // Base URL for the callback.
+        $new_href = $base_url . '/dita/node_redirect/';
+
+        // Vocabulary machine name, so we know with documentation the node
+        // belongs to.
+        $new_href .= $v_name . '/';
+
+        // The XML id.
+        $new_href .= $href . '/';
+
+        // The node language.
+        $new_href .= $node->language . '/';
+
+        // Allow custom modules to add extra segments to the URL. These should
+        // be separated by semicolons instead of slashes to make sure we always
+        // have the right number of URL parameters.
+        //
+        // Need to use references again, so module_invoke_all won't work.
+        // module_invoke_all('dita_anchor_links', $new_href);
+        $hook = 'dita_anchor_links';
+        foreach (module_implements($hook) as $module) {
+          $function = $module . '_' . $hook;
+          $function($new_href, $node);
+        }
+
+        // Finally, re-add any anchor segment, separated by a slash so it gets
+        // passed to the redirector script.
+        $new_href .= '/' . ($anchor_string ? $anchor_string : "_");
+
+        $anchor->setAttribute('href', $new_href);
+      }
+    }
+  }
+
+  $xhtml = $dom->saveXML();
+
+  return $xhtml;
+}
+
+
+/**
+ * Imported DITA link click handler.
+ *
+ * Handles links clicked on imported DITA nodes, and redirects the user to the
+ * correct node. We can't add the correct links in the documents themselves,
+ * since the target document might not exist at the time the link source
+ * document is imported, and we don't know the final URL alias(based on node
+ * title), we just know the xmlid.
+ *
+ * @param String $vocabulary
+ *   Vocabulary machine name
+ * @param String $xmlid
+ *   Original XML id for the node, from the DITA document
+ * @param String $lang
+ *   The node language
+ * @param String $extra
+ *   Any extra parameters added by modules hooking the link generation code.
+ * @param String $anchor
+ *   HTML anchor from the original link, if any
+ */
+function dita_node_redirect($vocabulary, $xmlid, $lang, $extra, $anchor) {
+  global $base_url;
+
+  $v = taxonomy_vocabulary_machine_name_load($vocabulary);
+  $vid = $v->vid;
+
+  $efq = new EntityFieldQuery();
+  $efq
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'dita')
+    ->propertyCondition('language', $lang, '=')
+    ->fieldCondition('node_dita_original_id', 'value', $xmlid, '=');
+
+  // Allow custom modules to add conditions in the efq based on the extra
+  // segments added to the links earlier.
+  $extra = explode(';', $extra);
+  $hook = 'dita_anchor_links_redirect';
+  foreach (module_implements($hook) as $module) {
+    $extra_item = array_shift($extra);
+    $function = $module . '_' . $hook;
+    $function($efq, $extra_item);
+  }
+
+  $result = $efq->execute();
+
+  // We're almost done. The last thing to check is that the node belongs to the
+  // correct vocabulary. We can't do that directly with the efq, since we can't
+  // query for a fields vid, but only for the tid. So, if we still have
+  // multiples at this stage, loop through them, load the vids, and select the
+  // correct one. NOTE: This has never been tested!
+  if (count($result) == 1) {
+    foreach ($result['node'] as $nodette) {
+      $node = node_load($nodette->nid);
+      $tid = $node->field_node_dita_ditamap_term_ref['und'][0]['value'];
+      $t = taxonomy_term_load($tid);
+      $v_name = $t->vocabulary_machine_name;
+
+      if ($v_name == $vocabulary) {
+        // We now have the $node we want.
+        continue;
+      }
+    }
+  }
+  else {
+    // Select the first and the only one.
+    $nodette = reset($result['node']);
+    $node = node_load($nodette->nid);
+  }
+
+  // TODO should be site default lang.
+  if ($lang != 'en') {
+    $path = $lang . '/';
+  }
+  else {
+    $path = '';
+  }
+
+  $path .= drupal_lookup_path('alias', "node/" . $node->nid, $lang);
+  $path .= '#' . $anchor;
+
+  drupal_goto($base_url . '/' . $path);
+}
+
+
+/**
+ * Helper function that parses the public identifier.
+ *
+ * Parses the public identifier for a topic subtype when given the topic id.
+ *
+ * @param String? $id
+ *   TODO
+ *
+ * @return String?
+ *   TODO
+ */
+function dita_get_public_id_from_dtd($id) {
+  global $base_url;
+  $path = $base_url . '/' . drupal_get_path('module', 'dita') . '/' . variable_get('dita_selected_dtd', 'dtd/1.2/technicalContent') . '/dtd/' . $id . '.dtd';
+  $dtd = file_get_contents($path);
+
+  // Get the Topic Entity element and get rid of it. We should find the entity
+  // element we're looking for after it.
+  $offset = strpos($dtd, '<!ENTITY % topic-type');
+  $dtd = substr($dtd, $offset);
+  do {
+    $c = substr($dtd, 0, 1);
+    $dtd = substr($dtd, 1);
+  } while ($c != '>');
+  // And the name after the element...
+  do {
+    $c = substr($dtd, 0, 1);
+    $dtd = substr($dtd, 1);
+  } while ($c != ';');
+  // And the next comment...
+  $dtd = preg_replace('/<!--(.*?)-->/', '', $dtd);
+
+  // We should have the Entity element for this doctype now.
+  // Get the public id.
+  $public_id = substr(trim($dtd), strpos(trim($dtd), '"') + 1);
+  $public_id = substr($public_id, 0, strpos($public_id, '"'));
+
+  return $public_id;
+}
+
+/**
+ * Recursively delete a directory and its contents.
+ *
+ * @param String $dir
+ *   The path of the directory to delete.
+ */
+function dita_rrmdir($dir) {
+  if (is_dir($dir)) {
+    $objects = scandir($dir);
+    foreach ($objects as $object) {
+      if ($object != "." && $object != "..") {
+        if (filetype($dir . "/" . $object) == "dir") {
+          dita_rrmdir($dir . "/" . $object);
+        }
+        else {
+          unlink($dir . "/" . $object);
+        }
+      }
+    }
+    reset($objects);
+    rmdir($dir);
+  }
+}

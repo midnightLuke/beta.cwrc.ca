@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Untitled Document</title>
+<link rel="stylesheet" type="text/css" href="TimeView.css">
+<style>
+#timelineLegend {
+	float: right;
+    margin-top: -50px;
+}
+#timelineLegend #legendCategoryWriting {
+	color: #174E17 
+}
+#timelineLegend #legendCategoryLetter {
+	color: #50338C
+}
+#timelineLegend #legendCategoryArt {
+	color: #A40404 
+}
+#timelineLegend #legendCategoryLife {
+	color: #06A6E9
+}
+
+#timelineLegend p{
+	text-transform: uppercase;
+	color: #555;	
+}
+#timelineDots p {
+	font-size: 14px;
+	margin: 2px;
+	text-transform:inherit;
+}
+
+#timelineCategories, #timelineDots {
+	float: left;
+	padding: 10px;
+}
+#timelineDots{
+    border: 1px solid #ccc;
+    margin: 10px 0 0 20px;
+    
+}
+
+#timelineDots .iconWrapper{
+	width:45px;
+}
+#timelineDots td {
+	padding-right: 5px;
+}
+
+#timelineDots td.icon div{
+	margin: auto;
+}
+
+#TimeView_timeline #timelineLegend .legendItems{
+    height: 10px;
+    min-width: 0;
+    width: 6px;
+	border-color: #444;
+	background-image: linear-gradient(180deg, rgba(30, 30, 30, 0.3) 0%, rgba(30, 30, 30, 0.3) 100%);
+}
+#TimeView_timeline #timelineLegend .legendItems.startKnown{
+	 border-radius: 5px 0 0 5px;
+    border-width: 6px;
+	width: 0;
+	
+}
+#TimeView_timeline #timelineLegend .legendItems.endKnown{
+	 border-radius: 0 5px 5px 0;
+    border-width: 6px;
+	width: 0;
+}
+#TimeView_timeline #timelineLegend .legendItems.endUnknown{
+	border-radius: 0 5px 5px 0;
+}
+#TimeView_timeline #timelineLegend .legendItems.startUnknown{
+	border-radius: 5px 0 0 5px;
+}
+#TimeView_timeline .timeline-event-tape.tapeLayer0.singleDateEvent.between {
+    background-image: url("images/dp-grey-bg.png");
+}
+
+</style>
+</head>
+
+<body>
+<h1 class="page-header">Timeline</h1>
+<div id="TimeView_timeline">
+    <div id="timelineLegend">
+        <div id="timelineCategories">
+            <p id="legendCategoryWriting">Writings</p>
+            <p id="legendCategoryArt">Visual Art</p>
+            <p id="legendCategoryLetter">Correspondence</p>
+            <p id="legendCategoryLife">Life</p>
+        </div>
+        
+        <div id="timelineDots">
+        	<table>
+              <tr>
+                <td class="icon"><div id="" class="legendItems startKnown timeline-event-tape tapeLayer0 singleDateEvent" style=" "></div></td>
+                <td> <p>Beginning Precisely</p></td>
+              </tr>
+              <tr>
+                <td class="icon"><div id="" class="legendItems endKnown timeline-event-tape tapeLayer0 singleDateEvent" style=""></div></td>
+                <td><p>Ending Precisely</p></td>
+              </tr>
+              <tr>
+                <td class="icon"><div id="" class="legendItems endUnknown timeline-event-tape tapeLayer0 " style=""></div></td>
+                <td><p>Beginning Approximately</p></td>
+              </tr>
+              <tr>
+                <td class="icon"><div id="" class="legendItems startUnknown timeline-event-tape tapeLayer0 " style=""></div></td>
+                <td><p>Ending Approximately</p></td>
+              </tr>
+              <tr>
+                <td class="icon"><div id="" class="legendItems startKnown endKnown between timeline-event-tape tapeLayer1" style="width: 45px; height: 8px; opacity: 1;border:none; border-radius:0"></div></td>
+                <td><p>From... To...</p></td>
+              </tr>
+              <tr>
+                <td class="icon"><div id="" class="startKnown endKnown between timeline-event-tape tapeLayer0 singleDateEvent" style="width: 45px; height: 8px; opacity: 1; border:none;"></div></td>
+                <td><p>Between... and...</p></td>
+              </tr>
+            </table>
+            <div class="iconWrapper">
+            	
+            </div>
+              
+        </div>
+    
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,296 @@
+/**
+ * Custom Styles for Digital Page
+ * Created by Semandra Inc. 2014 
+ * URL: http://semandra.com
+ */
+
+
+
+
+h1, h2, h3{
+	/*font-family: 'Quintessential', cursive;*/
+	color: #004D6E;
+	font-family: "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif
+}
+
+p {
+	font-family: "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+	font-size: 1.1em;
+}
+
+a {
+	color: #802D2D;
+}
+a:hover, a:focus {
+	text-decoration: underline;
+	color: #802D2D;
+}
+
+.navbar-default, .navbar-inverse {
+	background-color: #D09938;
+	border-color: none;
+}
+
+#navbar {
+	max-width: none;
+	color: #004D6E;
+	width: 100%;
+}
+
+#navbar .container {
+	max-width: 1170px;
+	margin: auto;
+}
+
+#navbar .navbar-header {
+	position:relative;
+}
+
+.navbar-header .logo img {
+	
+}
+
+.navbar-inverse .navbar-brand {
+	color: #004D6E;
+	font-size: 36px;
+	margin-top: 10px;
+	font-family: "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif
+}
+
+.lead {
+    color: #802d2d;
+    font-size: 13.5px;
+    left: 170px;
+    margin-bottom: 0;
+    position: absolute;
+    top: 87px;
+}
+
+
+#navbar {
+	margin-bottom: 0;
+	margin-top: 0;
+	border-radius:0;
+	border: none;
+}
+#navbar .nav {
+	float: right;
+}
+
+#navbar .region-navigation {
+	width: 200px;
+	float: right;
+	clear: both;
+	margin-top: -60px;
+	display: block;
+}
+
+#block-search-form button{
+	background-color: #AD636C;
+	color: white;
+	border-color: lightgray;
+	padding: 3px 6px;
+	
+}
+#block-search-form input{
+
+	background-color: #BF9199;
+	border: 1px solid lightgray;
+	padding: 3px 6px;
+	height: 28px;
+	color: #fff;
+	letter-spacing: 1px;
+}
+
+#block-search-form input::-webkit-input-placeholder  {
+	color: #ddd;
+}
+
+#block-search-form input::-moz-placeholder {
+	color: #ddd;
+}
+#block-search-form input:-moz-placeholder {   /* Older versions of Firefox */
+	color: #ddd;
+}
+#block-search-form input:-ms-input-placeholder { 
+	color: #ddd;
+}
+
+.navbar .logo {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+	background-color: #D6A651;
+}
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+	background-color: #BA862B;
+	color: #fff;	
+}
+
+.navbar-inverse .navbar-nav > li > a {
+	font-size: 12px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	color: #fff;
+}
+.dropdown-menu {
+	background-color: #BA862B;
+	color: #fff;
+}
+.dropdown-menu > li > a {
+	background-color: #BA862B;
+	color: #fff;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+	background-color: #CB922F;
+	color: #fff;
+	text-decoration: none;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+	background-color: #D6A651;
+}
+
+#page-header {
+	background-color: #004D6E;
+	margin-top: -60px;
+	left: 0;
+	position:absolute;
+	width: 100%;
+}
+
+#page-header .region-header{
+	width: 100%;
+	margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+#page-header section {
+	margin: auto;
+    max-width: 1170px;}
+
+
+#page-header ul.nav a{
+    color: #eee;
+    font-weight: 300;
+    letter-spacing: 0.6px;
+    padding: 5px 15px;
+	text-transform: uppercase;
+}
+#page-header ul.nav a:hover{
+	padding: 5px 15px;
+	color: #EEEEEE;
+	background-color: #0072A3;
+}
+
+#page-header .nav > li { 
+	float: left;
+
+}
+
+#page-header .nav > li > a:hover, #page-header .nav > li > a:focus{
+	background-color: #0072A3;
+}
+
+
+#page-header .dropdown-menu {
+	background-color: #004D6E;	
+}
+
+
+.main-container {
+	z-index: 99;
+	margin-top: 60px;
+}
+
+.footer {
+	border-top: none;
+	background-color: #D09938;
+	border-bottom: 7px solid #AC7842;
+	width: 100%;
+	}
+
+#footerCopyright  {
+	color: #DCC97F;
+	font-size:12px;
+	text-align: center;
+}
+
+#footerCopyright a {
+	color: #DCC97F;
+}
+#footerCopyright a:hover {
+	color: #fff;
+}
+
+
+
+/* --------------------------  Home Page --------------------------------------- */
+
+.front .page-header {
+	display: none;
+}
+#homeBigNav {
+	margin: 0 0 40px 0;
+}
+
+#homeIntroTitle {
+    margin-bottom: 30px;
+    margin-top: 0;
+    padding-top: 30px;
+}
+
+.front .region-sidebar-second {
+	margin-top: 140px;
+}
+
+.front .main-container {
+	
+}
+
+#homeSlideShow {
+	min-width: 310px;
+	padding: 0;
+}
+
+
+.homeSlideshow a.ssc-previous, .homeSlideshow a.ssc-next {
+	background-image: url(images/next-buttons.png);
+	background-repeat: no-repeat;
+	width: 110px;
+	display: inline-block;
+	height: 24px;
+	text-transform:uppercase;
+	padding: 0 30px;
+	margin-bottom: 10px;
+}
+
+.homeSlideshow a.ssc-previous:hover {
+	background-position: 0px -50px;	
+}
+
+.homeSlideshow a.ssc-next {
+	background-position: 63px -25px;
+    padding-left: 0;
+}
+.homeSlideshow a.ssc-next:hover {
+	background-position: 63px -75px;
+}
+
+.homeSlideshow .ssc-index {
+	width: 100px;
+	display: inline-block;
+	color: #555;
+	text-transform:uppercase;
+	visibility: hidden;
+	
+}
+
+.homeSlideshow .ssc-caption {
+	padding: 15px;
+	color: #555;
+}

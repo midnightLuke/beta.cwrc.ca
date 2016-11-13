@@ -1,0 +1,12 @@
+name = AYAH
+description = Are You A Human is a dynamic, ever changing interactive experience that stops spammers in their tracks.
+package = AYAH
+core = 7.x
+configure = admin/config/people/ayah
+
+; Information added by drupal.org packaging script on 2013-09-30
+version = "7.x-1.0+1-dev"
+core = "7.x"
+project = "ayah"
+datestamp = "1380555063"
+

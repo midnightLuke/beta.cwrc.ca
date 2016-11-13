@@ -1,0 +1,338 @@
+<?php
+// $Id$
+
+/**
+ * Implements hook_schema().
+ */
+function dita_schema() {
+  $schema = array();
+
+  $schema['dita_task'] = array(
+    'fields' => array(
+      'dtid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'prefix' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'ditamap' => array(
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'type' => 'text',
+        'size' => 'small',
+        'not null' => TRUE,
+      ),
+      'output_dir' => array(
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
+      'basedir' => array(
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
+      'enabled' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'status' => array(
+        'description' => 'Status of the conversion.
+          0 if not converted
+          1 if converted successfully
+          >1 if an error happened',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'priority' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('dtid'),
+    'indexes' => array(
+      'nid' => array('nid'),
+      'enabled' => array('enabled'),
+      'status' => array('status'),
+    ),
+  );
+
+  $schema['dita_task_vocabulary'] = array(
+    'fields' => array(
+      'dtid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'vid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array(
+      'dtid',
+      'vid',
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ *
+ * Copied from node_example.install
+ *
+ */
+function dita_install() {
+  // During installation, the t() function is unavailable, so we use get_t()
+  // to store the name of the translation function.
+  $t = get_t();
+
+  // Add the Taxonomy Vocabulary for DITA topic types
+  $v = taxonomy_vocabulary_machine_name_load('dita_topic_type');
+  if(!$v) {
+    $v = new StdClass();
+    $v->name = $t('DITA topic type');
+    $v->machine_name = 'dita_topic_type';
+    $v->module = 'dita';
+    taxonomy_vocabulary_save($v);
+    
+    $term = new StdClass();
+    $term->vid = $v->vid;
+    $term->name = $t('Reference');
+    taxonomy_term_save($term);
+    $term->name = $t('Concept');
+    $term->tid = false;
+    taxonomy_term_save($term);
+    $term->name = $t('Task');
+    $term->tid = false;
+    taxonomy_term_save($term);
+    $term->name = $t('Topic');
+    $term->tid = false;
+    taxonomy_term_save($term);
+  }
+
+  // Create the custom content type for DITA nodes
+  // The following code is mostly copied from the examples module.
+  // We define the node type as an associative array.
+  $node_dita = array(
+    'type' => 'dita',
+    'name' => $t('DITA document Node'),
+    // 'base' tells Drupal the base string for hook functions.
+    // This is often the module name; if base is set to 'mymodule', Drupal
+    // would call mymodule_insert() or similar for node hooks.
+    // In this case, we set base equal to 'node_content' so Drupal will handle
+    // our node as if we had designed it in the UI.
+    'base' => 'node_content',
+    'description' => $t('A node that contains all the information imported from a DITA XML topic file.'),
+    'body_label' => $t('Body HTML content'),
+    'custom' => TRUE,
+  );
+
+  // Complete the node type definition by setting any defaults not explicitly
+  // declared above.
+  // http://api.drupal.org/api/function/node_type_set_defaults/7
+  $content_type = node_type_set_defaults($node_dita);
+  
+  // Add body field
+  node_add_body_field($content_type, 'Body');
+
+  // Save the content type
+  node_type_save($content_type);
+
+  // Create all the fields we are adding to our content type.
+  // http://api.drupal.org/api/function/field_create_field/7
+  foreach (_node_dita_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  // http://api.drupal.org/api/function/field_create_instance/7
+  foreach (_node_dita_installed_instances() as $instance) {
+    field_create_instance($instance);
+  }
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function dita_uninstall() {
+  foreach (_node_dita_installed_instances() as $instance) {
+    field_delete_instance($instance);
+  }
+  
+  foreach (_node_dita_installed_fields() as $field) {
+    field_delete_field($field['field_name']);
+  }
+  
+  field_purge_batch(20);
+}
+
+
+/**
+ * Copied from node_example.install
+ *
+ * Returns a structured array defining the fields created by this content type.
+ *
+ * This is factored into this function so it can be used in both
+ * node_example_install() and node_example_uninstall().
+ *
+ * @return
+ *  An associative array specifying the fields we wish to add to our
+ *  new node type.
+ *
+ * @ingroup node_example
+ */
+function _node_dita_installed_fields() {
+  return array(
+    'node_dita_original_id' => array(
+      'field_name' => 'node_dita_original_id',
+      'type' => 'text',
+      'cardinality' => 1,
+    ),
+    'node_dita_body_xml' => array(
+      'field_name' => 'node_dita_body_xml',
+      'cardinality' => 1,
+      'type'        => 'text_long',
+    ),
+    'node_dita_topic_type' => array(
+      'field_name' => 'node_dita_topic_type',
+      'cardinality' => 1,
+      'type' => 'taxonomy_term_reference',
+      'settings' => array(
+        'allowed_values' => array(
+          array(
+            'vocabulary' => 'dita_topic_type',
+            'parent' => 0,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+
+/**
+ * Copied from node_example.install
+ *
+ * Returns a structured array defining the instances for this content type.
+ *
+ * The instance lets Drupal know which widget to use to allow the user to enter
+ * data and how to react in different view modes.  We are going to display a
+ * page that uses a custom "node_example_list" view mode.  We will set a
+ * cardinality of three allowing our content type to give the user three color
+ * fields.
+ *
+ * This is factored into this function so it can be used in both
+ * node_example_install() and node_example_uninstall().
+ *
+ * @return
+ *  An associative array specifying the instances we wish to add to our new
+ *  node type.
+ *
+ * @ingroup node_example
+ */
+function _node_dita_installed_instances() {
+  $t = get_t();
+  return array(
+    'node_dita_original_id' => array(
+      'entity_type' => 'node',
+      'bundle' => 'dita',
+      'field_name' => 'node_dita_original_id',
+      'label' => $t('Original XML id'),
+      'description' => $t('The unique XML id from the DITA topic document'),
+      'widget' => array(
+        'type' => 'text_textfield',
+        'weight' => 10,
+      ),
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'type' => 'hidden',
+        ),
+      ),
+    ),
+    
+    'node_dita_body_xml' => array(
+      'entity_type' => 'node',
+      'bundle' => 'dita',
+      'field_name' => 'node_dita_body_xml',
+      'label'      => $t('Body XML content.'),
+      'widget'     => array(
+        'type'       => 'text_textarea',
+      ),
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'type' => 'hidden',
+        ),
+      ),
+    ),
+    
+    'node_dita_topic_type' => array(
+      'entity_type' => 'node',
+      'bundle' => 'dita',
+      'field_name' => 'node_dita_topic_type',
+      'label'      => $t('Topic type.'),
+      'widget'     => array(
+        'type'       => 'select',
+      ),
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'type' => 'hidden',
+        ),
+      ),
+    ),
+
+  );
+}
+
+
+/**
+ * Implements hook_requirements().
+ * 
+ */
+function dita_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+
+  module_load_include('inc', 'dita');
+
+  if ($phase == 'runtime') {
+    // checking for DITA OT
+    $dita_ot_version = get_dita_ot_version(variable_get('dita_ot_dir', ''));
+
+    $requirements['dita_ot'] = array(
+      'title' => $t('DITA OT path'),
+      'value' => empty($dita_ot_version) ? $t('Not set') : $dita_ot_version,
+      'severity' => empty($dita_ot_version) ? REQUIREMENT_WARNING : REQUIREMENT_OK,
+      'description' => $t('You can set the path on !link', array(
+        '!link' => l($t('DITA admin page'), 'admin/content/dita'),
+      )),
+    );
+  }
+
+  return $requirements;
+}

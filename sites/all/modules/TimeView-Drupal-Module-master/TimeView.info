@@ -1,0 +1,8 @@
+; $Id$
+name = TimeView
+description = "Plots positions and information on a Timeline."
+core = 7.x
+files[] = TimeView.module
+files[] = TimeView.inc
+stylesheets[all][] =  TimeView.css
+configure = admin/config/content/TimeView
