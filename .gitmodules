@@ -105,7 +105,7 @@
         url = git@bitbucket.org:digitalechidna/cwrc-theme-de_theme.git
 [submodule "sites/all/modules/emic_ctype_feature"]
         path = sites/all/modules/emic_ctype_feature
-        url = https://github.com/discoverygarden/emic_ctype_feature.git
+        url = git://github.com/discoverygarden/emic_ctype_feature.git
 [submodule "sites/all/modules/emic_theme_feature"]
         path = sites/all/modules/emic_theme_feature
         url = git://github.com/discoverygarden/emic_theme_feature.git
