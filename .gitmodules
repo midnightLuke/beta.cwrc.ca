@@ -82,6 +82,72 @@
 [submodule "sites/default/modules/custom/cwrc_permissions"]
         path = sites/default/modules/custom/cwrc_permissions
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_permissions.git
+[submodule "sites/default/modules/custom/cwrc_projects"]
+        path = sites/default/modules/custom/cwrc_projects
+        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_projects.git
+[submodule "sites/default/modules/custom/cwrc_search"]
+        path = sites/default/modules/custom/cwrc_search
+        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_search.git
+[submodule "sites/default/modules/custom/cwrc_search_bar"]
+        path = sites/default/modules/custom/cwrc_search_bar
+        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_search_bar.git
+[submodule "sites/default/modules/custom/cwrc_solr_site_content"]
+        path = sites/default/modules/custom/cwrc_solr_site_content
+        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_solr_site_content.git
+[submodule "sites/default/modules/custom/cwrc_theme_compat"]
+        path = sites/default/modules/custom/cwrc_theme_compat
+        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_theme_compat.git
+[submodule "sites/default/modules/custom/cwrc_visualization"]
+        path = sites/default/modules/custom/cwrc_visualization
+        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_visualization.git
+[submodule "sites/default/modules/custom/cwrc_workflow_de"]
+        path = sites/default/modules/custom/cwrc_workflow_de
+        url = sites/default/modules/custom/cwrc_workflow_de
+[submodule "sites/default/modules/custom/cwrc_xacml"]
+        path = sites/default/modules/custom/cwrc_xacml
+        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_xacml.git
+[submodule "sites/default/libraries/CWRC-Mapping-Timelines-Project"]
+        path = sites/default/libraries/CWRC-Mapping-Timelines-Project
+        url = https://github.com/cwrc/CWRC-Mapping-Timelines-Project.git
+[submodule "sites/default/libraries/CWRC-Writer"]
+        path = sites/default/libraries/CWRC-Writer
+        url = https://github.com/cwrc/CWRC-Writer.git
+[submodule "sites/default/modules/custom/de_contextual_help"]
+        path = sites/default/modules/custom/de_contextual_help
+        url = git@bitbucket.org:digitalechidna/cwrc-module-de_contextual_help.git
+[submodule "sites/default/modules/custom/islandora_blocks"]
+        path = sites/default/modules/custom/islandora_blocks
+        url = https://github.com/echidnacorp/islandora_blocks
+[submodule "sites/default/modules/islandora_collection_search"]
+        path = sites/default/modules/islandora_collection_search
+        url = https://github.com/discoverygarden/islandora_collection_search.git
+[submodule "sites/default/modules/islandora_cwrc_basexdb"]
+        path = sites/default/modules/islandora_cwrc_basexdb
+        url = https://github.com/cwrc/islandora_cwrc_basexdb.git
+[submodule "sites/default/modules/islandora_cwrc_document"]
+        path = sites/default/modules/islandora_cwrc_document
+        url = https://github.com/discoverygarden/islandora_cwrc_document.git
+[submodule "sites/default/modules/islandora_cwrc_writer"]
+        path = sites/default/modules/islandora_cwrc_writer
+        url = git@github.com:discoverygarden/islandora_cwrc_writer.git
+[submodule "sites/default/modules/custom/islandora_object_field"]
+        path = sites/default/modules/custom/islandora_object_field
+        url = git@bitbucket.org:digitalechidna/cwrc-module-islandora_object_field.git
+[submodule "sites/default/modules/islandora_plotit"]
+        path = sites/default/modules/islandora_plotit
+        url = https://github.com/cwrc/islandora_plotit.git
+[submodule "sites/default/modules/custom/islandora_saved_searches"]
+        path = sites/default/modules/custom/islandora_saved_searches
+        url = https://github.com/echidnacorp/islandora_saved_searches
+[submodule "sites/default/modules/custom/og_global_roles"]
+        path = sites/default/modules/custom/og_global_roles
+        url = git@bitbucket.org:digitalechidna/cwrc-module-og_global_roles.git
+[submodule "sites/default/modules/custom/translation_settings"]
+        path = sites/default/modules/custom/translation_settings
+        url = git@bitbucket.org:digitalechidna/cwrc-feature-translation_settings.git
+[submodule "sites/default/modules/custom/webforms"]
+        path = sites/default/modules/custom/webforms
+        url = git@bitbucket.org:digitalechidna/cwrc-feature-webforms.git
 [submodule "sites/all/modules/cwrc_workflow"]
         path = sites/all/modules/cwrc_workflow
         url = https://github.com/cwrc/cwrc_workflow.git
