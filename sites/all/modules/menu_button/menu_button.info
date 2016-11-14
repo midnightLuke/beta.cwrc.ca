@@ -1,0 +1,19 @@
+name = Menu button
+description = Displays a menu when you click on a button/link.
+core = 7.x
+package = Menu
+
+stylesheets[all][] = menu_button.css
+
+scripts[] = menu_button.js
+
+dependencies[] = menu
+
+files[] = menu_button.test
+
+; Information added by Drupal.org packaging script on 2016-03-24
+version = "7.x-1.0"
+core = "7.x"
+project = "menu_button"
+datestamp = "1458863645"
+

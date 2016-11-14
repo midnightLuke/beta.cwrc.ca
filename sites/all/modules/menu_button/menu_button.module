@@ -1,0 +1,132 @@
+<?php
+/**
+ * @file
+ * Hooks and helper functions for the menu_button module.
+ */
+
+/* Hooks. */
+
+/**
+ * Implements hook_block_info().
+ */
+function menu_button_block_info() {
+  $blocks = array();
+  $all_menus = menu_get_menus();
+
+  // Add a menu button for each menu on the site.
+  foreach ($all_menus as $machine_name => $menu_title) {
+    $blocks[$machine_name] = array(
+      'info' => t('Menu button: @menu_title', array(
+        '@menu_title' => $menu_title,
+      )),
+      // Menu blocks can't be cached because each menu item can have a custom
+      // access callback. menu.inc manages its own caching.
+      // See menu_block_info() for more information.
+      'cache' => DRUPAL_NO_CACHE,
+    );
+  }
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function menu_button_block_configure($delta = '') {
+  $form = array();
+  $this_delta_settings_prefix = _menu_button_delta_settings_prefix($delta);
+
+  // Let the site-builder choose a glyph that the user must click on to open or
+  // close the menu.
+  $form['glyph'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Glyph to open menu'),
+    '#default_value' => variable_get($this_delta_settings_prefix . '_glyph', '⚙'),
+    '#size' => 2,
+    '#required' => TRUE,
+  );
+
+  // Let the site builder add CSS classes to the glyph wrapper.
+  $form['glyph_classes'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Glyph classes'),
+    '#default_value' => variable_get($this_delta_settings_prefix . '_glyph_classes', ''),
+  );
+
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function menu_button_block_save($delta = '', $edit = array()) {
+  $this_delta_settings_prefix = _menu_button_delta_settings_prefix($delta);
+
+  // Save the glyph and it's classes.
+  variable_set($this_delta_settings_prefix . '_glyph', $edit['glyph']);
+  variable_set($this_delta_settings_prefix . '_glyph_classes', $edit['glyph_classes']);
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function menu_button_block_view($delta = '') {
+  $this_delta_settings_prefix = _menu_button_delta_settings_prefix($delta);
+  $all_menus = menu_get_menus();
+  $current_menu = menu_navigation_links($delta);
+  $current_menu_name = isset($all_menus[$delta]) ? $all_menus[$delta] : '';
+
+  // Pre-populate the output.
+  $block = array();
+  $block['subject'] = $current_menu_name;
+  $block['content'] = array();
+
+  // Display the triggering element visually only.
+  $block['content']['activate_link_wrapper'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array(
+        $this_delta_settings_prefix,
+        'menu_button_trigger',
+        check_plain(variable_get($this_delta_settings_prefix . '_glyph_classes', '')),
+      ),
+      'aria-hidden' => 'true',
+    ),
+  );
+  $block['content']['activate_link_wrapper']['activate_link'] = array(
+    '#markup' => check_plain(variable_get($this_delta_settings_prefix . '_glyph', '⚙')),
+  );
+
+  // Wrap the menu content in a wrapper which we can hide and show.
+  $block['content']['menu_content_wrapper'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array(
+        $this_delta_settings_prefix,
+        'menu_button_target',
+      ),
+    ),
+  );
+  $block['content']['menu_content_wrapper']['menu_content'] = array(
+    '#markup' => theme('links', array('links' => $current_menu)),
+  );
+
+  return $block;
+}
+
+/* Helper functions. */
+
+/**
+ * Get a settings prefix for this delta.
+ *
+ * Use the same function to determine this every time.
+ *
+ * @param string $delta
+ *   The block delta.
+ *
+ * @return string
+ *   The settings prefix.
+ */
+function _menu_button_delta_settings_prefix($delta) {
+  return 'menu_button__' . $delta;
+}

@@ -1,0 +1,32 @@
+/**
+ * @file
+ * Client-side styles for the menu_button module.
+ */
+
+.block-menu-button .menu_button_trigger {
+  cursor: pointer;
+}
+
+/*
+ * Hide collapsed menus visually, but keep them available for screen-readers.
+ */
+.block-menu-button[data-state="collapsed"] .menu_button_target {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  height: 1px;
+  width: 1px;
+  word-wrap: normal;
+}
+
+/*
+ * Show expanded menus visually, make no change for screenreaders.
+ */
+.block-menu-button[data-state="expanded"] .menu_button_target {
+  position: inherit;
+  clip: inherit;
+  overflow: inherit;
+  height: inherit;
+  width: inherit;
+  word-wrap: inherit;
+}

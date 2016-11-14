@@ -1,0 +1,176 @@
+<?php
+/**
+ * Contains \MenuButtonWebTestCase.
+ */
+
+/**
+ * Tests the menu button module.
+ */
+class MenuButtonWebTestCase extends DrupalWebTestCase {
+
+  /**
+   * A user with administrative permissions.
+   *
+   * @var object
+   */
+  public $adminUser;
+
+  /**
+   * A machine name for a custom menu we use in the test.
+   *
+   * @var string
+   */
+  public $customMenuName;
+
+  /**
+   * A title for a custom menu we use in the test.
+   *
+   * @var string
+   */
+  public $customMenuTitle;
+
+  /**
+   * A title for a custom menu link we use in the test.
+   *
+   * @var string
+   */
+  public $customMenuLinkTitle;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    // Note: getInfo() strings are not translated with t().
+    return array(
+      'name' => 'Menu button',
+      'description' => 'Displays a menu when you click on a button/link.',
+      'group' => 'menu_button',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    // SimpleTest Turbo makes things really fast. Let's use it if we can.
+    if (module_exists('simpletest_turbo')) {
+      $id = simpletest_turbo_id('simpletest_turboOptimized');
+      if (db_table_exists('fasttest' . $id . 'node')) {
+        $this->prepareDatabasePrefix();
+        $this->prepareEnvironment();
+        $this->changeDatabasePrefix();
+        simpletest_turbo_copy_tables('fasttest' . $id, $this->databasePrefix);
+        variable_set('file_public_path', $this->public_files_directory);
+        variable_set('file_private_path', $this->private_files_directory);
+        variable_set('file_temporary_path', $this->temp_files_directory);
+        $this->setup = TRUE;
+      }
+      else {
+        parent::setUp();
+        simpletest_turbo_copy_tables($this->databasePrefix, 'fasttest' . $id);
+      }
+    }
+    else {
+      parent::setUp();
+    }
+
+    // Enable the modules we need.
+    module_enable(array(
+      'menu',
+      'menu_button',
+    ));
+
+    // To set up the test, we need to be logged in as a user with administrative
+    // privileges.
+    $this->adminUser = $this->drupalCreateUser(array(
+      'access administration pages',
+      'administer blocks',
+      'administer menu',
+    ));
+    $this->drupalLogin($this->adminUser);
+
+    // Add a custom menu.
+    $menu_machine_name = substr(hash('sha256', $this->randomName(16)), 0, MENU_MAX_MENU_NAME_LENGTH_UI);
+    $this->customMenuName = 'menu-' . $menu_machine_name;
+    $this->customMenuTitle = $this->randomName();
+    $this->drupalGet('admin/structure/menu/add');
+    $menu_add_form = array(
+      'title' =>  $this->customMenuTitle,
+      'menu_name' => $menu_machine_name,
+      'description' => '',
+    );
+    $this->drupalPost('admin/structure/menu/add', $menu_add_form, t('Save'));
+
+    // Add at least one link to the menu.
+    $this->drupalGet("admin/structure/menu/manage/$this->customMenuName/add");
+    $this->customMenuLinkTitle = $this->randomString();
+    $menu_link_add_form = array(
+      'link_path' => '<front>',
+      'link_title' => $this->customMenuLinkTitle,
+      'description' => '',
+      'enabled' => TRUE,
+      'expanded' => TRUE,
+      'parent' =>  $this->customMenuName . ':0',
+      'weight' => '0',
+    );
+    $this->drupalPost(NULL, $menu_link_add_form, t('Save'));
+  }
+
+  /**
+   * Test this module's basic functionality.
+   */
+  public function testBasicFunctionality() {
+    // Test there is a block corresponding to the new menu.
+    $this->drupalGet('admin/structure/block');
+    $this->assertText('Menu button: ' . $this->customMenuTitle,
+      'Menu button block exists for custom menu.');
+
+    // Place the block on the page.
+    $block_placement_page = array();
+    $block_placement_page['blocks[menu_button_' . $this->customMenuName . '][region]'] = 'sidebar_first';
+    $this->drupalPost('admin/structure/block', $block_placement_page, t('Save blocks'));
+
+    // See if the block is on the front page.
+    $this->drupalGet('<front>');
+    $this->assertRaw('id="block-menu-button-' . $this->customMenuName . '"',
+      'Found output for a menu button block.');
+    $this->assertText('⚙',
+      'The default glyph is displayed.');
+    $this->assertRaw(check_plain($this->customMenuLinkTitle),
+      'The custom menu link title is on the page.');
+  }
+
+  /**
+   * Test that we can change the menu glyph and classes.
+   */
+  public function testCanChangeMenuGlyphAndClasses() {
+    // Randomly generate a custom glyph. For the sake of simplicity, we'll make
+    // this a random string one character long.
+    $test_glyph = $this->randomString(1);
+    $test_class = $this->randomString();
+
+    // Change the block settings to use the glyph.
+    $config_page_path = 'admin/structure/block/manage/menu_button/' . $this->customMenuName . '/configure';
+    $this->drupalGet($config_page_path);
+    $config_page = array(
+      'title' => '',
+      'glyph' => $test_glyph,
+      'glyph_classes' => $test_class,
+    );
+    $this->drupalPost($config_page_path, $config_page, t('Save block'));
+
+    // Place the block on the page.
+    $this->drupalGet('admin/structure/block');
+    $block_placement_page = array();
+    $block_placement_page['blocks[menu_button_' . $this->customMenuName . '][region]'] = 'sidebar_first';
+    $this->drupalPost('admin/structure/block', $block_placement_page, t('Save blocks'));
+
+    // See if the new block settings appear on the front page.
+    $this->drupalGet('<front>');
+    $this->assertText($test_glyph,
+      'Custom glyph appears on the page.');
+    $this->assertRaw(check_plain($test_class),
+      'Custom class appears on the page.');
+  }
+
+}
