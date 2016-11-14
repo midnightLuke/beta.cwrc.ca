@@ -1,9 +1,9 @@
 [submodule "sites/all/modules/austese_collation"]
         path = sites/all/modules/austese_collation
-        url = git@github.com:discoverygarden/austese_collation.git
+        url = git://github.com/discoverygarden/austese_collation.git
 [submodule "sites/all/modules/austese_repository"]
         path = sites/all/modules/austese_repository
-        url = git@github.com:discoverygarden/austese_repository.git
+        url = git://github.com/discoverygarden/austese_repository.git
 [submodule "sites/all/libraries/BagItPHP"]
         path = sites/all/libraries/BagItPHP
         url = git://github.com/scholarslab/BagItPHP.git
@@ -108,13 +108,13 @@
         url = https://github.com/discoverygarden/emic_ctype_feature.git
 [submodule "sites/all/modules/emic_theme_feature"]
         path = sites/all/modules/emic_theme_feature
-        url = git@github.com:discoverygarden/emic_theme_feature.git
+        url = git://github.com/discoverygarden/emic_theme_feature.git
 [submodule "sites/all/themes/emic-theme"]
         path = sites/all/themes/emic-theme
         url = git://github.com/DGI-EMiC/emic-theme.git
 [submodule "sites/all/modules/emicdora"]
         path = sites/all/modules/emicdora
-        url = git@github.com:discoverygarden/emicdora.git
+        url = git://github.com/discoverygarden/emicdora.git
 [submodule "sites/all/modules/islandora"]
         path = sites/all/modules/islandora
         url = git://github.com/Islandora/islandora.git
@@ -141,7 +141,7 @@
         url = https://github.com/discoverygarden/islandora_critical_edition_advanced.git
 [submodule "sites/all/modules/islandora_cwrc_writer"]
         path = sites/all/modules/islandora_cwrc_writer
-        url = git@github.com:discoverygarden/islandora_cwrc_writer.git
+        url = git://github.com/discoverygarden/islandora_cwrc_writer.git
 [submodule "sites/all/modules/islandora_fits"]
         path = sites/all/modules/islandora_fits
         url = git://github.com/Islandora/islandora_fits.git
@@ -262,4 +262,3 @@
 [submodule "sites/all/libraries/tuque"]
         path = sites/all/libraries/tuque
         url = https://github.com/Islandora/tuque.git
-        
