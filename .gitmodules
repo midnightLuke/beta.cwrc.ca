@@ -126,7 +126,7 @@
         url = https://github.com/cwrc/islandora_cwrc_basexdb.git
 [submodule "sites/default/modules/islandora_cwrc_document"]
         path = sites/default/modules/islandora_cwrc_document
-        url = https://github.com/discoverygarden/islandora_cwrc_document.git
+        url = https://github.com/jefferya/islandora_cwrc_document.git
 [submodule "sites/default/modules/islandora_cwrc_writer"]
         path = sites/default/modules/islandora_cwrc_writer
         url = git@github.com:discoverygarden/islandora_cwrc_writer.git
