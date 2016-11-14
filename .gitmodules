@@ -157,9 +157,6 @@
 [submodule "sites/default/libraries/CWRC-Mapping-Timelines-Project"]
         path = sites/default/libraries/CWRC-Mapping-Timelines-Project
         url = https://github.com/cwrc/CWRC-Mapping-Timelines-Project.git
-[submodule "sites/default/libraries/CWRC-Mapping-Timelines-Project"]
-        path = sites/default/libraries/CWRC-Mapping-Timelines-Project
-        url = https://github.com/cwrc/CWRC-Mapping-Timelines-Project.git
 [submodule "sites/all/libraries/CWRC-Writer"]
         path = sites/all/libraries/CWRC-Writer
         url = https://github.com/discoverygarden/CWRC-Writer.git
