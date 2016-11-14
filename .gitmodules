@@ -102,7 +102,7 @@
         url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_visualization.git
 [submodule "sites/default/modules/custom/cwrc_workflow_de"]
         path = sites/default/modules/custom/cwrc_workflow_de
-        url = sites/default/modules/custom/cwrc_workflow_de
+        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_workflow_de.git
 [submodule "sites/default/modules/custom/cwrc_xacml"]
         path = sites/default/modules/custom/cwrc_xacml
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_xacml.git
