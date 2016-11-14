@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the emic_ctype_feature feature.
+ */
+
+include_once 'emic_ctype_feature.features.inc';
