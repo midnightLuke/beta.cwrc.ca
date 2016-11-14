@@ -129,7 +129,7 @@
         url = https://github.com/jefferya/islandora_cwrc_document.git
 [submodule "sites/default/modules/islandora_cwrc_writer"]
         path = sites/default/modules/islandora_cwrc_writer
-        url = git@github.com:discoverygarden/islandora_cwrc_writer.git
+        url = https://github.com/jefferya/islandora_cwrc_writer.git
 [submodule "sites/default/modules/custom/islandora_object_field"]
         path = sites/default/modules/custom/islandora_object_field
         url = git@bitbucket.org:digitalechidna/cwrc-module-islandora_object_field.git
