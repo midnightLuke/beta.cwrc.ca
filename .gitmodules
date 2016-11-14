@@ -21,7 +21,7 @@
         url = https://github.com/Islandora/internet_archive_bookreader.git
 [submodule "sites/default/modules/custom/borealis_block_wrappers"]
         path = sites/default/modules/custom/borealis_block_wrappers
-        url = sites/default/modules/custom/borealis_block_wrappers
+        url = git@bitbucket.org:digitalechidna/cwrc-module-borealis_block_wrappers.git
 [submodule "sites/all/libraries/citeproc-php"]
         path = sites/all/libraries/citeproc-php
         url = https://github.com/Islandora/citeproc-php.git
