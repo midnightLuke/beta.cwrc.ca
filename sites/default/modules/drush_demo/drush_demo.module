@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Example function.
+ */
+ 
+function demo_drush_print_statement($type = NULL) {
+  drupal_set_message(t('Hello world!'), $type);
+}

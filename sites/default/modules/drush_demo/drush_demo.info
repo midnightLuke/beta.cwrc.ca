@@ -1,0 +1,3 @@
+name = Drush Demo 
+description = Demonstrating Drush commands
+core = 7.x

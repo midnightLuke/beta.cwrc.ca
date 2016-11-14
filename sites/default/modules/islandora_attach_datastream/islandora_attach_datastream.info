@@ -1,0 +1,6 @@
+name = Islandora Batch Attach Datastream
+description = Islandora datastream attach batch drush script
+package = Islandora
+version = 7.x-dev
+core = 7.x
+dependencies[] = islandora 

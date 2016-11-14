@@ -1,0 +1,6 @@
+name = Islandora Batch Update Metadata
+description = Islandora metadata update batch drush script
+package = Islandora
+version = 7.x-dev
+core = 7.x
+dependencies[] = islandora 
