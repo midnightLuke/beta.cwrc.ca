@@ -322,3 +322,6 @@
 [submodule "sites/all/libraries/tuque"]
         path = sites/all/libraries/tuque
         url = https://github.com/Islandora/tuque.git
+[submodule "sites/default/libraries/islandora_cwrc_xslt_library"]
+        path = sites/default/libraries/islandora_cwrc_xslt_library
+        url = https://github.com/cwrc/islandora_cwrc_xslt_library.git
