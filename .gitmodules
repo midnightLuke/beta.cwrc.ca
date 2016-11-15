@@ -63,13 +63,13 @@
         url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_islandora_tweaks.git
 [submodule "sites/all/modules/cwrc_islandora_xml"]
         path = sites/all/modules/cwrc_islandora_xml
-        url = git@github.com:cwrc/cwrc_islandora_xml.git
+        url = https://github.com/cwrc/cwrc_islandora_xml.git
 [submodule "sites/default/modules/custom/cwrc_menu_links"]
         path = sites/default/modules/custom/cwrc_menu_links
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_menu_links.git
 [submodule "sites/default/modules/cwrc_migration_batch"]
         path = sites/default/modules/cwrc_migration_batch
-        url = git@github.com:cwrc/cwrc_migration_batch.git
+        url = https://github.com/cwrc/cwrc_migration_batch.git
 [submodule "sites/default/modules/custom/cwrc_news"]
         path = sites/default/modules/custom/cwrc_news
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_news.git
@@ -309,7 +309,7 @@
         url = https://github.com/echidnacorp/islandora_xquery.git
 [submodule "sites/all/modules/migrate_books_to_d7"]
         path = sites/all/modules/migrate_books_to_d7
-        url = git@github.com:ajstanley/migrate_books_to_d7.git
+        url = https://github.com/ajstanley/migrate_books_to_d7.git
 [submodule "sites/all/modules/objective_forms"]
         path = sites/all/modules/objective_forms
         url = git://github.com/Islandora/objective_forms.git
