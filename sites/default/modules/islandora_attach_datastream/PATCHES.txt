@@ -1,0 +1,1 @@
+The file 0001-Fix-conflict-with-registry-rebuild.patch was generated using git format-patch on the commit in https://github.com/JacobSanford/islandora_attach_datastream/pull/3 .

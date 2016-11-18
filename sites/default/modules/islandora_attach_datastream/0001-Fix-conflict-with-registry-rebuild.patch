@@ -1,0 +1,25 @@
+From 06b682f636a1b96029d9db5908e4ad834bdf0a99 Mon Sep 17 00:00:00 2001
+From: M Parker <mparker17@536298.no-reply.drupal.org>
+Date: Fri, 18 Nov 2016 16:03:57 -0500
+Subject: [PATCH] Fix conflict with registry-rebuild.
+
+---
+ islandora_attach_datastream.drush.inc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/islandora_attach_datastream.drush.inc b/islandora_attach_datastream.drush.inc
+index 89501b0..e8c8dec 100644
+--- a/islandora_attach_datastream.drush.inc
++++ b/islandora_attach_datastream.drush.inc
+@@ -7,7 +7,7 @@
+ /**
+  * Implements hook_drush_help().
+  */
+-function registry_rebuild_drush_help($section) {
++function islandora_attach_datastream_drush_help($section) {
+   switch ($section) {
+     case 'drush:islandora_attach_datastream_to_object':
+       return dt('Attaches a datastream via Islandora to a Fedora object.');
+-- 
+2.10.2
+
