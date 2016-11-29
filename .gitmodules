@@ -13,9 +13,6 @@
 [submodule "sites/default/modules/custom/block_islandora_options"]
         path = sites/default/modules/custom/block_islandora_options
         url = https://github.com/echidnacorp/block_islandora_options
-[submodule "sites/default/modules/custom/block_og_context"]
-        path = sites/default/modules/custom/block_og_context
-        url = git@bitbucket.org:digitalechidna/block_og_context.git
 [submodule "sites/all/libraries/bookreader"]
         path = sites/all/libraries/bookreader
         url = https://github.com/Islandora/internet_archive_bookreader.git
