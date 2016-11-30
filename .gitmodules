@@ -61,6 +61,7 @@
 [submodule "sites/default/modules/custom/cwrc_islandora_tweaks"]
         path = sites/default/modules/custom/cwrc_islandora_tweaks
         url = https://github.com/cwrc/cwrc_islandora_tweaks.git
+        branch = develop
 [submodule "sites/all/modules/cwrc_islandora_xml"]
         path = sites/all/modules/cwrc_islandora_xml
         url = https://github.com/cwrc/cwrc_islandora_xml.git
