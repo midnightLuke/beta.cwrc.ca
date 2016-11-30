@@ -87,7 +87,7 @@
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_search.git
 [submodule "sites/default/modules/custom/cwrc_search_bar"]
         path = sites/default/modules/custom/cwrc_search_bar
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_search_bar.git
+        url = https://github.com/cwrc/cwrc_search_bar.git
 [submodule "sites/default/modules/custom/cwrc_solr_site_content"]
         path = sites/default/modules/custom/cwrc_solr_site_content
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_solr_site_content.git
