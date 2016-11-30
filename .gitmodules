@@ -148,7 +148,8 @@
         url = https://github.com/echidnacorp/islandora_saved_searches
 [submodule "sites/default/modules/custom/og_global_roles"]
         path = sites/default/modules/custom/og_global_roles
-        url = git@bitbucket.org:digitalechidna/cwrc-module-og_global_roles.git
+        url = https://github.com/cwrc/og_global_roles.git
+        branch = develop
 [submodule "sites/default/modules/custom/translation_settings"]
         path = sites/default/modules/custom/translation_settings
         url = git@bitbucket.org:digitalechidna/cwrc-feature-translation_settings.git
