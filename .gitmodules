@@ -34,6 +34,7 @@
 [submodule "sites/default/modules/custom/cwrc_core_tweaks"]
         path = sites/default/modules/custom/cwrc_core_tweaks
         url = https://github.com/cwrc/cwrc_core_tweaks.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_dashboards"]
         path = sites/default/modules/custom/cwrc_dashboards
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_dashboards.git
