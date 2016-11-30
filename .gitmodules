@@ -102,7 +102,8 @@
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_theme_compat.git
 [submodule "sites/default/modules/custom/cwrc_visualization"]
         path = sites/default/modules/custom/cwrc_visualization
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_visualization.git
+        url = https://github.com/cwrc/cwrc_visualization.git
+        branch = feature/remove-plotit
 [submodule "sites/default/modules/custom/cwrc_workflow_de"]
         path = sites/default/modules/custom/cwrc_workflow_de
         url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_workflow_de.git
