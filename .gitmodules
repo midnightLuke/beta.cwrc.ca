@@ -119,7 +119,8 @@
         url = https://github.com/cwrc/CWRC-Writer.git
 [submodule "sites/default/modules/custom/de_contextual_help"]
         path = sites/default/modules/custom/de_contextual_help
-        url = git@bitbucket.org:digitalechidna/cwrc-module-de_contextual_help.git
+        url = https://github.com/cwrc/de_contextual_help.git
+        branch = develop
 [submodule "sites/default/modules/custom/islandora_blocks"]
         path = sites/default/modules/custom/islandora_blocks
         url = https://github.com/echidnacorp/islandora_blocks
