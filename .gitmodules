@@ -19,6 +19,7 @@
 [submodule "sites/default/modules/custom/borealis_block_wrappers"]
         path = sites/default/modules/custom/borealis_block_wrappers
         url = https://github.com/cwrc/borealis_block_wrappers.git
+        branch = develop
 [submodule "sites/all/libraries/citeproc-php"]
         path = sites/all/libraries/citeproc-php
         url = https://github.com/Islandora/citeproc-php.git
