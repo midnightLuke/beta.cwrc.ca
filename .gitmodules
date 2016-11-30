@@ -54,6 +54,7 @@
 [submodule "sites/default/modules/custom/cwrc_find_replace"]
         path = sites/default/modules/custom/cwrc_find_replace
         url = https://github.com/cwrc/cwrc_find_replace.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_homepage_slider"]
         path = sites/default/modules/custom/cwrc_homepage_slider
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_homepage_slider.git
