@@ -42,6 +42,7 @@
 [submodule "sites/default/modules/custom/cwrc_eap"]
         path = sites/default/modules/custom/cwrc_eap
         url = https://github.com/cwrc/cwrc_eap.git
+        branch = develop
 [submodule "sites/default/modules/cwrc_entities"]
         path = sites/default/modules/cwrc_entities
         url = https://github.com/cwrc/cwrc_entities.git
