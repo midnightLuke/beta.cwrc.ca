@@ -93,6 +93,7 @@
 [submodule "sites/default/modules/custom/cwrc_search_bar"]
         path = sites/default/modules/custom/cwrc_search_bar
         url = https://github.com/cwrc/cwrc_search_bar.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_solr_site_content"]
         path = sites/default/modules/custom/cwrc_solr_site_content
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_solr_site_content.git
