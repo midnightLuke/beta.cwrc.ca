@@ -25,7 +25,8 @@
         url = https://github.com/Islandora/citeproc-php.git
 [submodule "sites/default/modules/custom/cwrc_admin"]
         path = sites/default/modules/custom/cwrc_admin
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_admin.git
+        url = https://github.com/cwrc/cwrc_admin.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_baseline"]
         path = sites/default/modules/custom/cwrc_baseline
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_baseline.git
