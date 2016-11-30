@@ -138,7 +138,8 @@
         url = https://github.com/jefferya/islandora_cwrc_writer.git
 [submodule "sites/default/modules/custom/islandora_object_field"]
         path = sites/default/modules/custom/islandora_object_field
-        url = git@bitbucket.org:digitalechidna/cwrc-module-islandora_object_field.git
+        url = https://github.com/cwrc/islandora_object_field.git
+        branch = develop
 [submodule "sites/default/modules/islandora_plotit"]
         path = sites/default/modules/islandora_plotit
         url = https://github.com/cwrc/islandora_plotit.git
