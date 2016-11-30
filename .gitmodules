@@ -12,7 +12,7 @@
         url = https://github.com/cwrc/basex-api.git
 [submodule "sites/default/modules/custom/block_islandora_options"]
         path = sites/default/modules/custom/block_islandora_options
-        url = https://github.com/echidnacorp/block_islandora_options
+        url = https://github.com/echidnacorp/block_islandora_options.git
 [submodule "sites/all/libraries/bookreader"]
         path = sites/all/libraries/bookreader
         url = https://github.com/Islandora/internet_archive_bookreader.git
