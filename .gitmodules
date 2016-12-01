@@ -167,7 +167,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/translation_settings"]
         path = sites/default/modules/custom/translation_settings
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-translation_settings.git
+        url = https://github.com/cwrc/translation_settings.git
+        branch = develop
 [submodule "sites/default/modules/custom/webforms"]
         path = sites/default/modules/custom/webforms
         url = git@bitbucket.org:digitalechidna/cwrc-feature-webforms.git
