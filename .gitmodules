@@ -52,7 +52,8 @@
         url = https://github.com/cwrc/cwrc_entities.git
 [submodule "sites/default/modules/custom/cwrc_event"]
         path = sites/default/modules/custom/cwrc_event
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_event.git
+        url = https://github.com/cwrc/cwrc_event.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_featured_projects"]
         path = sites/default/modules/custom/cwrc_featured_projects
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_featured_projects.git
