@@ -124,7 +124,8 @@
         branch = feature/workflowblocklink
 [submodule "sites/default/modules/custom/cwrc_xacml"]
         path = sites/default/modules/custom/cwrc_xacml
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_xacml.git
+        url = https://github.com/cwrc/cwrc_xacml.git
+        branch = develop
 [submodule "sites/default/libraries/CWRC-Mapping-Timelines-Project"]
         path = sites/default/libraries/CWRC-Mapping-Timelines-Project
         url = https://github.com/cwrc/CWRC-Mapping-Timelines-Project.git
