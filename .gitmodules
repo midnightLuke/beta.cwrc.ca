@@ -12,97 +12,122 @@
         url = https://github.com/cwrc/basex-api.git
 [submodule "sites/default/modules/custom/block_islandora_options"]
         path = sites/default/modules/custom/block_islandora_options
-        url = https://github.com/echidnacorp/block_islandora_options
+        url = https://github.com/echidnacorp/block_islandora_options.git
 [submodule "sites/all/libraries/bookreader"]
         path = sites/all/libraries/bookreader
         url = https://github.com/Islandora/internet_archive_bookreader.git
 [submodule "sites/default/modules/custom/borealis_block_wrappers"]
         path = sites/default/modules/custom/borealis_block_wrappers
-        url = git@bitbucket.org:digitalechidna/cwrc-module-borealis_block_wrappers.git
+        url = https://github.com/cwrc/borealis_block_wrappers.git
+        branch = develop
 [submodule "sites/all/libraries/citeproc-php"]
         path = sites/all/libraries/citeproc-php
         url = https://github.com/Islandora/citeproc-php.git
 [submodule "sites/default/modules/custom/cwrc_admin"]
         path = sites/default/modules/custom/cwrc_admin
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_admin.git
+        url = https://github.com/cwrc/cwrc_admin.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_baseline"]
         path = sites/default/modules/custom/cwrc_baseline
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_baseline.git
+        url = https://github.com/cwrc/cwrc_baseline.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_components"]
         path = sites/default/modules/custom/cwrc_components
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_components.git
+        url = https://github.com/cwrc/cwrc_components.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_core_tweaks"]
         path = sites/default/modules/custom/cwrc_core_tweaks
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_core_tweaks.git
+        url = https://github.com/cwrc/cwrc_core_tweaks.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_dashboards"]
         path = sites/default/modules/custom/cwrc_dashboards
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_dashboards.git
+        url = https://github.com/cwrc/cwrc_dashboards.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_eap"]
         path = sites/default/modules/custom/cwrc_eap
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_eap.git
+        url = https://github.com/cwrc/cwrc_eap.git
+        branch = develop
 [submodule "sites/default/modules/cwrc_entities"]
         path = sites/default/modules/cwrc_entities
         url = https://github.com/cwrc/cwrc_entities.git
 [submodule "sites/default/modules/custom/cwrc_event"]
         path = sites/default/modules/custom/cwrc_event
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_event.git
+        url = https://github.com/cwrc/cwrc_event.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_featured_projects"]
         path = sites/default/modules/custom/cwrc_featured_projects
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_featured_projects.git
+        url = https://github.com/cwrc/cwrc_featured_projects.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_find_replace"]
         path = sites/default/modules/custom/cwrc_find_replace
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_find_replace.git
+        url = https://github.com/cwrc/cwrc_find_replace.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_homepage_slider"]
         path = sites/default/modules/custom/cwrc_homepage_slider
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_homepage_slider.git
+        url = https://github.com/cwrc/cwrc_homepage_slider.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_islandora_tweaks"]
         path = sites/default/modules/custom/cwrc_islandora_tweaks
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_islandora_tweaks.git
+        url = https://github.com/cwrc/cwrc_islandora_tweaks.git
+        branch = develop
 [submodule "sites/all/modules/cwrc_islandora_xml"]
         path = sites/all/modules/cwrc_islandora_xml
         url = https://github.com/cwrc/cwrc_islandora_xml.git
 [submodule "sites/default/modules/custom/cwrc_menu_links"]
         path = sites/default/modules/custom/cwrc_menu_links
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_menu_links.git
+        url = https://github.com/cwrc/cwrc_menu_links.git
+        branch = develop
 [submodule "sites/default/modules/cwrc_migration_batch"]
         path = sites/default/modules/cwrc_migration_batch
         url = https://github.com/cwrc/cwrc_migration_batch.git
 [submodule "sites/default/modules/custom/cwrc_news"]
         path = sites/default/modules/custom/cwrc_news
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_news.git
+        url = https://github.com/cwrc/cwrc_news.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_node_page"]
         path = sites/default/modules/custom/cwrc_node_page
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_node_page.git
+        url = https://github.com/cwrc/cwrc_node_page.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_notification_rules"]
         path = sites/default/modules/custom/cwrc_notification_rules
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_notification_rules.git
+        url = https://github.com/cwrc/cwrc_notification_rules.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_permissions"]
         path = sites/default/modules/custom/cwrc_permissions
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_permissions.git
+        url = https://github.com/cwrc/cwrc_permissions.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_projects"]
         path = sites/default/modules/custom/cwrc_projects
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_projects.git
+        url = https://github.com/cwrc/cwrc_projects.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_search"]
         path = sites/default/modules/custom/cwrc_search
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_search.git
+        url = https://github.com/cwrc/cwrc_search.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_search_bar"]
         path = sites/default/modules/custom/cwrc_search_bar
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_search_bar.git
+        url = https://github.com/cwrc/cwrc_search_bar.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_solr_site_content"]
         path = sites/default/modules/custom/cwrc_solr_site_content
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_solr_site_content.git
+        url = https://github.com/cwrc/cwrc_solr_site_content.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_theme_compat"]
         path = sites/default/modules/custom/cwrc_theme_compat
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_theme_compat.git
+        url = https://github.com/cwrc/cwrc_theme_compat.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_visualization"]
         path = sites/default/modules/custom/cwrc_visualization
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_visualization.git
+        url = https://github.com/cwrc/cwrc_visualization.git
+        branch = feature/remove-plotit
 [submodule "sites/default/modules/custom/cwrc_workflow_de"]
         path = sites/default/modules/custom/cwrc_workflow_de
-        url = git@bitbucket.org:digitalechidna/cwrc-module-cwrc_workflow_de.git
+        url = https://github.com/cwrc/cwrc_workflow_de.git
+        branch = feature/workflowblocklink
 [submodule "sites/default/modules/custom/cwrc_xacml"]
         path = sites/default/modules/custom/cwrc_xacml
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_xacml.git
+        url = https://github.com/cwrc/cwrc_xacml.git
+        branch = develop
 [submodule "sites/default/libraries/CWRC-Mapping-Timelines-Project"]
         path = sites/default/libraries/CWRC-Mapping-Timelines-Project
         url = https://github.com/cwrc/CWRC-Mapping-Timelines-Project.git
@@ -111,7 +136,8 @@
         url = https://github.com/cwrc/CWRC-Writer.git
 [submodule "sites/default/modules/custom/de_contextual_help"]
         path = sites/default/modules/custom/de_contextual_help
-        url = git@bitbucket.org:digitalechidna/cwrc-module-de_contextual_help.git
+        url = https://github.com/cwrc/de_contextual_help.git
+        branch = develop
 [submodule "sites/default/modules/custom/islandora_blocks"]
         path = sites/default/modules/custom/islandora_blocks
         url = https://github.com/echidnacorp/islandora_blocks
@@ -129,7 +155,8 @@
         url = https://github.com/jefferya/islandora_cwrc_writer.git
 [submodule "sites/default/modules/custom/islandora_object_field"]
         path = sites/default/modules/custom/islandora_object_field
-        url = git@bitbucket.org:digitalechidna/cwrc-module-islandora_object_field.git
+        url = https://github.com/cwrc/islandora_object_field.git
+        branch = develop
 [submodule "sites/default/modules/islandora_plotit"]
         path = sites/default/modules/islandora_plotit
         url = https://github.com/cwrc/islandora_plotit.git
@@ -138,13 +165,16 @@
         url = https://github.com/echidnacorp/islandora_saved_searches
 [submodule "sites/default/modules/custom/og_global_roles"]
         path = sites/default/modules/custom/og_global_roles
-        url = git@bitbucket.org:digitalechidna/cwrc-module-og_global_roles.git
+        url = https://github.com/cwrc/og_global_roles.git
+        branch = develop
 [submodule "sites/default/modules/custom/translation_settings"]
         path = sites/default/modules/custom/translation_settings
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-translation_settings.git
+        url = https://github.com/cwrc/translation_settings.git
+        branch = develop
 [submodule "sites/default/modules/custom/webforms"]
         path = sites/default/modules/custom/webforms
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-webforms.git
+        url = https://github.com/cwrc/webforms.git
+        branch = develop
 [submodule "sites/all/modules/cwrc_workflow"]
         path = sites/all/modules/cwrc_workflow
         url = https://github.com/cwrc/cwrc_workflow.git
@@ -162,7 +192,8 @@
         url = https://github.com/cwrc/CWRC-Writer.git
 [submodule "sites/all/themes/custom/de_theme"]
         path = sites/all/themes/custom/de_theme
-        url = git@bitbucket.org:digitalechidna/cwrc-theme-de_theme.git
+        url = https://github.com/cwrc/de_theme.git
+        branch = develop
 [submodule "sites/all/modules/emic_theme_feature"]
         path = sites/all/modules/emic_theme_feature
         url = git://github.com/discoverygarden/emic_theme_feature.git
