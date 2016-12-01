@@ -94,7 +94,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/cwrc_permissions"]
         path = sites/default/modules/custom/cwrc_permissions
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_permissions.git
+        url = https://github.com/cwrc/cwrc_permissions.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_projects"]
         path = sites/default/modules/custom/cwrc_projects
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_projects.git
