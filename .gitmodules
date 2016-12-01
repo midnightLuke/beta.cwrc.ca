@@ -29,7 +29,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/cwrc_baseline"]
         path = sites/default/modules/custom/cwrc_baseline
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_baseline.git
+        url = https://github.com/cwrc/cwrc_baseline.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_components"]
         path = sites/default/modules/custom/cwrc_components
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_components.git
