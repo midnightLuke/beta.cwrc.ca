@@ -41,7 +41,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/cwrc_dashboards"]
         path = sites/default/modules/custom/cwrc_dashboards
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_dashboards.git
+        url = https://github.com/cwrc/cwrc_dashboards.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_eap"]
         path = sites/default/modules/custom/cwrc_eap
         url = https://github.com/cwrc/cwrc_eap.git
