@@ -75,7 +75,8 @@
         url = https://github.com/cwrc/cwrc_islandora_xml.git
 [submodule "sites/default/modules/custom/cwrc_menu_links"]
         path = sites/default/modules/custom/cwrc_menu_links
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_menu_links.git
+        url = https://github.com/cwrc/cwrc_menu_links.git
+        branch = develop
 [submodule "sites/default/modules/cwrc_migration_batch"]
         path = sites/default/modules/cwrc_migration_batch
         url = https://github.com/cwrc/cwrc_migration_batch.git
