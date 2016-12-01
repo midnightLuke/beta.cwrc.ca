@@ -98,7 +98,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/cwrc_projects"]
         path = sites/default/modules/custom/cwrc_projects
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_projects.git
+        url = https://github.com/cwrc/cwrc_projects.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_search"]
         path = sites/default/modules/custom/cwrc_search
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_search.git
