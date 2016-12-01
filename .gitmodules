@@ -113,7 +113,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/cwrc_theme_compat"]
         path = sites/default/modules/custom/cwrc_theme_compat
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_theme_compat.git
+        url = https://github.com/cwrc/cwrc_theme_compat.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_visualization"]
         path = sites/default/modules/custom/cwrc_visualization
         url = https://github.com/cwrc/cwrc_visualization.git
