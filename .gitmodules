@@ -90,7 +90,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/cwrc_notification_rules"]
         path = sites/default/modules/custom/cwrc_notification_rules
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_notification_rules.git
+        url = https://github.com/cwrc/cwrc_notification_rules.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_permissions"]
         path = sites/default/modules/custom/cwrc_permissions
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_permissions.git
