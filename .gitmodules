@@ -64,7 +64,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/cwrc_homepage_slider"]
         path = sites/default/modules/custom/cwrc_homepage_slider
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_homepage_slider.git
+        url = https://github.com/cwrc/cwrc_homepage_slider.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_islandora_tweaks"]
         path = sites/default/modules/custom/cwrc_islandora_tweaks
         url = https://github.com/cwrc/cwrc_islandora_tweaks.git
