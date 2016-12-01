@@ -171,7 +171,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/webforms"]
         path = sites/default/modules/custom/webforms
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-webforms.git
+        url = https://github.com/cwrc/webforms.git
+        branch = develop
 [submodule "sites/all/modules/cwrc_workflow"]
         path = sites/all/modules/cwrc_workflow
         url = https://github.com/cwrc/cwrc_workflow.git
