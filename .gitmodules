@@ -192,7 +192,8 @@
         url = https://github.com/cwrc/CWRC-Writer.git
 [submodule "sites/all/themes/custom/de_theme"]
         path = sites/all/themes/custom/de_theme
-        url = git@bitbucket.org:digitalechidna/cwrc-theme-de_theme.git
+        url = https://github.com/cwrc/de_theme.git
+        branch = develop
 [submodule "sites/all/modules/emic_theme_feature"]
         path = sites/all/modules/emic_theme_feature
         url = git://github.com/discoverygarden/emic_theme_feature.git
