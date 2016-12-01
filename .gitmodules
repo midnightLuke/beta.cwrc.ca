@@ -109,7 +109,8 @@
         branch = develop
 [submodule "sites/default/modules/custom/cwrc_solr_site_content"]
         path = sites/default/modules/custom/cwrc_solr_site_content
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_solr_site_content.git
+        url = https://github.com/cwrc/cwrc_solr_site_content.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_theme_compat"]
         path = sites/default/modules/custom/cwrc_theme_compat
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_theme_compat.git
