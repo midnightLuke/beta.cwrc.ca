@@ -82,7 +82,8 @@
         url = https://github.com/cwrc/cwrc_migration_batch.git
 [submodule "sites/default/modules/custom/cwrc_news"]
         path = sites/default/modules/custom/cwrc_news
-        url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_news.git
+        url = https://github.com/cwrc/cwrc_news.git
+        branch = develop
 [submodule "sites/default/modules/custom/cwrc_node_page"]
         path = sites/default/modules/custom/cwrc_node_page
         url = git@bitbucket.org:digitalechidna/cwrc-feature-cwrc_node_page.git
