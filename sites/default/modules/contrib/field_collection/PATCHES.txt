@@ -1,0 +1,1 @@
+- https://www.drupal.org/files/issues/field_collection-logic_issue_with_fetchHostDetails-2382089-47.patch

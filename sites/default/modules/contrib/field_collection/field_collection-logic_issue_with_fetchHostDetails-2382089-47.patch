@@ -1,0 +1,57 @@
+diff --git a/docroot/sites/all/modules/contrib/field_collection/field_collection.entity.inc b/docroot/sites/all/modules/contrib/field_collection/field_collection.entity.inc
+index 9369bc4..d246724 100644
+--- a/field_collection.entity.inc
++++ b/field_collection.entity.inc
+@@ -300,7 +300,7 @@ class FieldCollectionItemEntity extends Entity {
+   }
+
+   protected function fetchHostDetails() {
+-    if (!isset($this->hostEntityId)) {
++    if (!isset($this->hostEntityId) || (!$this->hostEntityId && $this->hostEntityRevisionId)) {
+       if ($this->item_id) {
+         // For saved field collections, query the field data to determine the
+         // right host entity.
+@@ -310,16 +310,24 @@ class FieldCollectionItemEntity extends Entity {
+           $query->age(FIELD_LOAD_REVISION);
+         }
+         $result = $query->execute();
+-        list($this->hostEntityType, $data) = each($result);
++        if ($result) {
++          list($this->hostEntityType, $data) = each($result);
+
+-        if ($this->isInUse()) {
+-          $this->hostEntityId = $data ? key($data) : FALSE;
+-          $this->hostEntityRevisionId = FALSE;
++          if ($this->isInUse()) {
++            $data_array_keys = array_keys($data);
++            $this->hostEntityId = $data ? end($data_array_keys) : FALSE;
++            $this->hostEntityRevisionId = FALSE;
++          }
++          // If we are querying for revisions, we get the revision ID.
++          else {
++            $data_array_keys = array_keys($data);
++            $this->hostEntityId = FALSE;
++            $this->hostEntityRevisionId = $data ? end($data_array_keys) : FALSE;
++          }
+         }
+-        // If we are querying for revisions, we get the revision ID.
+         else {
++          // No host entity available yet.
+           $this->hostEntityId = FALSE;
+-          $this->hostEntityRevisionId = $data ? key($data) : FALSE;
+         }
+       }
+       else {
+diff --git a/docroot/sites/all/modules/contrib/field_collection/field_collection.module b/docroot/sites/all/modules/contrib/field_collection/field_collection.module
+index 22d88a9..8e1c1a2 100644
+--- a/field_collection.module
++++ b/field_collection.module
+@@ -1354,7 +1354,7 @@ function field_collection_remove_submit($form, &$form_state) {
+  *   The entity object or FALSE.
+  */
+ function field_collection_field_get_entity(&$item, $field_name = NULL) {
+-  if (isset($item['entity'])) {
++  if (isset($item['entity']) && ($item['entity']->entityType() == 'field_collection_item')) {
+     return $item['entity'];
+   }
+   elseif (isset($item['value'])) {
