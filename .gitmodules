@@ -134,6 +134,7 @@
 [submodule "sites/default/libraries/CWRC-Writer"]
         path = sites/default/libraries/CWRC-Writer
         url = https://github.com/cwrc/CWRC-Writer.git
+        branch = development
 [submodule "sites/default/modules/custom/de_contextual_help"]
         path = sites/default/modules/custom/de_contextual_help
         url = https://github.com/cwrc/de_contextual_help.git
