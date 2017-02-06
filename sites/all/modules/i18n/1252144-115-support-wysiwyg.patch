@@ -1,0 +1,210 @@
+diff --git a/i18n_block/i18n_block.test b/i18n_block/i18n_block.test
+index b1e4680..e33d99e 100644
+--- a/i18n_block/i18n_block.test
++++ b/i18n_block/i18n_block.test
+@@ -72,15 +72,16 @@ class i18nBlocksTestCase extends Drupali18nTestCase {
+
+     $this->clickLink(t('translate'));
+
++    // Title is a textarea, body is a text_format.
+     $this->assertFieldByName('strings[blocks:block:' . $box2['delta'] . ':title]', $translations['title']['es']);
+-    $this->assertFieldByName('strings[blocks:block:' . $box2['delta'] . ':body]', $translations['body']['es']);
++    $this->assertFieldByName('strings[blocks:block:' . $box2['delta'] . ':body][value]', $translations['body']['es']);
+
+     // Update the translation.
+     $translations['title']['es'] = $this->randomName(10);
+     $translations['body']['es'] = $this->randomName(20);
+     $edit = array(
+       'strings[blocks:block:' . $box2['delta'] . ':title]' => $translations['title']['es'],
+-      'strings[blocks:block:' . $box2['delta'] . ':body]' => $translations['body']['es'],
++      'strings[blocks:block:' . $box2['delta'] . ':body][value]' => $translations['body']['es'],
+     );
+     $this->drupalPost(NULL, $edit, t('Save translation'));
+     $this->i18nAssertTranslations($translations['title'], '', 'Updated block title translation displayed.');
+diff --git a/i18n_string/i18n_string.inc b/i18n_string/i18n_string.inc
+index 3136aad..dc1eede 100644
+--- a/i18n_string/i18n_string.inc
++++ b/i18n_string/i18n_string.inc
+@@ -1110,10 +1110,17 @@ class i18n_string_object_wrapper extends i18n_object_wrapper {
+       $info = is_array($info) ? $info : array('title' => $info);
+       $field_name = isset($info['field']) ? $info['field'] : $field;
+       $value = $this->get_field($field_name);
++      if (is_array($value) && isset($value['value'])) {
++        $format = isset($value['format']) ? $value['format'] : NULL;
++        $value = $value['value'];
++      }
++      else {
++        $format = isset($info['format']) ? $this->get_field($info['format']) : NULL;
++      }
+       $strings[$this->get_textgroup()][$string_type][$object_id][$field] = array(
+         'string' => is_array($value) || isset($info['empty']) && $value === $info['empty'] ? NULL : $value,
+         'title' => $info['title'],
+-        'format' => isset($info['format']) ? $this->get_field($info['format']) : NULL,
++        'format' => $format,
+         'name' => array_merge($object_keys, array($field)),
+       );
+     }
+diff --git a/i18n_string/i18n_string.module b/i18n_string/i18n_string.module
+index 9c232c0..209b654 100644
+--- a/i18n_string/i18n_string.module
++++ b/i18n_string/i18n_string.module
+@@ -259,6 +259,34 @@ function i18n_string_locale_translate_import_form_submit($form, &$form_state) {
+ }
+
+ /**
++ * Implements hook_element_info_alter().
++ *
++ * We need to do this on the element info level as wysiwyg also does so and form
++ * API (incorrectly) does not merge in the defaults for values that are arrays.
++ */
++function i18n_string_element_info_alter(&$types) {
++  $types['text_format']['#pre_render'][] = 'i18n_string_pre_render_text_format';
++}
++
++/**
++ * The '#pre_render' function to alter the text format element in a translation.
++ * The text format for a translation is taken form the original, so the text
++ * format drop down should be disabled.
++ *
++ * @param array $element
++ *   The text_format element which will be rendered.
++ *
++ * @return array
++ *   The altered text_format element with a disabled "Text format" select.
++ */
++function i18n_string_pre_render_text_format($element) {
++  if (!empty($element['#i18n_string_is_translation'])) {
++      $element['format']['format']['#attributes']['disabled'] = TRUE;
++  }
++  return $element;
++}
++
++/**
+  * Check if translation is required for this language code.
+  *
+  * Translation is required when default language is different from the given
+@@ -334,7 +362,10 @@ function i18n_string_update_context($oldname, $newname) {
+ }
+
+ /**
+- * Get textgroup handler
++ * Get textgroup handler.
++ *
++ * @return i18n_string_textgroup_default
++ *
+  */
+ function i18n_string_textgroup($textgroup) {
+   $groups = &drupal_static(__FUNCTION__);
+@@ -519,11 +550,12 @@ function i18n_string_multiple($operation, $name, $strings, $options = array()) {
+  *
+  * This function is intended to return translations for plain strings that have NO text format
+  *
+- * @param $name
++ * @param array|string name
+  *   Array or string concatenated with ':' that contains textgroup and string context
+- * @param $string
+- *   String in default language or array of strings to be translated
+- * @param $options
++ * @param array|string $string
++ *   A string in the default language, a string wth format (array with keys
++ *   value and format),or an array of strings (without format) to be translated.
++ * @param array $options
+  *   An associative array of additional options, with the following keys:
+  *   - 'langcode' (defaults to the current language) The language code to translate to a language other than what is used to display the page.
+  *   - 'filter' Filtering callback to apply to the translated string only
+@@ -531,8 +563,13 @@ function i18n_string_multiple($operation, $name, $strings, $options = array()) {
+  *   - 'callback' Callback to apply to the result (both to translated or untranslated string
+  *   - 'sanitize' Whether to filter the translation applying the text format if any, default is TRUE
+  *   - 'sanitize default' Whether to filter the default value if no translation found, default is FALSE
++ *
++ * @return string
+  */
+ function i18n_string_translate($name, $string, $options = array()) {
++  if (is_array($string) && isset($string['value'])) {
++    $string = $string['value'];
++  }
+   if (is_array($string)) {
+     return i18n_string_translate_list($name, $string, $options);
+   }
+diff --git a/i18n_string/i18n_string.pages.inc b/i18n_string/i18n_string.pages.inc
+index 28005d6..0c695e6 100644
+--- a/i18n_string/i18n_string.pages.inc
++++ b/i18n_string/i18n_string.pages.inc
+@@ -170,14 +170,16 @@ function i18n_string_translate_page_form_base($form, $langcode, $redirect = NULL
+
+ /**
+  * Create field elements for strings
++ *
++ * @param i18n_string_object[] $strings
++ * @param string $langcode
++ *
++ * @return array
+  */
+ function i18n_string_translate_page_form_strings($strings, $langcode) {
+-  $formats = filter_formats();
++  global $user;
++  $form = array();
+   foreach ($strings as $item) {
+-    // We may have a source or not. Load it, our string may get the format from it.
+-    $source = $item->get_source();
+-    $format_id = $source ? $source->format : $item->format;
+-    $description = '';
+     // Check permissions to translate this string, depends on format, etc..
+     if ($message = $item->check_translate_access()) {
+       // We'll display a disabled element with the reason it cannot be translated.
+@@ -188,27 +190,31 @@ function i18n_string_translate_page_form_strings($strings, $langcode) {
+       $disabled = FALSE;
+       $description = '';
+       // If we don't have a source and it can be translated, we create it.
+-      if (!$source) {
++      if (!$item->get_source()) {
+         // Enable messages just as a reminder these strings are not being updated properly.
+         $status = $item->update(array('messages' => TRUE));
+         if ($status === FALSE || $status === SAVED_DELETED) {
+           // We don't have a source string so nothing to translate here
+           $disabled = TRUE;
+         }
+-        else {
+-          $source = $item->get_source();
+-        }
+       }
+     }
+
+     $default_value = $item->format_translation($langcode, array('langcode' => $langcode, 'sanitize' => FALSE, 'debug' => FALSE));
++    $available_formats = array_keys(filter_formats($user));
++    if (!in_array($item->format, $available_formats)) {
++      $item->format = NULL;
++    }
+     $form[$item->get_name()] = array(
+       '#title' => $item->get_title(),
+-      '#type' => 'textarea',
++      '#type' => $item->format ? 'text_format' : 'textarea',
+       '#default_value' => $default_value,
++      '#format' => $item->format,
++      // This will trigger i18n_string_pre_render_text_format() to actually
++      // alter the element.
++      '#i18n_string_is_translation' => TRUE,
+       '#disabled' => $disabled,
+-      '#description' => $description . _i18n_string_translate_format_help($format_id),
+-      //'#i18n_string_format' => $source ? $source->format : 0,
++      '#description' => $description,
+       // If disabled, provide smaller textarea (that can be expanded anyway).
+       '#rows' => $disabled ? 1 : min(ceil(str_word_count($default_value) / 12), 10),
+       // Change the parent for disabled strings so we don't get empty values later
+@@ -226,6 +227,16 @@ function i18n_string_translate_page_form_submit($form, &$form_state) {
+   foreach ($form_state['values']['strings'] as $name => $value) {
+     $count++;
+     list($textgroup, $context) = i18n_string_context(explode(':', $name));
++    if (is_array($value)) {
++      if (isset($value['value'])) {
++        $value = $value['value'];
++        $form_state['values']['strings'][$name] = $value;
++      }
++      else {
++        form_set_error("strings][$name", t('Unable to get the translated string value.'));
++        watchdog('locale', 'Unable to get the translated string value, string array is: %string', array('%string' => var_dump($value)), WATCHDOG_WARNING);
++      }
++    }
+     $result = i18n_string_textgroup($textgroup)->update_translation($context, $form_state['values']['langcode'], $value);
+     $success += ($result ? 1 : 0);
+   }
