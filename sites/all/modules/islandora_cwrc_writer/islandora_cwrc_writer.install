@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * Install hooks for this module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function islandora_cwrc_writer_requirements($phase) {
+  $t = get_t();
+  $requirements = array(
+    'cwrc' => array('title' => $t('CWRC-Writer Library')),
+  );
+  $library = array(
+    'library path' => libraries_get_path('CWRC-Writer'),
+  );
+  $options = array(
+    'file' => 'src/editor_dev.htm',
+    'pattern' => '/CWRC-Writer v([0-9.]+)/',
+    'lines' => 200,
+  );
+  if (file_exists($library['library path'])) {
+    $requirements['cwrc']['severity'] = REQUIREMENT_OK;
+    $requirements['cwrc']['value'] = libraries_get_version($library, $options);
+  }
+  else {
+    $requirements['cwrc']['severity'] = REQUIREMENT_ERROR;
+    $requirements['cwrc']['value'] = $t('Not found');
+    $requirements['cwrc']['description'] = $t('The <a href="@cwrc">CWRC-Writer Library</a> is missing. <a href="@download">Download</a> and extract it into the <code>@directory</code> directory. Rename the extracted folder to <code>@library-folder</code>.', array(
+        '@cwrc' => 'https://github.com/discoverygarden/CWRC-Writer',
+        '@download' => 'https://github.com/discoverygarden/CWRC-Writer/archive/emicdora.zip',
+        '@directory' => 'sites/all/libraries',
+        '@library-folder' => 'CWRC-Writer')
+    );
+  }
+  return $requirements;
+}
+
+/**
+ * Implements hook_install().
+ *
+ * @see islandora_cwrc_writer_islandora_required_objects()
+ */
+function islandora_cwrc_writer_install() {
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  // Install required object(s).
+  islandora_install_solution_pack('islandora_cwrc_writer');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_cwrc_writer_uninstall() {
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  islandora_uninstall_solution_pack('islandora_cwrc_writer');
+  $variables = array(
+    'islandora_cwrc_writer_default_schema_object',
+    'islandora_cwrc_writer_person_entity_collection',
+    'islandora_cwrc_writer_organization_entity_collection',
+    'islandora_cwrc_writer_title_entity_collection',
+    'islandora_cwrc_writer_place_entity_collection',
+  );
+  foreach ($variables as $variable) {
+    variable_del($variable);
+  }
+}

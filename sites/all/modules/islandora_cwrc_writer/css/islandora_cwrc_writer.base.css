@@ -1,0 +1,56 @@
+/**
+ * @file
+ * Styles for the CWRC-Writer in the context of Islandora.
+ */
+
+/* Allow the CWRC-Writer to be used outside of an iframe */
+body {
+  overflow: auto;
+}
+#cwrc_wrapper {
+  overflow: hidden;
+}
+#cwrc_header h2{
+  margin: 0 !important;
+}
+#islandora-cwrc-document-select-wrapper {
+  display: block;
+  float: left;
+}
+#islandora-cwrc-document-select {
+  margin: 12px 15px 0px;
+}
+#islandora-cwrc-document-nav {
+  list-style:  none;
+  margin: 0;
+}
+#islandora-cwrc-document-nav a {
+  float: left;
+  width: 30px;
+  height: 35px;
+  background: transparent url('../images/nav-arrows.png') no-repeat;
+  opacity: 0.85 !important;
+}
+#islandora-cwrc-document-nav a.disabled {
+  opacity: 0.6 !important;
+}
+#islandora-cwrc-document-nav a:not(.disabled):hover {
+  opacity: 1 !important;
+}
+#islandora-cwrc-document-nav li.prev a {
+  background-position: -9px -1px;
+}
+#islandora-cwrc-document-nav li.next a {
+  background-position: -42px -1px;
+}
+/* Full height of the settings dialog box from the header */
+.cwrc * #settingsDialog {
+  height:auto !important;
+}
+/**
+ * CWRC-Writer expects the font-size of body tag to be 10px, this compensates
+ *  for that.
+ */
+div.cwrc {
+  font-size: 10px;
+}

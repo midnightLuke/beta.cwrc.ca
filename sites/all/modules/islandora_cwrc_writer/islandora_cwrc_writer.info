@@ -1,0 +1,10 @@
+name = "Islandora CWRC-Writer"
+description = "Provides a very minimal wrapper around the CWRC-Writer, so that it can be used in an islandora context."
+dependencies[] = libraries
+dependencies[] = islandora
+dependencies[] = islandora_rest
+dependencies[] = islandora_basic_collection
+core = 7.x
+version = 7.x-dev
+configure = admin/islandora/tools/cwrc-writer
+package = Islandora Tools
