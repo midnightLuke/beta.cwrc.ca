@@ -1,0 +1,269 @@
+<?php
+
+/**
+ * @file
+ * Hooks and helper functions for the cwrc_search_bar module.
+ *
+ * Potential future improvements:
+ * - Let the user select which searches to provide radiobuttons for from the
+ *   list of active search modules (see _search_get_module_names(), the
+ *   search_active_modules variable).
+ * - Let the user select which Apachesolr search page to redirect searches to.
+ * - Automatically select the correct radiobutton when you're in a search page
+ *   path.
+ */
+
+/**
+ * The path prefix for Islandora searches.
+ */
+define('CWRC_SEARCH_BAR_ISLANDORA_PATH_PREFIX', 'islandora/search');
+
+/**
+ * The path prefix for site content searches.
+ */
+define('CWRC_SEARCH_BAR_SITE_PATH_PREFIX', 'search/site');
+
+/**
+ * The field storing search string for projects.
+ */
+define('CWRC_SEARCH_BAR_SEARCH_STRING_FIELD', 'field_search_string');
+
+/* Hooks. */
+
+/**
+ * Implements hook_block_info().
+ */
+function cwrc_search_bar_block_info() {
+  $blocks = array();
+
+  // A search block.
+  $blocks['search'] = array(
+    'info' => t('CWRC search bar'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cwrc_search_bar_block_view($delta = '') {
+  $block = array();
+
+  // Display the search block.
+  if ($delta === 'search') {
+    $block['subject'] = t('Search');
+    $block['content'] = drupal_get_form('cwrc_search_bar_search');
+  }
+
+  return $block;
+}
+
+/* Form handlers. */
+
+/**
+ * Form constructor for the CWRC search block form.
+ *
+ * @see cwrc_search_bar_block_view()
+ * @see cwrc_search_bar_search_submit()
+ *
+ * @ingroup forms
+ */
+function cwrc_search_bar_search($form, &$form_state) {
+  $current_search_params = _cwrc_search_bar_detect_search_params();
+
+  // A container for the search query, scope, and default search button, so we
+  // make the scope and search button look like they're inside the textfield.
+  $form['basic_query'] = array(
+    '#type' => 'container',
+    '#attributes' => array('class' => array('basic_query_wrapper')),
+  );
+
+  // A textfield to enter a search query.
+  $form['basic_query']['query'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Search terms'),
+    '#title_display' => 'invisible',
+    '#default_value' => $current_search_params['term'],
+    '#attributes' => array(
+      'title' => t('Enter the terms you wish to search for.'),
+      'placeholder' => t('search for...'),
+    ),
+  );
+
+  // Let the user choose the scope. Default to the first one, unless we can
+  // detect one, at which point, use the detected one instead.
+  $scopes = _cwrc_search_bar_valid_scopes();
+  $scopes_keys = array_keys($scopes);
+  $default_scope = (string) array_shift($scopes_keys);
+  if (in_array($current_search_params['scope'], $scopes_keys)) {
+    $default_scope = $current_search_params['scope'];
+  }
+  $form['basic_query']['scope'] = array(
+    '#type' => 'select',
+    '#title' => t('Search scope'),
+    '#title_display' => 'invisible',
+    '#options' => $scopes,
+    '#default_value' => $default_scope,
+  );
+
+  // Add a submit button.
+  $form['basic_query']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Search'),
+  );
+
+  // An advanced search link.
+  if (module_exists('cwrc_search') && user_access('search islandora solr')) {
+    $form['advanced_search'] = array(
+      '#type' => 'link',
+      '#title' => t('Advanced search'),
+      '#href' => 'cwrc_search',
+      '#attributes' => array('class' => array('advanced_search_button')),
+    );
+  }
+
+  return $form;
+}
+
+/**
+ * Form submission handler for the CWRC search block form.
+ *
+ * @see cwrc_search_bar_search()
+ */
+function cwrc_search_bar_search_submit($form, &$form_state) {
+  // Note that drupal_goto() automatically URL-escapes the query, i.e.: it
+  // ensures a search term of "test?destination=node" turns into
+  // "test%3Fdestination%3Dnode", rather than a search term of "test" and
+  // subsequent redirection to /node, so we don't have to worry about doing that
+  // ourselves.
+  if ($form_state['values']['scope'] === 'project') {
+    $gid = og_context_determine_context('node');
+    $group = entity_load_single('node', $gid);
+    $wrapper = entity_metadata_wrapper('node', $group);
+    $query = array(
+      'type' => 'dismax',
+      'f' => array(
+        'ancestors_ms:"' . Apache_Solr_Service::escape($wrapper->{CWRC_PROJECTS_COLLECTION_PID_FIELD}->value()->id) . '"',
+      ),
+    );
+
+    // Append "search string" field if available and not empty.
+    if ($wrapper->__isset(CWRC_SEARCH_BAR_SEARCH_STRING_FIELD)
+      && $wrapper->{CWRC_SEARCH_BAR_SEARCH_STRING_FIELD}->value()) {
+
+      // Parse out the key => value pairs here and merge with query.
+      parse_str($wrapper->{CWRC_SEARCH_BAR_SEARCH_STRING_FIELD}->value(), $extra);
+      $query = array_merge_recursive($query, $extra);
+    }
+
+    drupal_goto(CWRC_SEARCH_BAR_ISLANDORA_PATH_PREFIX . '/' . $form_state['values']['query'], array(
+      'query' => $query,
+    ));
+  }
+  elseif ($form_state['values']['scope'] === 'islandora') {
+    drupal_goto(CWRC_SEARCH_BAR_ISLANDORA_PATH_PREFIX . '/' . $form_state['values']['query'], array(
+      'query' => array('type' => 'dismax'),
+    ));
+  }
+  // Default to the site content search.
+  else {
+    drupal_goto(CWRC_SEARCH_BAR_SITE_PATH_PREFIX . '/' . $form_state['values']['query']);
+  }
+}
+
+/* Helper functions. */
+
+/**
+ * Return a list of search scopes the current user has access to.
+ *
+ * @return array
+ *   An associative array of search scopes the current user has access to.
+ */
+function _cwrc_search_bar_valid_scopes() {
+  $scopes = array();
+
+  // Add project-specific Islandora search scope if we are in group context.
+  if ($gid = og_context_determine_context('node')) {
+    $group = entity_load_single('node', $gid);
+    if (isset($group->{CWRC_PROJECTS_COLLECTION_PID_FIELD})) {
+      $scopes['project'] = t('This project');
+    }
+  }
+
+  // Add the Islandora search scope if the user has access to it.
+  if (user_access('search islandora solr')) {
+    $scopes['islandora'] = t('Collaboratory');
+  }
+
+  // Add the site content search scope if the user has access to it.
+  if (user_access('search content')) {
+    $scopes['site'] = t('Website content');
+  }
+
+  return $scopes;
+}
+
+/**
+ * Return a search term and scope by looking at the URL.
+ *
+ * @return array
+ *   An associative array containing:
+ *   - scope: A string containing the scope that was searched. If the scope
+ *     cannot be determined, '' (an empty string) will be returned.
+ *   - term: The search term used in the search. If the search term cannot be
+ *     determined, '' (an empty string) will be returned.
+ */
+function _cwrc_search_bar_detect_search_params() {
+  $answer = array(
+    'scope' => '',
+    'term' => '',
+  );
+  $current_url = implode('/', arg());
+
+  // If the current URL starts with the Islandora search path prefix, the user
+  // just searched Islandora.
+  if (_cwrc_search_bar_string_starts_with($current_url, CWRC_SEARCH_BAR_ISLANDORA_PATH_PREFIX)) {
+    // For this particular module, the search term happens to be the next part
+    // of the URL after the prefix.
+    $num_prefix_tokens = count(explode('/', CWRC_SEARCH_BAR_ISLANDORA_PATH_PREFIX));
+    $answer['term'] = (string) arg($num_prefix_tokens);
+  }
+  // If the current URL starts with the Site search path prefix, the user just
+  // searched the site.
+  elseif (_cwrc_search_bar_string_starts_with($current_url, CWRC_SEARCH_BAR_SITE_PATH_PREFIX)) {
+    $answer['scope'] = 'site';
+
+    // For this particular module, the search term happens to be the next part
+    // of the URL after the prefix.
+    $num_prefix_tokens = count(explode('/', CWRC_SEARCH_BAR_SITE_PATH_PREFIX));
+    $answer['term'] = (string) arg($num_prefix_tokens);
+  }
+
+  return $answer;
+}
+
+/**
+ * Determine if a given string starts with a given substring.
+ *
+ * @param string $haystack
+ *   A string to search.
+ * @param string|array $needles
+ *   One or more sub-strings to test.
+ *
+ * @return bool
+ *   TRUE if at least one $needle is found at the start of $haystack; FALSE
+ *   otherwise.
+ *
+ * @see https://github.com/laravel/framework/blob/5.1/src/Illuminate/Support/Str.php
+ */
+function _cwrc_search_bar_string_starts_with($haystack, $needles) {
+  foreach ((array) $needles as $needle) {
+    if ($needle != '' && strpos($haystack, $needle) === 0) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
