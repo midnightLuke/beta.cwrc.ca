@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Code for the CWRC: Featured projects feature.
+ */
+
+include_once 'cwrc_featured_projects.features.inc';
+
+/* Hooks. */
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function cwrc_featured_projects_entity_info_alter(&$entity_info) {
+  // Add a build mode to use in the featured project carousel.
+  $entity_info['node']['view modes']['featured_carousel'] = array(
+    'label' => t('Featured project carousel'),
+    'custom settings' => TRUE,
+  );
+}
