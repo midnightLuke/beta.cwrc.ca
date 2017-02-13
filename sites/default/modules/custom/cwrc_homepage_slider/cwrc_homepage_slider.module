@@ -1,0 +1,150 @@
+<?php
+
+/**
+ * @file
+ * Code for the CWRC: Homepage Slider feature.
+ */
+
+include_once 'cwrc_homepage_slider.features.inc';
+
+/* Hooks. */
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function cwrc_homepage_slider_entity_info_alter(&$entity_info) {
+  // Add a build mode to use in the homepage slider.
+  $entity_info['node']['view modes']['homepage_slider'] = array(
+    'label' => t('Homepage slider'),
+    'custom settings' => TRUE,
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function cwrc_homepage_slider_block_info() {
+  $blocks = array();
+  $blocks['writing'] = array(
+    'info' => t('What We Are Writing'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['collecting'] = array(
+    'info' => t('What We Are Collecting'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cwrc_homepage_slider_theme($existing, $type, $theme, $path) {
+  return array(
+    'cwrc_homepage_slider_what_block' => array(
+      'template' => 'templates/cwrc-homepage-slider-what-block',
+      'variables' => array('icon' => NULL, 'items' => array()),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cwrc_homepage_slider_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'writing':
+      $block['subject'] = t('What We Are Writing');
+      $block['content'] = array(
+        '#theme' => 'cwrc_homepage_slider_what_block',
+        '#icon' => 'pencil',
+        '#items' => _cwrc_homepage_slider_get_writing(),
+      );
+      break;
+
+    case 'collecting':
+      $block['subject'] = t('What We Are Collecting');
+      $block['content'] = array(
+        '#theme' => 'cwrc_homepage_slider_what_block',
+        '#icon' => 'folder',
+        '#items' => _cwrc_homepage_slider_get_collecting(),
+      );
+      break;
+  }
+
+  return $block;
+}
+
+/* Helper functions. */
+
+/**
+ * Helper function to return render array of items recently added to repository.
+ */
+function _cwrc_homepage_slider_get_collecting() {
+  $items = array();
+  $client = cwrc_dashboards_get_solarium();
+
+  // Build select query for block.
+  $query = $client->createSelect();
+  $query->setQuery('((RELS_EXT_isViewableByRole_literal_ms:("anonymous user")) OR (-RELS_EXT_isViewableByRole_literal_ms:["" TO *])) AND (-RELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel")')
+    ->addParam('rows', 3)
+    ->addParam('defType', 'edismax')
+    ->setFields(array(
+      "PID",
+      "fgs_label_s",
+      "fgs_createdDate_dt",
+      "workflow_date_current_dt",
+    ))
+    ->addSort('fgs_createdDate_dt', $query::SORT_DESC);
+
+  // Get query results.
+  $results = $client->select($query);
+  foreach ($results as $result) {
+    $items[] = array(
+      'label' => array('#markup' => l($result['fgs_label_s'], 'islandora/object/' . $result['PID'])),
+      'date' => array('#markup' => date('n/j/y', strtotime($result['fgs_createdDate_dt']))),
+    );
+  }
+
+  return $items;
+}
+
+/**
+ * Helper function to return render array of items recently added to repository.
+ */
+function _cwrc_homepage_slider_get_writing() {
+  $items = array();
+  $client = cwrc_dashboards_get_solarium();
+
+  // Build select query for block.
+  $query = $client->createSelect();
+  $query->setQuery('((RELS_EXT_isViewableByRole_literal_ms:("anonymous user")) OR (-RELS_EXT_isViewableByRole_literal_ms:["" TO *])) AND (-RELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel")')
+    ->addParam('rows', 3)
+    ->addParam('defType', 'edismax')
+    ->setFields(array(
+      "PID",
+      "fgs_label_s",
+      "fgs_createdDate_dt",
+      "workflow_date_current_dt",
+    ))
+    ->addSort('workflow_date_current_dt', $query::SORT_DESC);
+
+  // Get query results.
+  $results = $client->select($query);
+  foreach ($results as $result) {
+    // Some results may not have a recent workflow stamp.
+    $date = $result['workflow_date_current_dt'];
+    if (empty($date)) {
+      $date = $result['fgs_createdDate_dt'];
+    }
+
+    $items[] = array(
+      'label' => array('#markup' => l($result['fgs_label_s'], 'islandora/object/' . $result['PID'])),
+      'date' => array('#markup' => date('n/j/y', strtotime($date))),
+    );
+  }
+
+  return $items;
+}
