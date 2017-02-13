@@ -1,0 +1,7 @@
+name = CWRC core tweaks
+description = Tweaks to Drupal core functionality specific to the CWRC website.
+core = 7.x
+package = CWRC
+
+dependencies[] = block
+dependencies[] = cwrc_menu_links

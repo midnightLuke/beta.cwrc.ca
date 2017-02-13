@@ -1,0 +1,74 @@
+<?php
+/**
+ * @file
+ * Hooks and helper functions for the cwrc_core_tweaks module.
+ */
+
+/* Hooks. */
+
+/**
+ * Implements hook_mail_alter().
+ */
+function cwrc_core_tweaks_mail_alter(&$message) {
+  if ($message['id'] === 'user_register_pending_approval_admin') {
+    // Define a new message body.
+    $body = t("[user:name] has applied for an account, with the following reason:
+
+***
+[user:field-user-registration-reason]
+***
+
+[user:edit-url]", array(), array('langcode' => $message['language']->language));
+
+    // Replace the tokens in the message body.
+    $message['body'][0] = token_replace($body, array('user' => $message['params']['account']), array(
+      'language' => $message['language'],
+      'sanitize' => FALSE,
+      'clear' => TRUE,
+    ));
+  }
+}
+
+/**
+ * Implements hook_menu_breadcrumb_alter().
+ */
+function cwrc_core_tweaks_menu_breadcrumb_alter(&$active_trail, $item) {
+  // Change the title of breadcrumb items linking to the front page from "Home"
+  // to "CWRC" to avoid confusion with project homepages.
+  // We must check that there _are_ breadcrumbs first, as the front page notably
+  // does not display them.
+  if (!empty($active_trail)) {
+    foreach ($active_trail as &$breadcrumb) {
+      if ($breadcrumb['href'] === '<front>') {
+        $breadcrumb['title'] = t('CWRC');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_islandora_breadcrumbs_alter().
+ *
+ * @param array &$breadcrumbs
+ *   An array of breadcrumbs.
+ * @param string $context
+ *   A context string.
+ * @param IslandoraFedoraObject $object
+ *   The Fedora object.
+ */
+function cwrc_core_tweaks_islandora_breadcrumbs_alter(&$breadcrumbs, $context, $object = NULL) {
+  $front_page_path = url('<front>');
+
+  // Loop through each breadcrumb. If it points to the front page, modify the
+  // link text. Note that the breadcrumb comes pre-rendered to HTML with
+  // already-translated strings, so we have to preg_replace() the already-
+  // translated string with a different already-translated string. This is not
+  // ideal, but Islandora doesn't really provide us with any better options
+  // unless we patch the Islandora core module. Note also that we use the
+  // Ungreedy pattern modifier for convenience.
+  foreach ($breadcrumbs as &$breadcrumb) {
+    if (_cwrc_menu_links_points_to_path($breadcrumb, $front_page_path)) {
+      $breadcrumb = preg_replace('/' . t('Home') . '/U', t('CWRC'), $breadcrumb);
+    }
+  }
+}
