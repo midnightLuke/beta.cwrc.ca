@@ -1,0 +1,7 @@
+name = CWRC Islandora XML
+description = "Allow the ingest and export of XML anywhere XML is supported."
+dependencies[] = islandora
+package = Islandora
+version = 7.x-dev
+core = 7.x
+php = 5.3
