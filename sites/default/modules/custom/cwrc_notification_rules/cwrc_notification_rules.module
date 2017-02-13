@@ -1,0 +1,268 @@
+<?php
+
+/**
+ * @file
+ * Code for the CWRC: notification rules feature.
+ */
+
+include_once 'cwrc_notification_rules.features.inc';
+
+/* Hooks. */
+
+/**
+ * Implements hook_theme().
+ */
+function cwrc_notification_rules_theme($existing, $type, $theme, $path) {
+  return array(
+    'notification_icon_block' => array(
+      'template' => 'templates/notification-icon-block',
+      'variables' => array(
+        'unread_count' => NULL,
+        'unread_message' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function cwrc_notification_rules_block_info() {
+
+  $blocks['notification_icon'] = array(
+    'info' => t('Notification icon'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cwrc_notification_rules_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+
+    case 'notification_icon':
+      global $user;
+      if ($user->uid != 0) {
+        $unread_count = privatemsg_unread_count();
+        $unread_message = format_plural(
+          $unread_count,
+          'unread message',
+          'unread messages');
+        $block['subject'] = t('Notifications');
+        $block['content'] = theme('notification_icon_block', array(
+          'unread_count' => $unread_count,
+          'unread_message' => $unread_message,
+        ));
+      }
+      break;
+
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cwrc_notification_rules_form_islandora_bookmark_detailed_form_alter(&$form, &$form_state) {
+  // Adds a validation callback to the bookmark detailed form that notifies
+  // users when a bookmark list is shared with them.
+  $form['#validate'][] = 'cwrc_notification_rules_bookmark_validate';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cwrc_notification_rules_form_islandora_basic_collection_share_item_form_alter(&$form, &$form_state) {
+  // Injects optional notification form for integration with the privatemsg
+  // module.
+  global $user;
+  $object = menu_get_object('islandora_object', 2);
+  if (!$object) {
+    return;
+  }
+
+  // Add notification form elements.
+  cwrc_notification_rules_notification_form($form, $form_state);
+
+  // Hard-code subject and body values.
+  $form['cwrc_notification_rules_notification']['subject']['#type'] = 'hidden';
+  $form['cwrc_notification_rules_notification']['subject']['#value'] = t('Notification: @user shared "@object".', array(
+    '@user' => realname_load($user),
+    '@object' => $object->label,
+  ));
+  $form['cwrc_notification_rules_notification']['body']['#type'] = 'hidden';
+  $form['cwrc_notification_rules_notification']['body']['#value'] = t('View "@object" <a href="@url">here</a>.', array(
+    '@object' => $object->label,
+    '@url' => url('islandora/object/' . $object->id),
+  ));
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function cwrc_notification_rules_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == "privatemsg_list") {
+    $form['updated']['actions']['newmsg'] = array(
+      '#type' => 'markup',
+      '#markup' => '<span class="compose-new-message">' . l(t('New message'), 'messages/new') . '</a></span>',
+      '#weight' => 50,
+    );
+    return $form;
+  }
+}
+
+/* Form handlers. */
+
+/**
+ * Form validation handler for islandora_bookmark_detailed_form().
+ *
+ * @see cwrc_notification_rules_form_islandora_bookmark_detailed_form_alter()
+ */
+function cwrc_notification_rules_bookmark_validate($form, &$form_state) {
+  // Check if this was triggered by the 'Share' button.
+  if (isset($form_state['triggering_element']['#button_id'])
+    && $form_state['triggering_element']['#button_id'] == 'islandora-bookmark-add-user') {
+
+    // Get the uid of the user to be added.
+    $parents = array('bookmarks', 'users', 'listusers');
+    $add_user = drupal_array_get_nested_value($form_state['values'], $parents);
+
+    // Ensure we have something to do.
+    if (drupal_strlen($add_user) > 0 && $add_user != "0") {
+
+      // Load required objects.
+      module_load_include('inc', 'islandora_bookmark', 'includes/api');
+      global $user;
+      $shared = user_load($add_user);
+      $list = Bookmark::getList($form_state['build_info']['args'][0]);
+
+      // Set up private message.
+      $recipients = array($shared);
+      $subject = t('Notification: @user shared the bookmark list "@list" with you.', array(
+        '@user' => realname_load($user),
+        '@list' => $list->bookmarkName,
+      ));
+      $body = t('View "@list" <a href="@url">here</a>.', array(
+        '@list' => $list->bookmarkName,
+        '@url' => url('islandora-bookmark/listid/' . $list->getId()),
+      ));
+
+      // Send private message.
+      privatemsg_new_thread($recipients, $subject, $body);
+    }
+  }
+}
+
+/**
+ * Form constructor for the notification form.
+ *
+ * Adds notification elements before submit element of a form array.
+ *
+ * @see cwrc_notification_rules_notification_form_validate()
+ * @see cwrc_notification_rules_notification_form_submit()
+ *
+ * @ingroup forms
+ */
+function cwrc_notification_rules_notification_form(&$form, &$form_state, $submit = 'submit') {
+  // Weigh down the submit button if it exists.
+  if (isset($form[$submit])) {
+    $form[$submit]['#weight'] = 10;
+  }
+
+  // Add new form elements.
+  $form['cwrc_notification_rules_notify'] = array(
+    '#type' => 'checkbox',
+    '#weight' => 8,
+    '#title' => t('Send notification?'),
+    '#default_value' => FALSE,
+  );
+  $form['cwrc_notification_rules_notification'] = array(
+    '#type' => 'fieldset',
+    '#weight' => 9,
+    '#title' => t('Notification'),
+    '#tree' => TRUE,
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="cwrc_notification_rules_notify"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+  $form['cwrc_notification_rules_notification']['recipient'] = array(
+    '#type' => 'textfield',
+    '#autocomplete_path' => 'messages/autocomplete',
+    '#title' => t('Recipient(s)'),
+  );
+  $form['cwrc_notification_rules_notification']['subject'] = array(
+    '#type' => 'textbox',
+    '#title' => t('Subject'),
+  );
+  $form['cwrc_notification_rules_notification']['body'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Message'),
+  );
+
+  // Add validation and submit handlers.
+  $form['#validate'][] = 'cwrc_notification_rules_notification_form_validate';
+  $form['#submit'][] = 'cwrc_notification_rules_notification_form_submit';
+}
+
+/**
+ * Form validation handler for cwrc_notification_rules_notification_form().
+ *
+ * Only validates our fields if "Notify?" is selected.
+ *
+ * @see cwrc_notification_rules_notification_form_submit()
+ */
+function cwrc_notification_rules_notification_form_validate($form, &$form_state) {
+  $values = $form_state['values'];
+  if ($values['cwrc_notification_rules_notify']) {
+    $notification = $values['cwrc_notification_rules_notification'];
+
+    // All fields are required.
+    if (empty($notification['recipient'])) {
+      form_set_error('cwrc_notification_rules_notification][recipient', t('To send a notification "recipient(s)" cannot be empty.'));
+    }
+    if (empty($notification['subject'])) {
+      form_set_error('cwrc_notification_rules_notification][subject', t('To send a notification "subject" cannot be empty.'));
+    }
+    if (empty($notification['body'])) {
+      form_set_error('cwrc_notification_rules_notification][body', t('To send a notification "message" cannot be empty.'));
+    }
+
+    // Check for invalid recipients.
+    list(, $invalid, , ) = _privatemsg_parse_userstring($notification['recipient']);
+    if (count($invalid) > 0) {
+      form_set_error('cwrc_notification_rules_notification][recipient', format_plural(
+        count($invalid),
+        'The user "@user" is invalid.',
+        'The users "@user" are invalid.',
+        array('@user' => implode('", "', $invalid))
+      ));
+    }
+  }
+}
+
+/**
+ * Form submission handler for cwrc_notification_rules_notification_form().
+ *
+ * Only sends notification if "Notify?" is selected.
+ *
+ * @see cwrc_notification_rules_notification_form_validate()
+ */
+function cwrc_notification_rules_notification_form_submit($form, &$form_state) {
+  $values = $form_state['values'];
+  if ($values['cwrc_notification_rules_notify']) {
+    $notification = $values['cwrc_notification_rules_notification'];
+
+    // Get recipients.
+    list($valid, , , ) = _privatemsg_parse_userstring($notification['recipient']);
+
+    // Send notification to users.
+    privatemsg_new_thread($valid, filter_xss($notification['subject']), check_markup($notification['body'], 'filtered_html'));
+  }
+}
