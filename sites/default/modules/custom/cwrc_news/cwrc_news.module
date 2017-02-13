@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CWRC News feature.
+ */
+
+include_once 'cwrc_news.features.inc';
