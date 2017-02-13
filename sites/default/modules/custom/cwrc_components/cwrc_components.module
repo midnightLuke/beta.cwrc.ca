@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * Code for the CWRC Base Components feature.
+ */
+
+include_once 'cwrc_components.features.inc';
