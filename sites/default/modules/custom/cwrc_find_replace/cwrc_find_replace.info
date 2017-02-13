@@ -1,0 +1,6 @@
+name = CWRC: Find and Replace
+description = Modifies the Islandora XQuery module to be more user friendly.
+core = 7.x
+package = CWRC
+
+dependencies[] = islandora_xquery

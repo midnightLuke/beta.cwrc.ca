@@ -1,0 +1,158 @@
+<?php
+
+/**
+ * @file
+ * Hooks and helper functions for the cwrc_find_replace module.
+ */
+
+/* Hooks. */
+
+/**
+ * Implements hook_menu_alter().
+ */
+function cwrc_find_replace_menu_alter(&$items) {
+  // Alters the title of the query preview page for clarity.
+  $items['islandora/xquery/preview/%']['#title'] = 'Step 3: Review changes';
+}
+
+/**
+ * Implements hook_batch_alter().
+ */
+function cwrc_find_replace_batch_alter(&$batch) {
+  // Really the only entry point here...
+  if (isset($batch['sets'][0]['finished']) && $batch['sets'][0]['finished'] == 'islandora_xquery_run_query_batch_finished') {
+    $batch['sets'][0]['title'] = t('Running find and replace');
+    $batch['sets'][0]['finished'] = 'cwrc_find_replace_run_query_batch_finished';
+  }
+  elseif (isset($batch['sets'][0]['finished']) && $batch['sets'][0]['finished'] == 'islandora_xquery_apply_query_batch_finished') {
+    $batch['sets'][0]['title'] = t('Applying find and replace');
+    $batch['sets'][0]['finished'] = 'cwrc_find_replace_apply_query_batch_finished';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for islandora_xquery_results().
+ */
+function cwrc_find_replace_form_islandora_xquery_results_form_alter(&$form, &$form_state) {
+  // Alters the initial XQuery form to be a little more user friendly.
+  //
+  // Label and help text updates.
+  $form['step_one'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Step 1: Select objects to modify'),
+    '#suffix' => '</h2>',
+    '#weight' => -100,
+  );
+  $form['step_one_help'] = array(
+    '#prefix' => '<div class="help-text"><p>',
+    '#markup' => t('You may use the filters on the left to filter this list further.'),
+    '#suffix' => '</p></div>',
+    '#weight' => -99,
+  );
+  $form['islandora_xquery_table']['#weight'] = -98;
+  $form['step_two'] = array(
+    '#prefix' => '<h2>',
+    '#markup' => t('Step 2: Select and configure query'),
+    '#suffix' => '</h2>',
+    '#weight' => -97,
+  );
+  $form['step_two_query_options'] = array(
+    '#prefix' => '<h3>',
+    '#markup' => t('Query options'),
+    '#suffix' => '</h3>',
+    '#weight' => -96,
+  );
+  $form['xquery_controls']['xquery']['#title'] = t('Find and replace query');
+  $form['xquery_controls']['xquery']['#description'] = t('Select the query you would like to run against the selected objects.');
+  $form['xquery_controls']['xquery']['#weight'] = -100;
+  $form['xquery_controls']['step_two_parameters'] = array(
+    '#prefix' => '<h3>',
+    '#markup' => t('Parameters'),
+    '#suffix' => '</h3>',
+    '#weight' => -97,
+  );
+  $form['xquery_controls']['step_two_parameters_help'] = array(
+    '#prefix' => '<div class="help-text"><p>',
+    '#markup' => t('The selected query defines the following parameters.'),
+    '#suffix' => '</p></div>',
+    '#weight' => -96,
+  );
+  $form['xquery_controls']['xquery_inputs']['#weight'] = -95;
+  if (!isset($form['xquery_controls']['xquery_inputs']['tokens'])
+    && !isset($form['xquery_controls']['xquery_inputs']['query'])) {
+    $form['xquery_controls']['xquery_inputs']['#markup'] = t('No parameters.');
+  }
+  $form['xquery_controls']['submit_all']['#value'] = t('Step 3: Review changes from all objects in search result');
+  $form['xquery_controls']['submit_selected']['#value'] = t('Step 3: Review changes from selected objects');
+
+  // Alter the DSID field to have additional helper checkboxes.
+  $dsids = variable_get('cwrc_find_replace_dsid_checkboxes', array(
+    'CWRC' => 'CWRC',
+    'DC' => 'DC',
+    'MODS' => 'MODS',
+    'ORGANIZATION' => 'ORGANIZATION',
+    'PERSON' => 'PERSON',
+    'PLACE' => 'PLACE',
+    'POLICY' => 'POLICY',
+    'RELS-EXT' => 'RELS-EXT',
+    'TEI' => 'TEI',
+    'WORKFLOW' => 'WORKFLOW',
+  ));
+  $form['xquery_controls']['dsids_extra'] = array(
+    '#title' => t('Datastreams to run query on'),
+    '#type' => 'checkboxes',
+    '#options' => $dsids,
+    '#description' => t('Select the datastreams that the changes will be applied to.'),
+    '#weight' => -99,
+  );
+  $form['xquery_controls']['dsids']['#title'] = t('Additional datastream IDs');
+  $form['xquery_controls']['dsids']['#description'] = t('Enter a comma-seperated list of additional DSIDs to run the query against (advanced).');
+  $form['xquery_controls']['dsids']['#weight'] = -98;
+  $form['xquery_controls']['dsids']['#required'] = FALSE;
+
+  // Add our validation handler.
+  $form['#validate'][] = 'cwrc_find_replace_validate_dsids';
+}
+
+/* Batch API callbacks. */
+
+/**
+ * Batch finished callback.
+ */
+function cwrc_find_replace_run_query_batch_finished($success, $results, $operations) {
+  // Clear messages and set our own message.
+  drupal_get_messages();
+  drupal_set_message(t('Objects listed below have been locked for editing.'));
+
+  // Call the original callback now.
+  islandora_xquery_run_query_batch_finished($success, $results, $operations);
+}
+
+/**
+ * Batch finished callback.
+ */
+function cwrc_find_replace_apply_query_batch_finished($success, $results, $operations) {
+  drupal_set_message(t('Objects were modified successfully and locks have been released.'));
+
+  // Call the original callback now.
+  islandora_xquery_apply_query_batch_finished($success, $results, $operations);
+}
+
+/* Form handlers. */
+
+/**
+ * Form validation handler for islandora_xquery_results().
+ *
+ * @see cwrc_find_replace_form_islandora_xquery_results_form_alter()
+ */
+function cwrc_find_replace_validate_dsids($form, &$form_state) {
+  // Ensure some DSIDs were entered and sets the right field for the
+  // islandora_xquery module.
+  $values =& $form_state['values'];
+  if (empty($values['xquery_controls']['dsids']) && empty($values['xquery_controls']['dsids_extra'])) {
+    form_set_error('dsids_extra', t('You must select at least one datastream to run the query against.'));
+  }
+  $dsids_extra = array_filter($values['xquery_controls']['dsids_extra']);
+  $dsids = trim(implode(',', $dsids_extra) . ',' . $values['xquery_controls']['dsids'], ",");
+  form_set_value($form['xquery_controls']['dsids'], $dsids, $form_state);
+}
