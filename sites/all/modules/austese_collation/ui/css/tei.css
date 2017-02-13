@@ -1,0 +1,99 @@
+p.stage-italic {
+    color: #51666b;
+    font-style: italic;
+    margin-top:1em;
+    margin-bottom:1em;
+}
+p.stage {
+    color: #51666b;
+    margin-top:1em;
+    margin-bottom:1em;
+}
+span.speaker {
+    font-weight: bold
+}
+br.l {}
+p.sp {
+    line-height:2em;
+}
+span.italics {
+    font-style: italic
+}
+span.bold {
+    font-weight: bold;
+}
+.founddeleted-default, .overstrike {
+    text-decoration: line-through;
+}
+.foundadded-default:before {
+  font-weight:bold;
+  color:#999999;
+  content: "|";
+}
+.foundadded-default:after{
+  color:#999999;
+  font-weight:bold;
+  content: "|";
+}
+.foundadded-above:before{
+  font-weight:bold;
+  color:#999999;
+  content: "\\";
+}
+.foundadded-above:after {
+  font-weight:bold;
+  color:#999999;
+  content: "/";
+}
+.foundadded-below:before{
+  font-weight:bold;
+  color:#999999;
+  content: "/";
+}
+.foundadded-below:after {
+  font-weight:bold;
+  color:#999999;
+  content: "\\";
+}
+.pb {
+    color: #bbbbbb;
+}
+span.added, span.inserted, span.deleted {
+    color: #565656;
+    border-radius: 3px;
+    position: relative;
+}
+span.base {
+   border-bottom: 1px dotted #ba0000;
+}
+span.left {
+    position: relative;
+    float:left;
+}
+span.right {
+    position: relative;
+    float:right;
+}
+span.inserted-left {
+    position: relative;
+    float: left;
+    color: #000AEE;
+    border-radius: 3px;
+}
+span.inserted-right {
+    position: relative;
+    float: right;
+    color: #000AEE;
+    border-radius: 3px;
+}
+
+a.parent {
+    color:black;
+    border-bottom: 1px dashed purple;
+}
+a.child {
+    color:black;
+    border-bottom: 1px dashed purple; }
+.resourceContent {
+    font-family: Arial, Helvetica, sans-serif;
+}

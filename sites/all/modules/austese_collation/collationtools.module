@@ -1,0 +1,392 @@
+<?php
+
+/**
+ * @file
+ * Module file for HRITServer collation views
+ */
+/**
+ * @defgroup collationtools AustESE collation views
+ * @ingroup austese
+ * @{
+ * AustESE collation views
+ *
+ */
+
+/**
+ * Implements hook_help().
+ *
+ */
+function collationtools_help($path, $arg) {
+  switch ($path) {
+    case 'collationtools':
+      return t('AustESE Collation Tools');
+    case 'collationtools/apparatus':
+      return t('AustESE collation views');
+    case 'collationtools/compare':
+      return t('AustESE collation compare view');
+    case 'collationtools/slider':
+      return t('Alternative slider');
+    case 'admin/help#collationtools':
+      // Help text for the admin section, using the module name in the path.
+      return t('AustESE collation views');
+  }
+}
+
+/**
+ * Implements hook_permission().
+ *
+ */
+function collationtools_permission() {
+  return array(
+    'view collation tools' => array(
+      'title' => t('View collation tools'),
+      'description' => t('Allow users to view collation tools'),
+    ),
+    'edit mvds' => array(
+      'title' => t('Edit MVDs'),
+      'description' => t('Allow users to create or update MVDs')
+    )
+  );
+}
+
+/**
+ * Implements hook_menu().
+ *
+ *
+ * @see hook_menu()
+ * @see menu_example
+ */
+function collationtools_menu() {
+  // by default any path after this is split and provided as args to alignment_view
+  $items['collationtools'] = array(
+    'title' => 'Collation Tools',
+    'page callback' => 'collationtools_toc',
+    'access arguments' => array('view collation tools'),
+    'type' => MENU_CALLBACK
+  );
+  $items['collationtools/apparatus'] = array(
+    'title' => 'Apparatus Table',
+    'page callback' => 'collationtools_tableapparatus',
+    'access arguments' => array('view collation tools'),
+    'type' => MENU_CALLBACK
+  );
+  $items['collationtools/compare'] = array(
+    'title' => 'Compare',
+    'page callback' => 'collationtools_compare',
+    'access arguments' => array('view collation tools'),
+    'type' => MENU_CALLBACK
+  );
+  $items['collationtools/slider'] = array(
+    'title' => 'Slider Demo',
+    'page callback' => 'collationtools_tableapparatus2',
+    'access arguments' => array('view collation tools'),
+    'type' => MENU_CALLBACK
+  );
+  $items['collationtools/sendtomvd'] = array(
+    'title' => 'Send to MVD',
+    'page callback' => 'collationtools_sendtomvd',
+    'access arguments' => array('edit mvds'),
+    'type' => MENU_CALLBACK
+  );
+    $items['collationtools/get_edits'] = array(
+    'title' => 'Get edited collations',
+    'file' => "includes/emicdora.inc",
+    'page callback' => 'collationtools_get_edited_collation',
+    // While this does actually write to mongo it doesn't change content and is
+    // required for basic view access, when the user views a particular version
+    // the comparison is generated and stored.
+    'access arguments' => array('view collation tools'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+/**
+ * Builds Table of Contents.
+ *
+ * @return string
+ *   HTML
+ */
+function collationtools_toc() {
+  // Create breadcrumbs trail
+  $breadcrumb = array();
+  $breadcrumb[] = l('Home', '<front>');
+  _add_project_or_repository($breadcrumb);
+  $breadcrumb[] = t(drupal_get_title());
+  drupal_set_breadcrumb($breadcrumb);
+
+  // Prepare render array
+  $list[] = l("Compare", "collationtools/compare");
+  $list[] = l("Table Apparatus", "collationtools/apparatus");
+  $render_array['collationtools_list'] = array(
+    '#theme' => 'item_list',
+    '#items' => $list
+  );
+  return $render_array;
+}
+
+function collationtools_compare($left = null, $right = null) {
+  global $base_path;
+  // Create breadcrumbs trail
+  $breadcrumb = array();
+  $breadcrumb[] = l('Home', '<front>');
+  _add_project_or_repository($breadcrumb);
+  $breadcrumb[] = l('Collation Tools', 'collationtools');
+  $breadcrumb[] = t(drupal_get_title());
+  drupal_set_breadcrumb($breadcrumb);
+  // Add JS/CSS to render array
+  $modulePath = drupal_get_path('module', 'collationtools');
+  drupal_add_js("$modulePath/js/emicdora_customizations.js");
+  drupal_add_css("$modulePath/ui/css/tei.css");
+  drupal_add_css($modulePath . '/ui/app.css');
+  drupal_add_js('sites/all/libraries/ext-4.1.1a/ext-all.js');
+  drupal_add_js(array('collationtoools' => array('base_url' => 'garbage')), 'setting');
+
+  drupal_add_js(
+      array(
+    'collationtools' => array(
+      'base_url' => $base_path,
+      'module_path' => drupal_get_path('module', 'repository'),
+    ),
+      ), 'setting'
+  );
+  drupal_add_js($modulePath . '/ui/compareapp.js');
+  return theme('extjsapp', array('left' => $left, 'right' => $right));
+}
+
+function collationtools_tableapparatus($left = null, $right = null) {
+  global $base_path;
+  $breadcrumb = array();
+  $breadcrumb[] = l('Home', '<front>');
+  $breadcrumb[] = l('Collation Tools', 'collationtools');
+  $breadcrumb[] = t(drupal_get_title());
+  drupal_set_breadcrumb($breadcrumb);
+  $extjs = 'ext-4.1.1a';
+  //if (($library = libraries_detect($extjs)) && !empty($library['installed'])) {
+  $modulePath = drupal_get_path('module', 'collationtools');
+  drupal_add_css($modulePath . '/ui/app.css');
+  drupal_add_js('sites/all/libraries/ext-4.1.1a/ext-all.js');
+  drupal_add_js(
+      array(
+    'collationtools' => array(
+      'base_url' => $base_path,
+      'module_path' => drupal_get_path('module', 'repository'),
+    )
+      ), 'setting'
+  );
+  drupal_add_js($modulePath . '/ui/app.js');
+  return theme('extjsapp', array('left' => $left, 'right' => $right));
+  //} else {
+  //    return t('Please install ext-4.1.1a into /sites/all/libraries');
+  //}
+}
+
+function collationtools_sendtomvd($ids = null) {
+  global $base_url;
+  $mvd_url = variable_get('mvd_server_url', $base_url) . variable_get('austese_server_prefix', '');
+  $hritimport = "$mvd_url/import";
+  // generate a unique document identifier for new MVD if docpath isn't specified
+  $docpath = $_GET['docpath'];
+  if ($docpath == null) {
+    $docpath = uniqid();
+  }
+  $filter = "Empty";
+  if (isset($_GET['filter'])) {
+    $filter = $_GET['filter'];
+  }
+  // remove spaces from doc path
+  $docpath = str_replace(' ', '_', $docpath);
+  $origdocpath = $docpath;
+  if ($ids == null) {
+    return t('Identifiers of resources to add to MVD not specified');
+  }
+  // $docpath = urlencode($docpath);
+  $resids = explode(";", $ids);
+
+  $boundary = "-------------" . uniqid();
+  $data = "";
+  $idarr = array();
+  foreach ($resids as $resid) {
+    if ($resid != "") {
+
+
+      $resurl = 'http://' . $_SERVER['HTTP_HOST'] . "/" . drupal_get_path('module', 'repository') . "/api/resources/" . $resid;
+      // look up resource metadata - use short id or original filename minus extension
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        "Accept: application/json"
+      ));
+      curl_setopt($ch, CURLOPT_URL, $resurl);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // return the transfer as a string
+      $resmetadata = curl_exec($ch);
+      curl_close($ch);
+
+      $resjson = json_decode($resmetadata);
+      $filename = $resjson->filename;
+      if (!empty($resjson->metadata->shortname)) {
+        $versionid = $resjson->metadata->shortname;
+      }
+      else {
+        $dotpos = strrpos($filename, '.');
+        if ($dotpos > 0) {
+          $versionid = substr($filename, 0, $dotpos);
+        }
+        else {
+          $versionid = $filename;
+        }
+      }
+      $versionid = str_replace('.', '_', $versionid);
+      $idarr[] = array('id' => $resid, 'name' => $versionid);
+      // load contents for resource
+      // $contents = file_get_contents($resurl);
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $resurl);
+      curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // return the transfer as a string
+      $contents = curl_exec($ch);
+      $contenttype = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+      curl_close($ch);
+
+      $data .= "--" . $boundary . "\r\n";
+      $data .= "Content-Disposition: form-data; name=\"uploadedfile[]\"; filename=\"" . $versionid . "\"\r\n";
+      $data .= "Content-Type: " . $contenttype . "\r\n";
+      $data .= "Content-Length: " . strlen($contents) . "\r\n";
+      $data .= "Content-Transfer-Encoding: binary\r\n\r\n";
+      $data .= $contents . "\r\n";
+    }
+  }
+  $data .= "--" . $boundary . "\r\n";
+  $data .= "Content-Disposition: form-data; name=\"DOC_ID\"\r\n\r\n" . $docpath . "\r\n";
+
+  $data .= "--" . $boundary . "\r\n";
+  $data .= "Content-Disposition: form-data; name=\"FILTER\"\r\n\r\n" . $filter . "\r\n";
+  $data .= "--" . $boundary . "--\n";
+
+  $ch = curl_init();
+  // post to HRIT server import
+  curl_setopt($ch, CURLOPT_URL, trim($hritimport));
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data; boundary=" . $boundary));
+  // get back status or response
+  $response = curl_exec($ch);
+  $err = curl_errno($ch);
+
+  $header = curl_getinfo($ch);
+  $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+  $error = curl_error($ch);
+  curl_close($ch);
+
+  if ($err) {
+    return t('Error: ' . $err . " " . $error . " " . $response);
+  }
+  else {
+    $message = "";
+
+    // Unfortunately HRIT Server does not use HTTP status to indicate errors,
+    // instead look for 'rror' in response
+    $hriterror = preg_match('/rror/', $response);
+    if ($hriterror == 0) {
+      // try to fetch json for created mvd
+      $json = file_get_contents("$mvd_url/json/list/$origdocpath");
+      $hriterror = preg_match('/HritServer Error/', $response);
+      //$message =  "<p>MVD created. You may now view <a href='/collationtools/apparatus#$docpath'>table apparatus</a> or <a href='/collationtools/compare#$docpath'>side-by-side comparison</a></p>";
+      if ($hriterror == 0) {
+        // store MVD details in db for now
+        // parse existing mvd results to check if one exists with same name, get id and delete
+        $mvdsearchurl = $base_url. "/" . drupal_get_path('module', 'repository') . "/api/mvds/?searchField=name&query=" . $docpath . "$";
+        $mvdsearch = file_get_contents($mvdsearchurl);
+        $mvdsearchjson = json_decode($mvdsearch, TRUE);
+        $existingmvdcount = $mvdsearchjson['count'];
+        if ($existingmvdcount != 0) {
+          $existingmvd = $mvdsearchjson['results'][0]['id'];
+          $ch3 = curl_init();
+          curl_setopt($ch3, CURLOPT_CUSTOMREQUEST, 'DELETE');
+          curl_setopt($ch3, CURLOPT_RETURNTRANSFER, TRUE);
+          curl_setopt($ch3, CURLOPT_URL, trim($base_url . "/" . drupal_get_path('module', 'repository') . "/api/mvds/" . $existingmvd));
+          $dbresponse = curl_exec($ch3);
+          $dberr = curl_errno($ch3);
+          $dberror = curl_error($ch3);
+          $info3 = curl_getinfo($ch3);
+          curl_close($ch3);
+          if ($dberr) {
+            return t('Error: ' . $dberr . " " . $dberror . $dbresponse);
+          }
+          if ($info3['http_code'] !== 204) { // success with No Content
+            return t('Error deleting old mvd record: ' . $dbresponse);
+          }
+        }
+        // post new MVD details to db
+        $mvddburl = $base_url . "/" . drupal_get_path('module', 'repository') . "/api/mvds/";
+
+        $newmvd = array('name' => $origdocpath, 'resources' => $idarr, 'filter' => $filter);
+        if (isset($_GET['project'])) {
+          $newmvd['project'] = $_GET['project'];
+        }
+        $ch2 = curl_init();
+        curl_setopt($ch2, CURLOPT_URL, trim($mvddburl));
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch2, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch2, CURLOPT_POST, 1);
+        curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($newmvd));
+        curl_setopt($ch2, CURLOPT_HTTPHEADER, array("Content-type: application/json;"));
+
+        $dbresponse = curl_exec($ch2);
+        $dberr = curl_errno($ch2);
+        $dberror = curl_error($ch2);
+        $info = curl_getinfo($ch2);
+        curl_close($ch2);
+        if ($dberr) {
+          return t('Error: ' . $dberr . " " . $dberror . $dbresponse);
+        }
+        if ($info['http_code'] !== 201) { // success with No Content
+          return t('Error creating mvd record: ' . $dbresponse);
+        }
+
+        // message is success message
+        $projectParam = '';
+        if (isset($_GET['project'])) {
+          $projectParam = "?project=" . $_GET['project'];
+        }
+        $message = "<p>MVD created. You may now view <a href='/collationtools/apparatus$projectParam#$docpath'>table apparatus</a> or <a href='/collationtools/compare$projectParam#$docpath'>side-by-side comparison</a></p>";
+      }
+      else {
+        $message = "<p>MVD was not created. Refer to the log above for the cause.";
+      }
+    }
+    else {
+      // else message is failure message
+      $message = "<p>There was an error creating the MVD. Refer to the log above for the cause. If the log does not indicate a reason, the operation may have failed as a result of versions being too large or too much variation between versions. Try splitting larger transcriptions into smaller sections.</p>";
+    }
+    $breadcrumb = array();
+    $breadcrumb[] = l('Home', '<front>');
+    _add_project_or_repository($breadcrumb);
+    $breadcrumb[] = t(drupal_get_title());
+    drupal_set_breadcrumb($breadcrumb);
+    return t('<p>' . $response . '</p>' . $message);
+  }
+}
+
+function collationtools_tableapparatus2($left = null, $right = null) {
+  return theme('tableapparatus2', array('left' => $left, 'right' => $right));
+}
+
+function collationtools_theme() {
+  return array(
+    'extjsapp' => array(
+      'template' => 'tableui',
+      'variables' => array('left' => null, 'right' => null)
+    ),
+    'tableapparatus2' => array(
+      'template' => 'slider',
+      'variables' => array('left' => null, 'right' => null)
+    )
+  );
+}
+
+/**
+ * @} End of "defgroup collationtools".
+ */
