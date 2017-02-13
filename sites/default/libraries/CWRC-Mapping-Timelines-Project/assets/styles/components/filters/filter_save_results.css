@@ -1,0 +1,50 @@
+filter_save_results {
+   display: inline-block;
+
+   vertical-align: top;
+   
+   margin: 0em 0.9em;
+}
+
+filter_save_results > input {
+   font-size: 0.8em;
+}
+
+filter_save_results .save-dialog {
+   position: fixed;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   z-index: 100;
+
+   background: rgba(0, 0, 0, 0.4);
+}
+
+filter_save_results .save-dialog > div {
+   position: relative;
+
+   margin: 10% auto;
+   max-width: 27.5em;
+   padding: 1em;
+
+   box-shadow: 0.25em 0.25em 0.5em rgba(0, 0, 0, 0.6);
+
+   text-align: left;
+   background: lightgrey;
+}
+
+filter_save_results .save-dialog > div header {
+   margin-bottom: 1em;
+
+   text-align: center;
+}
+
+filter_save_results .save-dialog > div input {
+   display: inline-block;
+
+   min-width: 8em;
+   min-height: 2.5em;
+
+   cursor: pointer;
+}

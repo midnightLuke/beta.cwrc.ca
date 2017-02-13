@@ -1,0 +1,15 @@
+filter_reset {
+   display: inline-block;
+
+   vertical-align: top;
+
+   margin: 0em 0.9em;
+}
+
+filter_reset input {
+   display: block;
+
+   width: 100%;
+
+   font-size: 0.8em;
+}

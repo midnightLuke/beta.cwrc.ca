@@ -1,0 +1,183 @@
+timeline {
+   display: block;
+}
+
+timeline > section:first-of-type {
+   text-align: right;
+}
+
+timeline .unplottable {
+   font-size: 0.8em;
+}
+
+/*timeline > section {*/
+/*position: relative;*/
+/*}*/
+
+/*timeline > section:first-of-type div {*/
+/*display: inline-block;*/
+/**/
+/*position: absolute;*/
+/*right: 0em;*/
+/*}*/
+
+timeline resizer .viewport {
+   height: 15em;
+}
+
+timeline .timeline-viewport {
+   height: 100%;
+
+   overflow: hidden;
+
+   background: #ccc;
+}
+
+timeline .timeline-viewport {
+   cursor: -moz-grab;
+   cursor: -webkit-grab;
+   cursor: grab;
+}
+
+timeline .timeline-ruler {
+   cursor: default;
+}
+
+timeline .timeline-viewport,
+timeline .timeline-ruler {
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+timeline .timeline-ruler > div {
+   -webkit-transform-origin: left;
+   -moz-transform-origin: left;
+   -ms-transform-origin: left;
+   -o-transform-origin: left;
+   transform-origin: left;
+}
+
+timeline .timeline-viewport:active {
+   cursor: -moz-grabbing;
+   cursor: -webkit-grabbing;
+   cursor: grabbing;
+}
+
+timeline .timeline-viewport .canvas {
+   position: relative;
+
+   z-index: 10;
+
+   background: #b3d1ff;
+
+   -webkit-transform-origin: 0 0 0;
+   -moz-transform-origin: 0 0 0;
+   -ms-transform-origin: 0 0 0;
+   -o-transform-origin: 0 0 0;
+   transform-origin: 0 0 0;
+}
+
+timeline .timeline-viewport > div.canvas .event {
+   position: absolute;
+
+   width: 2em;
+
+   border-left: 2px groove darkgrey;
+
+   font-size: 0.8em;
+}
+
+timeline .timeline-viewport > div.canvas .event a {
+   position: absolute;
+   bottom: -0.9em;
+
+   max-width: 10em;
+
+   border: 2px groove darkgrey;
+
+   border-radius: 0.25em;
+
+   background: white;
+
+   overflow: hidden;
+   text-overflow: ellipsis;
+
+   padding: 0.25em 0.5em 0.25em 0;
+   box-sizing: border-box;
+
+   color: black;
+   text-decoration: none;
+   white-space: nowrap;
+
+   transition: max-width 0.5s ease-in-out;
+}
+
+timeline .timeline-viewport > div.canvas .event a:hover {
+   max-width: 100em;
+
+   z-index: 10;
+
+   background: #b3bbbe;
+}
+
+timeline .timeline-viewport > div.canvas .period {
+   border-right-style: groove;
+}
+
+timeline .timeline-viewport > div.canvas .period a,
+timeline .timeline-viewport > div.canvas .period a:hover {
+   max-width: none;
+
+   left: 0;
+}
+
+timeline .timeline-viewport > div.canvas .selected {
+   border-color: #CC0000;
+}
+
+timeline .timeline-viewport > div.canvas .selected a {
+   z-index: 10;
+
+   max-width: none;
+
+   box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.65);
+   border: 3px dotted #CC0000;
+
+   background: #336699;
+   color: white;
+}
+
+/*timeline .timeline-viewport > div.canvas .event span:first-of-type:after {
+   content: ":";
+}*/
+
+timeline .timeline-viewport > div.canvas .event span {
+   margin-left: 0.25em;
+}
+
+timeline .timeline-ruler {
+   position: relative;
+
+   overflow: hidden;
+
+   background: #336699;
+   color: white;
+}
+
+timeline .timeline-ruler > div {
+   overflow: hidden;
+
+   min-height: 1.25em;
+}
+
+timeline .timeline-ruler > div > span {
+   position: absolute;
+
+   min-height: 1.25em;
+
+   border-left: 1px solid black;
+
+   padding-left: 0.25em;
+}

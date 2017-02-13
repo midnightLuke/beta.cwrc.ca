@@ -1,0 +1,233 @@
+grid {
+   display: block;
+
+   /*margin: 1em;*/
+
+   width: 100%;
+   min-height: 10em;
+
+   padding-top: 0.5em;
+}
+
+grid table {
+   border-collapse: collapse;
+
+   width: 100%;
+}
+
+grid table thead th {
+   padding: 0.25em;
+}
+
+grid table thead th a {
+   display: inline-block;
+
+   padding: 0.5em 0;
+
+   cursor: pointer;
+
+   text-decoration: none;
+   color: black;
+   white-space: nowrap;
+}
+
+grid table thead th a:hover {
+   text-decoration: underline;
+}
+
+grid table tbody tr {
+   cursor: pointer;
+}
+
+grid table tbody tr td {
+   height: 2.5em;
+}
+
+grid table tbody tr:nth-of-type(even) {
+   background: #eee;
+}
+
+grid table tbody tr:nth-of-type(odd) {
+   background: #ddd;
+}
+
+grid table tbody tr:hover {
+   background: #336699;
+   color: white;
+}
+
+grid table tbody td {
+   padding: 0.25em 0.5em;
+}
+
+grid a[selected] {
+   font-weight: bold;
+   text-decoration: none;
+}
+
+grid .grid-controls {
+   font-size: 0.8em;
+}
+
+grid .grid-sorter {
+   display: inline-block;
+}
+
+grid .grid-column-chooser {
+   display: inline-block;
+   position: relative;
+   z-index: 10;
+
+   float: right;
+
+   margin-right: 1em;
+   margin-bottom: 0.5em;
+}
+
+grid .grid-column-chooser > div:first-of-type {
+   position: absolute;
+   right: 0em;
+
+   box-shadow: 0.25em 0.25em 0.5em rgba(0, 0, 0, 0.66);
+
+   border-radius: 0.25em;
+
+   background: #336699;
+   color: white;
+}
+
+grid .grid-column-chooser > div:first-of-type label {
+   margin: 0.5em;
+
+   display: block;
+
+   white-space: nowrap;
+
+   cursor: pointer;
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+grid .grid-column-chooser > div:first-of-type label input {
+   cursor: pointer;
+}
+
+grid .grid-column-chooser-area {
+   position: fixed;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   z-index: 9;
+}
+
+grid .grid-sorter div {
+   display: inline-block;
+}
+
+grid .grid-sorter > a {
+   display: inline-block;
+
+   margin-top: 0.25em;
+}
+
+grid .grid-sorter .prompt {
+   display: inline-block;
+
+   margin-top: 0.25em;
+
+   vertical-align: top;
+}
+
+grid .grid-sorter > div div {
+   display: block;
+}
+
+grid .grid-sorter > div div:after {
+   content: ' then';
+}
+
+grid .grid-sorter > div > div select {
+   background: none;
+
+   cursor: pointer;
+}
+
+grid .grid-sorter > div > div a:last-of-type {
+   margin-left: 0.5em;
+
+   width: 1em;
+
+   border-radius: 100%;
+
+   background: #336699;
+   color: white;
+
+   text-decoration: none;
+}
+
+grid .grid-sorter > div > div a:last-of-type:hover {
+   color: white;
+
+   text-decoration: underline;
+}
+
+grid .grid-sorter > div > div a {
+   /* :last-of-type {*/
+   display: inline-block;
+
+   border-radius: 0.25em;
+
+   padding: 0.25em;
+
+   text-align: center;
+
+   color: black;
+   border: 1px outset #cfcfcf;
+   text-decoration: none;
+}
+
+grid .grid-sorter > div > div a:hover {
+   border: 1px outset #ababab;
+
+   color: black;
+   text-decoration: none;
+}
+
+grid .pageControls {
+   margin-top: 0.5em;
+
+   text-align: center;
+}
+
+grid .pageControls a {
+   display: inline-block;
+
+   min-width: 1em;
+   min-height: 1em;
+
+   padding: 0.25em;
+
+   background: white;
+   text-align: center;
+
+   text-decoration: none;
+}
+
+grid .pageControls a:hover {
+   text-decoration: underline;
+}
+
+grid .pageControls div {
+   margin-top: 0.5em;
+
+   font-size: 0.8em;
+
+   color: #6D6D6D;
+}
+
+grid .pageControls div select {
+   background: white;
+}
