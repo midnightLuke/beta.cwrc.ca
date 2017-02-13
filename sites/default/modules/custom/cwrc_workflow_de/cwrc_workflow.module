@@ -1,0 +1,482 @@
+<?php
+
+/**
+ * @file
+ * Code for the CWRC: Workflow Extras feature.
+ */
+
+include_once 'cwrc_workflow.features.inc';
+
+/* Constants. */
+
+define('CWRC_WORKFLOW_DSID', 'WORKFLOW');
+
+/* Hooks. */
+
+/**
+ * Implements hook_menu().
+ */
+function cwrc_workflow_menu() {
+  $items['islandora/object/%islandora_object/history'] = array(
+    'title' => 'History',
+    'page callback' => 'cwrc_workflow_object_history_page',
+    'page arguments' => array(2),
+    'access callback' => 'islandora_object_access_callback',
+    'access arguments' => array(ISLANDORA_VIEW_OBJECTS, 2),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 15,
+    'file' => 'includes/cwrc_workflow.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function cwrc_workflow_menu_alter(&$items) {
+  // Removes the old "workflow" tab.
+  $items['islandora/object/%islandora_object/workflow']['type'] = MENU_CALLBACK;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cwrc_workflow_theme($existing, $type, $theme, $path) {
+  return array(
+    // Render a single workflow stamp.
+    'cwrc_workflow_stamp' => array(
+      'template' => 'templates/cwrc-workflow-stamp',
+      'variables' => array(
+        'stamp' => NULL,
+        'object' => NULL,
+        'stamp_id' => NULL,
+        'stamp_date_time' => NULL,
+        'stamp_user' => NULL,
+        'activity_category' => NULL,
+        'activity_stamp' => NULL,
+        'activity_status' => NULL,
+        'activity_note' => NULL,
+        'activity_message_recipient' => NULL,
+        'activity_message_subject' => NULL,
+        'activity_message_body' => NULL,
+        'assigned_category' => NULL,
+        'assigned_note' => NULL,
+        'assigned_message_recipient' => NULL,
+        'assigned_message_subject' => NULL,
+        'assigned_message_body' => NULL,
+      ),
+    ),
+
+    // Render workflow stamps for an object on a page.
+    'cwrc_workflow_stamps' => array(
+      'template' => 'templates/cwrc-workflow-stamps',
+      'variables' => array(
+        'stamps' => NULL,
+        'object' => NULL,
+      ),
+    ),
+
+    // Render workflow stamps for an object in a block.
+    'cwrc_workflow_stamps_block' => array(
+      'template' => 'templates/cwrc-workflow-stamps-block',
+      'variables' => array(
+        'stamps' => NULL,
+        'object' => NULL,
+      ),
+    ),
+
+    // Render the workflow stamps form modal dialog.
+    'cwrc_workflow_stamp_form_modal' => array(
+      'template' => 'templates/cwrc-workflow-stamp-form-modal',
+      'variables' => array(
+        'form' => NULL,
+        'object' => NULL,
+        'message' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function cwrc_workflow_libraries_info() {
+  $libraries = array();
+  $libraries['remodal'] = array(
+    'name' => 'Remodal',
+    'vendor url' => 'http://vodkabears.github.io/remodal/',
+    'download url' => 'https://github.com/VodkaBears/Remodal/releases/latest',
+    'version arguments' => array(
+      'file' => 'dist/remodal.js',
+      'pattern' => '@.*v+([0-9a-zA-Z\.-]+)@',
+    ),
+    'files' => array(
+      'css' => array(
+        'dist/remodal.css',
+        'dist/remodal-default-theme.css',
+      ),
+      'js' => array(
+        'dist/remodal.min.js',
+      ),
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * Implements hook_preprocess_cwrc_workflow_stamp().
+ */
+function cwrc_workflow_preprocess_cwrc_workflow_stamp(&$variables) {
+  // Parses out the various elements of a workflow stamp using xpath.
+  $stamp = $variables['stamp'];
+
+  // These values always exist.
+  $variables['stamp_id'] = (string) $stamp->xpath('@workflowID')[0];
+  $variables['activity_category'] = (string) $stamp->xpath('activity/@category')[0];
+  $variables['activity_stamp'] = (string) $stamp->xpath('activity/@stamp')[0];
+  $variables['activity_status'] = (string) $stamp->xpath('activity/@status')[0];
+
+  // Date the stamp was created.
+  $date = $stamp->xpath('@date');
+  if (!$date || count($date) < 1) {
+    $date = '';
+  }
+  else {
+    $date = (string) $date[0];
+  }
+
+  $time = $stamp->xpath('@time');
+  if (!$time || count($time) < 1) {
+    $time = '';
+  }
+  else {
+    $time = (string) $time[0];
+  }
+
+  $date_time = $date . 'T' . $time;
+  $variables['stamp_date_time'] = format_date(strtotime($date_time));
+
+  // User-based values (link to user if access allows).
+  $search = array(
+    '@userID' => 'stamp_user',
+    'activity/message/recipient/@userID' => 'activity_message_reicipient',
+    'assigned/message/recipient/@userID' => 'assigned_message_recipient',
+  );
+  foreach ($search as $xpath => $field) {
+    $check = $stamp->xpath($xpath);
+    if (count($check) > 0) {
+      $account = user_load_by_name((string) $check[0]);
+      if (user_view_access($account)) {
+        $variables[$field] = l(realname_load($account), entity_uri('user', $account)['path']);
+      }
+      elseif ($account !== FALSE && $account->uid != 0) {
+        $variables[$field] = realname_load($account);
+      }
+      elseif ($field == 'stamp_user') {
+        $variables[$field] = t('(Unknown)');
+      }
+    }
+  }
+
+  // Optional values.
+  $search = array(
+    'activity/note' => 'activity_note',
+    'activity/message/subject' => 'activity_message_subject',
+    'activity/message/body' => 'activity_message_body',
+    'assigned/@category' => 'assigned_category',
+    'assigned/note' => 'assigned_note',
+    'assigned/message/subject' => 'assigned_message_subject',
+    'assigned/message/body' => 'assigned_message_body',
+  );
+  foreach ($search as $xpath => $field) {
+    $check = $stamp->xpath($xpath);
+    if (count($check) > 0) {
+      $variables[$field] = (string) $check[0];
+    }
+  }
+
+  // Add a class that can be used for contextual styling.
+  $variables['classes_array'][] = drupal_clean_css_identifier($variables['activity_category']);
+}
+
+/**
+ * Implements hook_preprocess_cwrc_workflow_stamps().
+ */
+function cwrc_workflow_preprocess_cwrc_workflow_stamps(&$variables) {
+  foreach ($variables['stamps'] as $delta => $stamp) {
+    $variables['stamps'][$delta] = array(
+      '#theme' => 'cwrc_workflow_stamp',
+      '#stamp' => $stamp,
+      '#object' => $variables['object'],
+    );
+  }
+}
+
+/**
+ * Implements hook_preprocess_cwrc_workflow_stamps_block().
+ */
+function cwrc_workflow_preprocess_cwrc_workflow_stamps_block(&$variables) {
+  foreach ($variables['stamps'] as $delta => $stamp) {
+    $variables['stamps'][$delta] = array(
+      '#theme' => 'cwrc_workflow_stamp',
+      '#stamp' => $stamp,
+      '#object' => $variables['object'],
+    );
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function cwrc_workflow_block_info() {
+  $blocks['recent_stamps'] = array(
+    'info' => t('Recent workflow stamps'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+  );
+
+  $blocks['stamp_form'] = array(
+    'info' => t('Workflow stamp form'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function cwrc_workflow_block_configure($delta = '') {
+  $form = array();
+  if ($delta == 'recent_stamps') {
+    $form['num_stamps'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Number of workflow stamps to display'),
+      '#default_value' => variable_get('cwrc_workflow_num_stamps', 2),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function cwrc_workflow_block_save($delta = '', $edit = array()) {
+  if ($delta == 'recent_stamps') {
+    variable_set('cwrc_workflow_num_stamps', $edit['num_stamps']);
+  }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cwrc_workflow_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'recent_stamps':
+      // Only show if there are stamps on this object.
+      if ($stamps = cwrc_workflow_get_stamps(variable_get('cwrc_workflow_num_stamps', 2))) {
+        // TODO: Find a better way to limit to view displays.
+        $menu_item = menu_get_item();
+        if ($menu_item['path'] == 'islandora/object/%/view' || $menu_item['path'] == 'islandora/object/%') {
+          $block['subject'] = t('History <span class="cwrc-workflow-num-stamps badge">@count stamps</span>', array('@count' => $stamps['total']));
+          $block['content'] = theme('cwrc_workflow_stamps_block', array('stamps' => $stamps['stamps'], 'object' => $stamps['object']));
+        }
+      }
+      break;
+
+    case 'stamp_form':
+      if ($object = menu_get_object('islandora_object', 2)) {
+        module_load_include('inc', 'islandora_workflow_rest', 'includes/workflow.form');
+        // Run Islandora access callback.
+        if (islandora_object_manage_access_callback(array(
+          ISLANDORA_MANAGE_PROPERTIES,
+          ISLANDORA_METADATA_EDIT,
+          ISLANDORA_ADD_DS,
+          ISLANDORA_PURGE,
+          ISLANDORA_INGEST,
+        ), $object)) {
+
+          $block['subject'] = t('Add workflow stamp');
+          $block['content'] = drupal_get_form('islandora_workflow_rest_entry_form', $object);
+        }
+      }
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_form_islandora_workflow_rest_entry_form_alter().
+ */
+function cwrc_workflow_form_islandora_workflow_rest_entry_form_alter(&$form, &$form_state, $form_id) {
+  // Alters the workflow stamp entry form to be more user friendly.
+  // These are for viewing the workflow datastream, no longer necessary.
+  $form['workflow_wfds_fs']['#access'] = FALSE;
+  $form['workflow_wfs_fs']['#access'] = FALSE;
+
+  // Break "Add workflow stamp" items out of their fieldset.
+  $form['workflow_fs_activity'] = $form['workflow_wfs_add_fs']['workflow_fs_activity'];
+  $form['workflow_fs_assigned'] = $form['workflow_wfs_add_fs']['workflow_fs_assigned'];
+  $form['submit'] = $form['workflow_wfs_add_fs']['submit'];
+  unset($form['workflow_wfs_add_fs']);
+
+  // Uncollapse a couple of items.
+  $form['workflow_fs_activity']['#collapsed'] = FALSE;
+  $form['workflow_fs_assigned']['workflow_fs_assigned_message']['#collapsed'] = FALSE;
+  $form['workflow_fs_assigned']['workflow_fs_assigned_message']['#collapsible'] = FALSE;
+
+  // Move "Notification" assign section up.
+  $form['workflow_fs_assigned']['workflow_fs_assigned_message']['#weight'] = -10;
+}
+
+/**
+ * Implements hook_islandora_datastream_alter().
+ */
+function cwrc_workflow_islandora_datastream_alter(AbstractObject $object, AbstractDatastream $datastream, array &$context) {
+  // Sets some session variables that trigger a modal window with the workflow
+  // stamp form to appear.
+  // Only fire on "modify" action.
+  if ($context['action'] == 'modify') {
+    // Get DSID whitelist keyed by cmodel PID.
+    $query = db_select('islandora_workflow_rest_ds_log_admin', 'r');
+    $query->fields('r', array('pid', 'dsid', 'label'));
+    $results = $query->execute()->fetchAllAssoc('pid');
+
+    // Check if this object contains a relevant cmodel.
+    foreach ($object->models as $cmodel) {
+      if (isset($results[$cmodel])) {
+        // Check if the DSID is being tracked.
+        $dsids = array_map('trim', explode(',', $results[$cmodel]->dsid));
+        if (in_array($datastream->id, $dsids)) {
+          // Store session data for alert.
+          if (!isset($_SESSION['cwrc_workflow']['alerts'][$object->id])) {
+            $_SESSION['cwrc_workflow']['alerts'][$object->id] = array(
+              'label' => $object->label,
+              'cmodel' => $results[$cmodel]->label,
+              'ds_string' => array(),
+              'dsids' => array(),
+            );
+          }
+          $_SESSION['cwrc_workflow']['alerts'][$object->id]['ds_string'][] = $datastream->id . ' (' . $datastream->label . ')';
+          $_SESSION['cwrc_workflow']['alerts'][$object->id]['dsids'][] = $datastream->id;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function cwrc_workflow_page_alter(&$page) {
+  // Adds a modal with the workflow stamp form embedded to encourage users to
+  // fill out workflow stamps as they use the CWRC interface.
+  global $user;
+
+  // Load dependencies for saving form data.
+  if (isset($_SESSION['cwrc_workflow'])) {
+    $object = menu_get_object('islandora_object', 2);
+    if ($object != NULL) {
+      module_load_include('inc', 'islandora_workflow_rest', 'includes/workflow.form');
+      $form = drupal_get_form('islandora_workflow_rest_entry_form', $object);
+
+      // Lookup relevant workflow logs (current API supports only one lid).
+      if (isset($_SESSION['cwrc_workflow']['alerts'][$object->id]['dsids'])
+        && count($_SESSION['cwrc_workflow']['alerts'][$object->id]['dsids']) > 0) {
+
+        $lid = db_select('islandora_workflow_rest_ds_logs', 'l')
+          ->fields('l', array('lid'))
+          ->condition('l.usr', $user->uid)
+          ->condition('l.pid', $object->id)
+          ->condition('l.dsid', $_SESSION['cwrc_workflow']['alerts'][$object->id]['dsids'], 'IN')
+          ->orderBy('l.timestamp', 'DESC')
+          ->range(0, 1)
+          ->execute()
+          ->fetchField();
+
+        if ($lid) {
+          $form['#action'] = $form['#action'] . '/view/history';
+        }
+      }
+    }
+
+    // If the alerts variable is not set we can clear our session.
+    if (!isset($_SESSION['cwrc_workflow']['alerts'])) {
+      unset($_SESSION['cwrc_workflow']);
+    }
+  }
+
+  // Build the alert into page array, but only when we are viewing an object
+  // that was modified (or some sub-page).
+  if (isset($_SESSION['cwrc_workflow']['alerts'])) {
+    $alerts = $_SESSION['cwrc_workflow']['alerts'];
+    $object = menu_get_object('islandora_object', 2);
+    if ($object != NULL
+      && isset($alerts[$object->id])) {
+
+      // Plural format for datastreams.
+      $last  = array_slice($alerts[$object->id]['ds_string'], -1);
+      $first = implode(', ', array_slice($alerts[$object->id]['ds_string'], 0, -1));
+      $both  = array_filter(array_merge(array($first), $last), 'strlen');
+      $datastreams = implode(' and ', $both);
+      $message = format_plural(count($alerts[$object->id]['ds_string']),
+        'You have edited the %datastreams datastream.  Please add a workflow stamp to this object (you may also do this later from the "History" tab).',
+        'You have edited the %datastreams datastreams.  Please add a workflow stamp to this object (you may also do this later from the "History" tab).',
+        array('%datastreams' => $datastreams));
+
+      // Inject form into page bottom region.
+      libraries_load('remodal');
+      $page['page_bottom']['cwrc_workflow']['stamp_form_modal'] = array(
+        '#theme' => 'cwrc_workflow_stamp_form_modal',
+        '#form' => $form,
+        '#message' => $message,
+        '#object' => $object,
+        '#attached' => array(
+          'js' => array(
+            drupal_get_path('module', 'cwrc_workflow') . '/js/modal.js',
+          ),
+        ),
+      );
+    }
+
+    // Always clear the alerts, don't pester people.
+    unset($_SESSION['cwrc_workflow']['alerts']);
+  }
+
+  // Set persistant warning when the current user has un-stamped activity.
+  if ($user->uid != 0) {
+    $unstamped = (int) db_select('islandora_workflow_rest_ds_logs', 'l')
+      ->condition('l.usr', $user->uid)
+      ->condition('l.state', 'new')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    if ($unstamped > 0 && current_path() != 'cwrc_workflow') {
+      drupal_set_message(t('You have <strong>@count</strong> unstamped log entries. Please <a href="@url">review these here</a>.', array('@count' => $unstamped, '@url' => url('cwrc_workflow'))), 'warning', FALSE);
+    }
+  }
+}
+
+/* Helper functions. */
+
+/**
+ * Returns a set of stamps in a nested array with the total number of stamps.
+ */
+function cwrc_workflow_get_stamps($num_stamps = NULL) {
+  $object = menu_get_object('islandora_object', 2);
+
+  // Sanity check.
+  if ($object === NULL
+    || !isset($object[CWRC_WORKFLOW_DSID])) {
+    return FALSE;
+  }
+
+  $workflow = @simplexml_load_string($object[CWRC_WORKFLOW_DSID]->content)->xpath('workflow');
+  return array(
+    'total' => count($workflow),
+    'stamps' => array_slice(array_reverse($workflow), 0, $num_stamps),
+    'object' => $object,
+  );
+}

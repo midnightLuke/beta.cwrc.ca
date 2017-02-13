@@ -1,0 +1,17 @@
+name = CWRC: Workflow Extras
+description = Provides additions and configuration for the CWRC workflow module.
+core = 7.x
+package = CWRC
+dependencies[] = borealis_sb
+dependencies[] = ctools
+dependencies[] = fe_block
+dependencies[] = islandora
+dependencies[] = islandora_workflow_rest
+dependencies[] = libraries
+datestamp = 1455736845
+features[borealis_sb][] = cwrc_workflow_recent_stamps
+features[borealis_sb][] = cwrc_workflow_stamp_form
+features[ctools][] = borealis_sb:borealis_sb_default:1
+features[fe_block_settings][] = cwrc_workflow-recent_stamps
+features[fe_block_settings][] = cwrc_workflow-stamp_form
+features[features_api][] = api:2
