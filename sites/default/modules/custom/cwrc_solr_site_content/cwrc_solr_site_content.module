@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the cwrc_solr_site_content feature.
+ */
+
+include_once 'cwrc_solr_site_content.features.inc';
