@@ -1,0 +1,15 @@
+/*==================================================
+ * Collection Summary Widget styles
+ *==================================================
+ */
+div.exhibit-collectionSummaryWidget {
+    
+}
+span.exhibit-collectionSummaryWidget-count {
+    font-size:   200%;
+}
+span.exhibit-collectionSummaryWidget-results {
+    width: 200px;
+    text-align: left;
+    
+}
