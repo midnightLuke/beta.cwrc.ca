@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * This file contains all install related hooks for Islandora PlotIt.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_plotit_uninstall() {
+  $variables = array(
+    'islandora_plotit_solrfields',
+  );
+  array_walk($variables, 'variable_del');
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function islandora_plotit_requirements() {
+  if (!libraries_get_path('CWRC-Mapping-Timelines-Project')) {
+    $t = get_t();
+    $readme_link = l(
+      $t('README'),
+      drupal_get_path('module', 'islandora_plotit') . '/README.md'
+    );
+    return array(
+      'plotit' => array(
+        'title' => $t('PlotIt'),
+        'description' => $t(
+          'PlotIt is missing, please consult the !readme for installation instructions.',
+          array('!readme' => $readme_link)
+        ),
+        'severity' => REQUIREMENT_ERROR,
+      ),
+    );
+  }
+}
