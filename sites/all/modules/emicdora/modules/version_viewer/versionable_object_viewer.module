@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * @file
+ * Defines all the hooks this module implements.
+ */
+
+// Permissions.
+define('VERSIONABLE_OBJECT_VIEWER_VIEW', 'use version viewer');
+define('VERSIONABLE_OBJECT_VIEWER_CONSOLIDATE_TEI', 'consolidate tei');
+define('VERSIONABLE_OBJECT_VIEWER_MANAGE', 'manage version viewer display');
+
+/**
+ * Implements hook_permission().
+ */
+function versionable_object_viewer_permission() {
+  return array(
+    VERSIONABLE_OBJECT_VIEWER_VIEW => array(
+      'title' => t('View Versionable Objects'),
+      'description' => t('Enables version viewer.'),
+    ),
+    VERSIONABLE_OBJECT_VIEWER_CONSOLIDATE_TEI => array(
+      'title' => t('Consolidate TEI'),
+      'description' => t('Consolidate page level TEI.'),
+    ),
+    VERSIONABLE_OBJECT_VIEWER_MANAGE => array(
+      'title' => t('Manage Viewer Configuration'),
+      'description' => t('Manage annotation access and configuration of Viewer.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function versionable_object_viewer_menu() {
+  $items = array();
+  $items['islandora/object/%islandora_object/get_tree_data/%islandora_object'] = array(
+    'title' => 'Prepare advanced viewer',
+    'page callback' => 'versionable_object_viewer_build_tree',
+    'file' => 'includes/callbacks.inc',
+    'page arguments' => array(2, 4),
+    'type' => MENU_CALLBACK,
+    'access callback' => 'islandora_object_access_callback',
+    'access arguments' => array(ISLANDORA_VIEW_OBJECTS, 2),
+  );
+  $items['islandora/object/%islandora_object/get_transcription_data'] = array(
+    'title' => 'Prepare transcription data',
+    'page callback' => 'versionable_object_viewer_build_transcription_data',
+    'file' => 'includes/callbacks.inc',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'access callback' => 'islandora_object_access_callback',
+    'access arguments' => array(ISLANDORA_VIEW_OBJECTS, 2),
+  );
+  $items['islandora/cwrc_viewer/detail_metadata'] = array(
+    'title' => 'Prepare Metadata view',
+    'page callback' => 'versionable_object_viewer_prepare_detail_metadata',
+    'type' => MENU_CALLBACK,
+    'file' => 'includes/callbacks.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array(VERSIONABLE_OBJECT_VIEWER_VIEW),
+  );
+  $items['islandora/version_viewer/tei_markup/page/%islandora_object'] = array(
+    'title' => 'Prepare Page consolidated TEI',
+    'page callback' => 'versionable_object_viewer_prepare_page_tei_consolidated',
+    'file' => 'includes/callbacks.inc',
+    'page arguments' => array(4),
+    'type' => MENU_CALLBACK,
+    'access callback' => 'islandora_object_access_callback',
+    'access arguments' => array(VERSIONABLE_OBJECT_VIEWER_CONSOLIDATE_TEI, 4),
+  );
+  $items['islandora/version_viewer/annotation/%islandora_object'] = array(
+    'title' => 'Manage Annotation Access',
+    'file' => 'includes/annotation_configuration.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_emicdora_annotation_availability', 3),
+    'type' => MENU_CALLBACK,
+    'access callback' => 'islandora_object_access_callback',
+    'access arguments' => array(VERSIONABLE_OBJECT_VIEWER_VIEW, 3),
+  );
+  $items['islandora/version_viewer/configuration/delete'] = array(
+    'title' => 'Delete Custom Configuration',
+    'file' => 'includes/annotation_configuration.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('versionable_object_viewer_delete_config_form'),
+    'type' => MENU_CALLBACK,
+    'access callback' => 'user_access',
+    'access arguments' => array(VERSIONABLE_OBJECT_VIEWER_MANAGE),
+  );
+  $items['islandora/version_viewer/configuration/download'] = array(
+    'title' => 'Download files',
+    'file' => 'includes/annotation_configuration.inc',
+    'page callback' => 'versionable_object_viewer_download',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'user_access',
+    'access arguments' => array(VERSIONABLE_OBJECT_VIEWER_MANAGE),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function versionable_object_viewer_theme($existing, $type, $theme, $path) {
+  return array(
+    'versionable_object_viewer' => array(
+      'file' => 'theme/theme.inc',
+      'template' => 'theme/versionable_object_viewer',
+      'variables' => array(
+        'islandora_object' => NULL,
+        'anno_img_pane' => NULL,
+        'version_data' => NULL,
+        'tree_source' => NULL,
+        'transcription_source' => NULL,
+        'meta_source' => NULL,
+        'islandora_content' => NULL,
+        'pager_data' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_library().
+ */
+function versionable_object_viewer_library() {
+  $module_path = drupal_get_path('module', 'versionable_object_viewer');
+  $items = array();
+
+  $items['jquery_easy_ui'] = array(
+    'title' => t('jQuery EasyUI'),
+    'version' => '1.3.6',
+    'js' => array(
+      "$module_path/js/jquery/jquery-easyui/jquery.easyui.min.js" => array(),
+    ),
+    'css' => array(
+      "$module_path/js/jquery/jquery-easyui/themes/default/easyui.css" => array(),
+      "$module_path/js/jquery/jquery-easyui/themes/icon.css" => array(),
+    ),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_CMODEL_islandora_view_object().
+ */
+function versionable_object_viewer_islandora_versionCModel_islandora_view_object(AbstractObject $object) {
+  $module_path = drupal_get_path('module', 'versionable_object_viewer');
+  // Theme our verionable object viewer.
+  return theme('versionable_object_viewer', array(
+    'islandora_object' => $object,
+      )
+  );
+}

@@ -1,0 +1,272 @@
+<?php
+
+/**
+ * @file
+ * Defines all the hooks this module implements.
+ */
+
+/**
+ * Implements hook_islandora_required_objects().
+ */
+function emicdora_sample_islandora_required_objects(IslandoraTuque $connection) {
+  module_load_include('inc', 'emicdora', 'includes/utilities');
+  module_load_include('inc', 'emicdora', 'includes/apparatus');
+  $module_path = drupal_get_path('module', 'emicdora_sample');
+  $object_path = "$module_path/data/objects";
+
+  $supported_apparatus_datastreams = emicdora_apparatus_supported_datastreams();
+  $apparatus_datastreams = array();
+  foreach ($supported_apparatus_datastreams as $dsid => $label) {
+    $apparatus_datastreams[$dsid] = array(
+      'label' => $label,
+      'file' => "$object_path/sample_critical_edition_" . strtolower($dsid) . '.txt',
+      'mimetype' => 'text/plain',
+    );
+  }
+  // Critical Edition Object.
+  $critical_edition_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-critical_edition',
+    'label' => 'Legends of Vancouver (Sample)',
+    'datastreams' => array(
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_critical_edition_rels_ext.rdf",
+      ),
+      'MODS' => array(
+        'file' => "$object_path/sample_critical_edition_mods.xml",
+      ),
+      'DC' => array(
+        'file' => "$object_path/sample_critical_edition_dc.xml",
+      ),
+      'TN' => array(
+        'file' => "$object_path/sample_critical_edition_tn.jpg",
+        'mimetype' => 'image/jpeg',
+      ),
+    ) + $apparatus_datastreams,
+  ));
+  // Add the Sample Critical Edition to the Featured Collection by default.
+  $critical_edition_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', EMICDORA_FEATURED_EDITIONS_COLLECTION);
+  // Version Object.
+  $version_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-version',
+    'label' => 'Sample Version',
+    'datastreams' => array(
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_version_rels_ext.rdf",
+      ),
+      'MODS' => array(
+        'file' => "$object_path/sample_version_mods.xml",
+      ),
+      'TEI' => array(
+        'file' => "$object_path/sample_version_tei.xml",
+      ),
+      'TN' => array(
+        'file' => "$object_path/sample_version_tn.jpg",
+        'mimetype' => 'image/jpeg',
+      ),
+    ),
+  ));
+  // TEI-RDF Object.
+  $tei_rdf_01_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-tei-rdf-01',
+    'label' => 'Sample TEI-RDF',
+    'datastreams' => array(
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_tei_rdf_01_rels_ext.rdf",
+      ),
+      'CWRC' => array(
+        'file' => "$object_path/sample_tei_rdf_01_cwrc.xml",
+      ),
+    ),
+  ));
+  $tei_rdf_02_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-tei-rdf-02',
+    'label' => 'Sample TEI-RDF',
+    'datastreams' => array(
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_tei_rdf_02_rels_ext.rdf",
+      ),
+      'CWRC' => array(
+        'file' => "$object_path/sample_tei_rdf_02_cwrc.xml",
+      ),
+    ),
+  ));
+  // Transcription Object.
+  $transcription_01_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-transcription-01',
+    'label' => 'The Legend of the Two Sisters 1908',
+    'datastreams' => array(
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_transcription_01_rels_ext.rdf",
+      ),
+      'TRANSCRIPTION' => array(
+        'file' => "$object_path/sample_transcription_01_transcription.txt",
+        'mimetype' => 'text/plain',
+      ),
+    ),
+  ));
+  $transcription_02_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-transcription-02',
+    'label' => "The True Legend of Vancouver's Lions 1910",
+    'datastreams' => array(
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_transcription_02_rels_ext.rdf",
+      ),
+      'TRANSCRIPTION' => array(
+        'file' => "$object_path/sample_transcription_02_transcription.txt",
+        'mimetype' => 'text/plain',
+      ),
+    ),
+  ));
+  $transcription_03_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-transcription-03',
+    'label' => 'The Two Sisters 1913',
+    'datastreams' => array(
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_transcription_03_rels_ext.rdf",
+      ),
+      'TRANSCRIPTION' => array(
+        'file' => "$object_path/sample_transcription_03_transcription.txt",
+        'mimetype' => 'text/plain',
+      ),
+    ),
+  ));
+  // Book Object.
+  $source_book_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-book',
+    'label' => 'Sample Book',
+    'datastreams' => array(
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_book_rels_ext.rdf",
+      ),
+      'TN' => array(
+        'file' => "$object_path/sample_book_tn.jpg",
+        'mimetype' => 'image/jpeg',
+      ),
+      'MODS' => array(
+        'file' => "$object_path/sample_book_mods.xml",
+      ),
+    ),
+  ));
+  // Page Object.
+  $source_page_01_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-page-01',
+    'label' => 'Sample Page',
+    'datastreams' => array(
+      'TN' => array(
+        'file' => "$object_path/sample_page_01_tn.jpg",
+        'mimetype' => 'image/jpeg',
+      ),
+      'HOCR' => array(
+        'file' => "$object_path/sample_page_01_hocr.html",
+        'mimetype' => 'text/html',
+      ),
+      'JP2' => array(
+        'file' => "$object_path/sample_page_01_jp2.jp2",
+        'mimetype' => 'image/jp2',
+      ),
+      'JPG' => array(
+        'file' => "$object_path/sample_page_01_jpeg.jpg",
+        'mimetype' => 'image/jpeg',
+      ),
+      'OBJ' => array(
+        'file' => "$object_path/sample_page_01_obj.tiff",
+        'mimetype' => 'image/tiff',
+      ),
+      'OCR' => array(
+        'file' => "$object_path/sample_page_01_ocr.txt",
+        'mimetype' => 'text/plain',
+      ),
+      'PDF' => array(
+        'file' => "$object_path/sample_page_01_pdf.pdf",
+        'mimetype' => 'application/pdf',
+      ),
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_page_01_rels_ext.rdf",
+      ),
+      'RELS-INT' => array(
+        'file' => "$object_path/sample_page_01_rels_int.rdf",
+      ),
+      'TECHMD' => array(
+        'file' => "$object_path/sample_page_01_techmd.xml",
+      ),
+    ),
+  ));
+  // Page Object.
+  $source_page_02_object = emicdora_create_required_object($connection, array(
+    'pid' => 'emic:sample-page-02',
+    'label' => 'Sample Page',
+    'datastreams' => array(
+      'TN' => array(
+        'file' => "$object_path/sample_page_02_tn.jpg",
+        'mimetype' => 'image/jpeg',
+      ),
+      'HOCR' => array(
+        'file' => "$object_path/sample_page_02_hocr.html",
+        'mimetype' => 'text/html',
+      ),
+      'JP2' => array(
+        'file' => "$object_path/sample_page_02_jp2.jp2",
+        'mimetype' => 'image/jp2',
+      ),
+      'JPG' => array(
+        'file' => "$object_path/sample_page_02_jpeg.jpg",
+        'mimetype' => 'image/jpeg',
+      ),
+      'OBJ' => array(
+        'file' => "$object_path/sample_page_02_obj.tiff",
+        'mimetype' => 'image/tiff',
+      ),
+      'OCR' => array(
+        'file' => "$object_path/sample_page_02_ocr.txt",
+        'mimetype' => 'text/plain',
+      ),
+      'PDF' => array(
+        'file' => "$object_path/sample_page_02_pdf.pdf",
+        'mimetype' => 'application/pdf',
+      ),
+      'RELS-EXT' => array(
+        'file' => "$object_path/sample_page_02_rels_ext.rdf",
+      ),
+      'RELS-INT' => array(
+        'file' => "$object_path/sample_page_02_rels_int.rdf",
+      ),
+      'TECHMD' => array(
+        'file' => "$object_path/sample_page_02_techmd.xml",
+      ),
+    ),
+  ));
+  // @todo Add Collation Objects, will also require some database manipulation.
+  return array(
+    'emicdora_sample' => array(
+      'title' => 'EMiC (Editing Modernism in Canada) -- Sample Objects',
+      'objects' => array(
+        $critical_edition_object,
+        $version_object,
+        $tei_rdf_01_object,
+        $tei_rdf_02_object,
+        $transcription_01_object,
+        $transcription_02_object,
+        $transcription_03_object,
+        $source_book_object,
+        $source_page_01_object,
+        $source_page_02_object,
+      ),
+    ),
+  );
+}
+
+/**
+ * Purges the required objects.
+ */
+function emicdora_sample_remove_required_objects() {
+  $connection = islandora_get_tuque_connection();
+  $required_objects = emicdora_sample_islandora_required_objects($connection);
+  foreach ($required_objects['emicdora_sample']['objects'] as $object) {
+    try {
+      $connection->repository->purgeObject($object->id);
+    }
+    catch (Exception $e) {
+      // Exception message gets logged in Tuque Wrapper.
+    }
+  }
+}
