@@ -1,0 +1,5 @@
+name = Islandora Saved Searches
+description = Allows users to save searches performed on the islandora solr index.
+core = 7.x
+
+dependencies[] = islandora_solr

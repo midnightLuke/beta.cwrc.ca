@@ -1,0 +1,281 @@
+<?php
+
+define('ISLANDORA_SAVED_SEARCHES_TABLE', 'islandora_saved_search');
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_saved_searches_menu() {
+  $items['user/%user/islandora-saved-searches'] = array(
+    'title' => 'Saved searches',
+    'description' => 'View and edit your saved searches.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_saved_searches_user_listing', 1),
+    'access callback' => 'islandora_saved_searches_edit_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'islandora_saved_searches.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Access callback for saved searches listing.
+ */
+function islandora_saved_searches_edit_access($account) {
+  global $user;
+
+  // User must have access to save searches and this must be their account.
+  if ($user->uid == $account->uid && user_access('save islandora searches')) {
+    return true;
+  }
+
+  // Administrative access override.
+  return user_access('administer saved islandora searches');
+}
+
+/**
+ * Implements hook_permission().
+ */
+function islandora_saved_searches_permission() {
+  return array(
+    'save islandora searches' =>  array(
+      'title' => t('Save searches on the Islandora index.'),
+      'description' => t('Allows the user to save searches to their saved searches.'),
+    ),
+    'administer saved islandora searches' => array(
+      'title' => t('Administart saved Islandora searches.'),
+      'description' => t('Allows administrators to access all users saved searches.'),
+      'restrict access' => true,
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function islandora_saved_searches_block_info() {
+  $blocks['saved_searches'] = array(
+    'info' => t('Islandora saved searches for the current user'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['save_search'] = array(
+    'info' => t('Islandora save search'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function islandora_saved_searches_block_view($delta = '') {
+  global $user, $_islandora_solr_queryclass;
+  $block = array();
+
+  switch ($delta) {
+    case 'saved_searches':
+      if ($user->uid > 0
+        && user_access('save islandora searches')) {
+
+        $block['subject'] = t('Islandora saved searches');
+        $block['content'] = _islandora_saved_searches_render_user_list();
+      }
+      break;
+
+    case 'save_search':
+      if ($user->uid > 0
+        && user_access('save islandora searches')
+        && islandora_solr_results_page($_islandora_solr_queryclass)) {
+
+        $block['subject'] = t('Islandora save search');
+        $block['content'] = drupal_get_form('islandora_saved_searches_save_search_form');
+      }
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Form callback for the "save this search" form.
+ */
+function islandora_saved_searches_save_search_form($form, &$form_state) {
+
+  // Render simple form for adding a saved search.
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#description' => t('A useful name/label for this search.'),
+    '#maxlength' => 255,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
+  return $form;
+}
+
+/**
+ * Validation handler for the islandora saved searches form.
+ *
+ * Ensures name is not an empty string.
+ */
+function islandora_saved_searches_save_search_form_validate($form, &$form_state) {
+  global $user;
+
+  // Double check that there are no duplicate searches in the database.
+  $name = filter_xss($form_state['values']['name'], array());
+  $query = db_select(ISLANDORA_SAVED_SEARCHES_TABLE, 's');
+  $result = $query->fields('s', array('id'))
+    ->condition('s.uid', $user->uid)
+    ->condition('s.name', $name)
+    ->execute();
+
+  if ($result->rowCount() > 0) {
+    form_set_error('name', t('You have already saved a search called "@name", please choose another name.', array('@name' => $name)));
+  }
+
+  if (empty($form_state['values']['name'])) {
+    form_set_error('name', t('"Name" field cannot be empty.'));
+  }
+}
+
+/**
+ * Submit handler for the islandora saved searches form.
+ */
+function islandora_saved_searches_save_search_form_submit($form, &$form_state) {
+  global $user;
+
+  // Build saved search parameters.
+  $name = filter_xss($form_state['values']['name'], array());
+  $path = current_path();
+  $query = drupal_get_query_parameters();
+
+  // Save search to database.
+  islandora_saved_searches_save_search($name, $path, $query);
+
+  // Notify user of success.
+  drupal_set_message(t('Search "@name" successfully saved! View your saved searches <a href="@url">here</a>.', array(
+    '@name' => $name,
+    '@url' => url('user/' . $user->uid . '/islandora-saved-searches')
+  )), 'status');
+}
+
+/**
+ * API function that saves a search to the database.
+ */
+function islandora_saved_searches_save_search($name, $path, $query, $enabled = true, $uid = null) {
+  global $user;
+
+  if (!isset($uid)) {
+    $uid = $user->uid;
+  }
+
+  $created = time();
+
+  db_insert(ISLANDORA_SAVED_SEARCHES_TABLE)
+    ->fields(array(
+      'uid' => $uid,
+      'enabled' => $enabled,
+      'name' => $name,
+      'created' => $created,
+      'path' => $path,
+      'query' => serialize($query),
+    ))
+    ->execute();
+}
+
+/**
+ * API function to list all saved searches, can be limited to a single user.
+ *
+ * @param integer $uid
+ *   The user id to get saved searches for, can be set to -1 to get all results.
+ */
+function islandora_saved_searches_list_searches($uid = null, $enabled = true) {
+  global $user;
+
+  // Default to current user.
+  if ($uid === null) {
+    $uid = $user->uid;
+  }
+
+  // Build query.
+  $query = db_select(ISLANDORA_SAVED_SEARCHES_TABLE, 's')
+    ->fields('s')
+    ->orderBy('s.name');
+
+  if ($enabled !== null) {
+    $query->condition('s.enabled', $enabled);
+  }
+  if ($uid > 0) {
+    $query->condition('s.uid', $uid);
+  }
+
+  // Get results and unserialize.
+  $results = $query->execute()->fetchAllAssoc('id');
+  foreach ($results as &$result) {
+    $result->query = unserialize($result->query);
+  }
+
+  // Return the result set.
+  return $results;
+}
+
+/**
+ * API function to delete a search.
+ */
+function islandora_saved_searches_delete_search($id) {
+  db_delete(ISLANDORA_SAVED_SEARCHES_TABLE)
+    ->condition('id', $id)
+    ->execute();
+}
+
+/**
+ * API function to enable a search.
+ */
+function islandora_saved_searches_enable_search($id) {
+  db_update(ISLANDORA_SAVED_SEARCHES_TABLE)
+    ->fields(array('enabled' => 1))
+    ->condition('id', $id)
+    ->execute();
+}
+
+/**
+ * API function to disable a search.
+ */
+function islandora_saved_searches_disable_search($id) {
+  db_update(ISLANDORA_SAVED_SEARCHES_TABLE)
+    ->fields(array('enabled' => 0))
+    ->condition('id', $id)
+    ->execute();
+}
+
+/**
+ * Returns a render array for the block listing a users saved searches.
+ */
+function _islandora_saved_searches_render_user_list() {
+  global $user;
+
+  $searches = islandora_saved_searches_list_searches();
+
+  if (count($searches) == 0) {
+    return t('You have no saved searches yet.');
+  }
+
+  $build = array(
+    'list' => array(
+      '#theme' => 'item_list',
+      '#type' => 'ul',
+      '#items' => array(),
+    ),
+    'admin' => array(
+      '#markup' => '<div class="admin-access-wrapper">' . l(t('Saved searches admin'), 'user/' . $user->uid . '/islandora-saved-searches') . '</div>',
+    ),
+  );
+
+  foreach ($searches as $search) {
+    $build['list']['#items'][] = l($search->name, $search->path, array('query' => $search->query));
+  }
+  return $build;
+}

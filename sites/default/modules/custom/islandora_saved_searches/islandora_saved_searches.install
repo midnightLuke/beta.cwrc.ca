@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function islandora_saved_searches_schema() {
+  $schema[ISLANDORA_SAVED_SEARCHES_TABLE] = array(
+    'description' => 'A saved search.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for a saved search.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'The {users}.uid that created this saved search.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'enabled' => array(
+        'description' => 'The state of this saved search, enabled (1) or not (0).',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'name' => array(
+        'description' => 'The displayed name for this saved search.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp when the saved search was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'path' => array(
+        'description' => 'The path for the query that will be executed.',
+        'type' => 'text',
+      ),
+      'query' => array(
+        'description' => 'The query parameters for the search that will be executed.',
+        'type' => 'blob',
+        'serialize' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'indexes' => array(
+      'user' => array('uid'),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
