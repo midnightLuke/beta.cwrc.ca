@@ -1,0 +1,258 @@
+
+/* =============================================================================
+    MESSAGES SECTION
+   ========================================================================== */
+
+
+#privatemsg-list-form {
+  .container-inline {
+    margin-bottom: ms(0);
+  }
+}
+
+//FORM
+
+div.section-content {
+  #privatemsg-list,
+  .page-user-messages form,
+  .page-messages form {
+
+    input.form-autocomplete {
+      height: 35px;
+    }
+
+    input.form-submit {
+      margin-top: 0 !Important;
+      margin-right: 0 !Important;
+      line-height: 15px;
+      position: Relative;
+      top: -1px
+    }
+
+    .container-inline {
+      border-bottom: 1px solid $light-grey;
+      padding-bottom: ms(0);
+
+      input.form-submit {
+        top: -2px;
+        position: relative;
+      }
+
+      @include breakpoint(0 769px) {
+        float: left;
+        width: 100%;
+
+        input.form-autocomplete,
+        select,
+        input.form-submit {
+          width: 100%;
+          display: block;
+          margin: 0 0 .5em 0 !important;
+        }
+      }
+    }
+
+    .fieldset-wrapper {
+      input.form-submit {
+        margin-right: ms(0) !important;
+      }
+    }
+  }
+}
+
+//filter messages
+
+form#privatemsg-list {
+  fieldset.collapsible {
+
+    .fieldset-wrapper {
+      margin-top: -1em;
+
+      .privatemsg-filter-actions {
+        margin-top: ms(0);
+      }
+
+      .form-item {
+        margin-bottom: .3em;
+
+        label {
+          display: block;
+          width: 100%;
+          text-align: left;
+          margin-bottom: 0;
+          font-size: ms(-.5);
+          text-transform: none;
+        }
+      }
+    }
+  }
+}
+
+
+
+//ACTION LINK
+
+.page-messages .region-main-prefix ul.action-links li {
+  a {
+    &:before {
+      @extend %icon-pencil-2;
+    }
+  }
+}
+
+//New Message
+
+form#privatemsg-list {
+  .compose-new-message a {
+    float: right;
+    @include btn-w-icon;
+    &:before {
+      @extend %icon-pencil-2;
+      font-size: .9em;
+      top: 1px;
+    }
+
+    @include breakpoint(0 769px) {
+      width: 100%;
+      margin: 0 0 1em;
+      text-align: center;
+    }
+  }
+}
+
+
+//TITLE
+
+.page-messages h1#page-title {
+  margin-bottom: 0;
+}
+
+
+//READ MESSAGES TAGS
+
+a#privatemsg-filter-tags-cancel,
+a.privatemsg-filter-tags-add {
+  @include btn;
+}
+
+input#edit-modify-tags {
+  margin: 0 1em 0 1em !important;
+}
+
+#privatemsg-filter-tags {
+  a:not(:last-child) {
+    @include btn;
+    background: #fff;
+    color: $brand1;
+    border: 1px solid $shade3;
+    &:hover {
+      color: $brand1;
+      background: #fafafa;
+    }
+  }
+}
+
+
+form#privatemsg-new {
+  .form-actions {
+    input, a {
+      margin-right: 1em !important;
+    }
+  }
+}
+
+
+
+.privatemsg-message-participants {
+  padding-bottom: 1em;
+}
+
+.privatemsg-message-information {
+  padding-bottom: .5em;
+  margin-bottom: 1em;
+  float: left;
+}
+
+ul.privatemsg-message-actions {
+  float: right;
+}
+
+#privatemsg-new {
+  .form-actions {
+    input {
+
+    }
+  }
+}
+
+
+.privatemsg-message {
+  border: 1px solid $shade3;
+  background: $bck-grey;
+  max-width: 100%;
+  margin-bottom: 1em;
+  border-radius: 5px;
+  padding: .7em;
+
+  .privatemsg-author-avatar {
+    @include breakpoint(0 380px) {
+      width: 100%;
+      margin-bottom: .5em;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.privatemsg-message-body {
+  background: #fff;
+  float: left;
+  width: 100%;
+  margin: 0;
+  border: 1px solid $shade3;
+  padding: .7em;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 1em;
+  word-break: break-all;
+}
+
+.privatemsg-message-column {
+  @include breakpoint(0 380px) {
+    width: 100% !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

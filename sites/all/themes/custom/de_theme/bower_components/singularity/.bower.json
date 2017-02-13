@@ -1,0 +1,33 @@
+{
+  "name": "singularity",
+  "version": "1.5.1",
+  "main": "stylesheets/_singularitygs.scss",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "Gemfile",
+    "Gemfile.lock",
+    "*.gemspec",
+    "lib",
+    "example",
+    "tests",
+    "Rakefile",
+    "templates",
+    "working",
+    "CONTRIBUTING.md"
+  ],
+  "dependencies": {
+    "breakpoint-sass": ">=2.4.0"
+  },
+  "homepage": "https://github.com/Team-Sass/Singularity",
+  "_release": "1.5.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.5.1",
+    "commit": "73a0b395c441f3b08f8354133745fd85cf6b35a6"
+  },
+  "_source": "git://github.com/Team-Sass/Singularity.git",
+  "_target": "~1.5.1",
+  "_originalSource": "singularity"
+}

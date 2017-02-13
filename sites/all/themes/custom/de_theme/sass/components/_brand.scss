@@ -1,0 +1,30 @@
+/* =============================================================================
+    BRAND - LOGO
+   ========================================================================== */
+
+#logo{
+  width: auto;
+  display: block;
+  float: left;
+  padding: 0;
+  margin: .35em 0 0;
+  min-height: 32px;
+  width: 98px;
+  background: url('../logo.svg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  @include breakpoint(0 $weird-screen) {
+    margin-top: 0;
+    width: 85px;
+  }
+
+  img {
+    display: none;
+  }
+}
+
+.i18n-fr {
+  #logo {
+    background-image: url('../logo-FR.svg');
+  }
+}

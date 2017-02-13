@@ -1,0 +1,234 @@
+// @responsive breakpoints
+
+// CHANGE COLOR VARIABLES
+
+$small-screen: 29em; // 464px
+$narrow-screen: 38em; // 608px
+$weird-screen: 48em; // 768px what else I call this?!?!?!
+$medium-screen: 56em; // 896px
+$standard-screen: 60em; // 960px or 60em
+$wide-screen: 74.25em; // 1188px = 1220px - (16px*2);
+$super-wide-screen: 88em; // 1408px = 1440px - (16px*2);
+
+// @colour palettte  ==============================================
+// using color names as variables is fine.
+
+
+// BRAND COLOURS  ==============================================
+
+//dark grey
+$brand1: #333;
+
+//dark blue
+$brand2: #336699;
+
+//light grey
+$brand3: #B3BBBE;
+
+//light red
+//original red
+/*$brand4 : #cc0000;*/
+$brand4: #ac0033;
+
+
+// MY SHADES  ==============================================
+
+//grey-blue
+$grey-blue: #376e95;
+
+//light grey
+$header-grey: #f7f7f7;
+
+//border colours
+$border-grey: #d7d7d7;
+
+$ui-grey: #f2f2f2;
+
+//light blue
+$light-blue: #76ABBE;
+
+//darker light blue
+$dark-blue: #416B7B;
+
+
+// MY border ui shades  ==============================================
+
+//used for section content border,
+$shade1 : #d2d6de;
+
+//used for medium dark grey ui, like top of borders for tables in blocks
+$shade2 : #ddd;
+
+//used to create divide before alternating greys on lists - i.e. list headers
+$shade3 : #E1E1E1;
+
+//used for very light borders, like on tables in dashboard blocks
+$shade4 : #eee;
+
+//very light grey, alsmot white
+$shade5 : #f6f6f6;
+
+$bck-grey : #FBFBFB;
+
+//grey icon
+//grey icon back
+$grey-icon-back : #d6d6d6;
+$grey-icon-front : #828282;
+
+// SHADES IN EASY VARIABLE NAMES FOR FAST THEMING ==============================================
+
+// $dark-grey : $brand1;
+
+// $light-grey : $brand3;
+
+// $blue : $brand2;
+
+// $red : $brand4;
+
+
+// OTHER NEUTRALS ==============================================
+
+
+// greys
+ $dark-grey: tint(black, 25%);
+ $neutral-grey: tint($dark-grey, 50%);
+ $light-grey: tint($dark-grey, 75%);
+
+// $off-white
+
+// ui colours for shadows, borders, etc. Can be used on their own, or part of mixins or placeholders
+$ui-borders-color: $neutral-grey;
+
+
+// layout colors for header, footer, for easy customizing
+// $layout-main-color: $brand-color;
+// $layout-secondary-color: shade($brand-color,18%);
+// $layout-tertiary-color: $turquoise;
+
+
+
+// border interface color
+// primary layout color
+// secondary layout color
+// tertiary layout color
+
+// @type settings    ==============================================
+
+$xlight: 100;
+$light: 300;
+$normal: 400;
+$bold: 700;
+$xbold: 900;
+
+// $base-font-size: 16px;
+// $base-line-height: 26px;
+
+@import url(https://fonts.googleapis.com/css?family=Lato:400,100,300,400italic,700,900);
+
+$font1:'Lato', Arial, Helvetica, sans-serif;
+
+// Font Icons    ==============================================
+
+@font-face {
+  font-family: 'icomoon';
+  src:url('../fonts/icomoon.eot?-c3zxka');
+  src:url('../fonts/icomoon.eot?#iefix-c3zxka') format('embedded-opentype'),
+    url('../fonts/icomoon.woff?-c3zxka') format('woff'),
+    url('../fonts/icomoon.ttf?-c3zxka') format('truetype'),
+    url('../fonts/icomoon.svg?-c3zxka#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+// default overrides / testing
+
+
+// $browser-default-font-size: 16px;
+
+// easier font size variables
+$xsmall    : ms(-2);
+$small     : ms(-1);
+$base      : ms(0);
+$regular   : ms(1);
+$large     : ms(2);
+$xlarge    : ms(3);
+$xxlarge   : ms(4);
+$xxxlarge  : ms(5);
+$superlarge: ms(6);
+
+// @grid settings   ==============================================
+
+$ms-base: 1em;
+// $ms-ratio: $fifth;
+$ms-ratio: $golden;
+$class-slug: ms;
+
+@include add-grid(12);
+@include add-gutter(1/3);
+
+// @misc settings   ==============================================
+
+
+
+// @legacy browser support
+
+// $legacy-support-for-ie6: false;
+// $legacy-support-for-ie7: true;
+// $legacy-support-for-ie8: true;
+
+// $legacy-support-for-mozilla: true;
+
+
+
+// $default-border-radius: 3px;
+
+// $default-box-shadow-color: #999;
+
+
+
+// $toolbar: 'toolbar-icons';
+// $misc: 'misc-icons';
+$brand-color: #c2002f;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

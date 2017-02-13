@@ -1,0 +1,12 @@
+/* _navigation.scss file */
+// contains styles for all navigation systems. eg. main navigation, sub navigation, pagination, breadcrumbs, footer sitemap menus
+
+@import 'navigation/breadcrumb';
+@import 'navigation/footer-nav';
+@import 'navigation/block-main-nav';
+@import 'navigation/pager';
+@import 'navigation/tabs';
+@import 'navigation/block-secondary-nav';
+@import 'navigation/block-sub-nav';
+@import 'navigation/hamburger';
+@import 'navigation/block-menu__social-media';

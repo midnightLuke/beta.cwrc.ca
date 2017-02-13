@@ -1,0 +1,392 @@
+
+@import 'objects/toggle-grid-list';
+
+/* _objects file */
+// contains generic, underlying design patterns and their extensions. eg. basic styles for all sidebar blocks or list displays of content
+
+// icons
+
+// media
+
+.media_embed{
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+  @include breakpoint($medium-screen) {
+    position: static;
+    @include reset;
+    height: auto;
+    overflow: visible;
+  }
+}
+
+.media_embed iframe,
+.media_embed object,
+.media_embed embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  @include breakpoint($medium-screen) {
+    position: static;
+    top: auto;
+    left: auto;
+    width: auto;
+    height: auto;
+  }
+}
+
+
+// @fields, views fields
+
+// fields
+
+// .field-label{
+// }
+
+.field-name-field-videos{
+  border-bottom: 1px solid shade(white,18%);
+  margin-top: ms();
+  padding-bottom: ms(-1);
+  @include clearfix(true);
+}
+
+.field-name-body .field-type-image,
+.field-name-field-image{
+
+  img{
+    @include image-style;
+    @include image-style-right;
+  }
+}
+
+
+.date-time{
+  @extend %date-time;
+}
+
+.submitted-by .date-time{
+  margin-bottom: ms();
+}
+
+.views-field-title{
+  h3{
+    @include reset-font;
+    @include reset;
+  }
+}
+
+// elements fields
+
+.field-type-taxonomy-term-reference{
+  margin-bottom: ms();
+}
+
+// views ui and pages
+
+// views filters
+.view-filters{
+  margin-bottom: ms(1);
+  @extend %box-ui-light;
+  @include ui-box($bg-color: shade(white,2%), $box-padding: ms());
+
+  .views-exposed-widgets{
+    margin-bottom: 0;
+  }
+
+  .views-exposed-widget{
+    padding: 0;
+  }
+}
+
+// viewx taxonomy term pages
+.view-id-taxonomy_term{
+  margin-top: ms(1);
+  @extend %list-display;
+  h2{
+    @include adjust-font-size-to(18px);
+    margin-bottom: 0;
+    font-weight: $bold;
+  }
+}
+
+// review this
+.viewable{
+  display: inline-block !important;
+  width:  100%;
+}
+
+
+////////
+
+// sidebar aside blocks
+
+// .region-sidebar-second .block{
+//   position: relative;
+
+//   @include breakpoint($small-screen) {
+//     @include float-span(1, $grid: 2, $gutter: .05);
+//     &:nth-child(2n+2){
+//       margin-right: 0;
+//     }
+//   }
+
+//   @include breakpoint($weird-screen) {
+//     @include column-reset;
+//   }
+
+//   .not-front.two-sidebars &{
+
+//     @include breakpoint($small-screen) {
+//       @include float-span(1, $grid: 3, $gutter: .05);
+//       &:nth-child(3n+3){
+//         margin-right: 0;
+//       }
+//     }
+//     @include breakpoint($medium-screen) {
+//       @include column-reset;
+//     }
+
+//   }
+
+//   @extend %box-ui-light;
+//   @include reset;
+//   &:last-child{
+//     margin-bottom: 0;
+//   }
+//     h2{
+//       @include reset-font;
+//       @include reset;
+//       font-weight: $bold;
+//       color: $dark-grey;
+//       @include adjust-font-size-to(14px);
+//       line-height: ms(.5);
+//       @include list-divider($spacing-top: ms(-1), $spacing-bottom: ms(-1));
+//       padding-right: ms();
+//       padding-left: ms(2);
+//       background-position: ms() ms(-.75);
+//     }
+//   ul{
+//     padding-left: 0;
+//     @include no-bullets;
+//   }
+
+//   // so dumb.
+//   .view-content,
+//   .view-empty,
+//   .content{
+//     @include adjust-font-size-to(13px);
+//     padding: ms(-1) ms();
+//     color: $light-grey;
+//   }
+
+//   .views-row{
+//     @include list-divider($spacing-bottom: ms(-1), $spacing-top: ms(-1));
+//     line-height: ms(.75);
+//   }
+
+//   .views-row-first{
+//     padding-top: 0;
+//   }
+
+//   .views-row-last{
+//     border-bottom: none;
+//   }
+
+//   .views-row-first.views-row-last {
+//     padding-bottom: 0;
+//   }
+
+//   .view-empty p {
+//     @include reset;
+//   }
+
+//   .more-link a{
+//     border-top: 1px solid $ui-borders-color;
+//     @extend %box-button-link;
+//     @include adjust-font-size-to(12px);
+//   }
+
+//   .not-front & {
+//     margin-bottom: ms();
+//     .view-content{
+
+
+//       @include breakpoint($small-screen) {
+//         padding-bottom: 3em;
+//       }
+
+//       @include breakpoint($medium-screen) {
+//         padding-bottom: ms();
+//       }
+//     }
+//     .more-link{
+//       @include breakpoint($small-screen) {
+//         position: absolute;
+//         bottom: 0;
+//         left: 0;
+//         width: 100%;
+//       }
+
+//       @include breakpoint($medium-screen) {
+//         position: static;
+//         width: auto;
+//         bottom: auto; // do I need to decalare this?
+//         left: auto;
+//       }
+//     }
+//   }
+// }
+
+// layout
+
+// article.node .content{
+//   @include clearfix(true);
+// }
+
+// list display
+
+.landing-page.list-display{
+  @extend %list-display;
+}
+
+// list display with images
+
+.landing-page.list-display-images{
+
+  @extend %list-display;
+
+  .views-field-image{
+    line-height: 0;
+    margin-bottom: ms();
+    @include breakpoint($narrow-screen) {
+      margin-bottom: 0;
+      @include float-span(4,1);
+    }
+  }
+
+  .post-meta{
+    @include breakpoint($narrow-screen) {
+      @include float-span(8,'last');
+    }
+  }
+}
+
+
+// grid display
+
+.landing-page.grid-display{
+  .item-list{
+    @include clearfix(true);
+  }
+
+  // fix in IE
+
+  .views-row{
+    @extend %box-ui-light;
+  }
+
+  @extend %grid-display;
+
+  .views-field-field-image{
+    display: block;
+    line-height: 0;
+  }
+  img{
+    width:  100%;
+  }
+
+  .views-field-title h2{
+    @include adjust-font-size-to(20px);
+  }
+
+  .views-field-field-teaser{
+    @include adjust-font-size-to(14px);
+    line-height: ms();
+  }
+}
+
+// global secondary communications
+
+.block-global-comms {
+  @extend %box-ui-light;
+  // @include box-shadow(none);
+  box-shadow: none;
+  // @include border-radius(0);
+  border-radius: 0;
+  @include ui-borders($border-width: 0);
+  @include reset;
+  // margin-bottom: ms();
+  position: relative;
+
+  header{
+    @include list-divider($spacing-top: ms(), $spacing-bottom: ms());
+    padding-left: ms();
+    padding-right: ms();
+    @include breakpoint($medium-screen) {
+      padding-right: ms(1);
+      padding-left: ms(1);
+    }
+  }
+
+  h2{
+    @include reset-font;
+    @include reset;
+    font-weight: $bold;
+    color: $brand-color;
+    @include adjust-font-size-to(16px);
+    line-height: ms(1);
+  }
+
+  .view{
+    @include breakpoint($weird-screen)  {
+      padding-bottom: 2.5625em;
+    }
+  }
+
+  .view-content{
+    padding: ms() ms();
+    @include breakpoint($medium-screen) {
+      padding: ms() ms(1);
+    }
+  }
+
+  .view-empty{
+    padding: ms();
+    font-weight: $bold;
+    @include breakpoint($medium-screen) {
+      padding-left: ms(1);
+      padding-right: ms(1);
+    }
+    p{
+      margin-bottom: 0;
+      @include adjust-font-size-to(14px);
+    }
+  }
+
+  .more-link{
+    @include breakpoint($weird-screen)  {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+    a{
+      @extend %box-button-link;
+      @include button-link-styles($bg-color: transparent, $text-color: $brand-color, $bg-color-hover: shade(white,8%), $text-color-hover: tint(black,8%), $bg-color-active: $brand-color, $text-color-active: white);
+      border-top: 1px solid $ui-borders-color;
+    }
+  }
+}
+
+// Responsive tables - added via javascript to tables in the body field
+.table-responsive{
+  overflow-y: hidden;
+}
+
+.menu{
+  @include no-bullets;
+}

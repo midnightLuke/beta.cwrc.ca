@@ -1,0 +1,16 @@
+/**
+ * @file
+ * Styles for the Request Membership block.
+ */
+
+#block-cwrc-projects-project-group-join {
+  // Visually hide the "Welcome message" textarea label.
+  .form-item-og-membership-request-und-0-value label {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    word-wrap: normal;
+  }
+}

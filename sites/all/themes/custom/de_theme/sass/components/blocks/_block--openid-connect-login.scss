@@ -1,0 +1,18 @@
+
+/* =============================================================================
+    LOGIN
+   ========================================================================== */
+
+  .sidebar #block-openid-connect-openid-connect-login.block {
+    header h2 {
+      margin: -.7em -.7em .7em -.7em;
+    }
+
+    form .form-submit {
+      margin-bottom: 0;
+    }
+  }
+
+.page-user-login #block-openid-connect-openid-connect-login form {
+  padding: 0;
+}

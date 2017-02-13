@@ -1,0 +1,27 @@
+/* drupal/_user.scss */
+
+.profile{
+  @include reset;
+}
+
+// change password fields
+
+input.password-confirm,
+input.password-field {
+  width: auto;
+  margin: 0;
+}
+
+.confirm-parent, .password-parent{
+  width: auto;
+}
+
+div.form-item div.password-suggestions{
+  @include reset;
+  width: auto;
+  border: none;
+}
+
+.password-strength{
+  margin-top: ms();
+}

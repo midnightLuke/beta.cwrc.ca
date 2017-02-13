@@ -1,0 +1,122 @@
+
+@import 'views/view--events';
+@import 'views/view--news';
+@import 'views/view--project_overview--page_grid_3.scss';
+@import 'views/view__block--events';
+@import 'views/view__block--news';
+@import 'views/view__block--homepage-news-and-events';
+
+/* =============================================================================
+   VIEWS
+   ========================================================================== */
+.region-content, .sidebar{
+  .view {
+
+    .views-row {
+      margin: 0 0 1.5em;
+      padding: 0 0 1.5em;
+      border-bottom: 1px solid $shade3;
+      &:last-child{border-bottom: none; padding-bottom: 0;}
+    }
+
+    .field, .views-field {
+      margin: 0 0 1em;
+    }
+
+    .views-field-title a {
+      text-decoration: none;
+      font-weight: $bold;
+    }
+
+    .views-field.views-field-view-node, .field.views-field-view-node {
+      margin-bottom: 0;
+    }
+
+    .read-more-link a {
+      @include btn-blue;
+      margin: 0;
+      float: right;
+    }
+
+    .view-all-link a {
+      @include btn-blue;
+      margin: 0;
+      float: right;
+    }
+
+    //image
+
+    .field-name-field-image {
+      @include breakpoint(0 400px) {
+        width: 100%;
+      }
+    }
+
+    .field-name-field-image img {
+      padding: 0;
+      border: none;
+      border-radius : 5px;
+      margin: 0 1em 0 0;
+      float: left;
+      @include breakpoint(0 400px) {
+        width: 100% !important;
+        margin: 0 0 1em 0;
+      }
+    }
+  }
+
+
+  //VIEW BLOCKS
+
+  .block-views {
+    .view {
+
+      .views-field-title a {
+        font-size: ms(0);
+      }
+
+      .date-display-single, .views-field-created {
+        font-size: ms(-.5);
+      }
+
+      .views-field:last-child, .field:last-child {
+        margin-bottom: 0;
+      }
+
+      .views-row {
+        float: left;
+        width: 100%;
+        padding: 0 0 1em 0;
+
+        &:last-child, &:only-of-type {
+          padding: 0 0 0 0;
+          margin: 0 0 0 0;
+        }
+      }
+
+      .view-footer {
+        text-align: center;
+        margin-top: 1em;
+        float: left;
+        width: 100%;
+
+        a.view-all-items {
+          @include btn-w-icon;
+          &:before{@extend %icon-arrow-right; float: right; top:0; margin-right: 0; font-size: 12px;}
+          width: 100%;
+          float: right;
+          margin: 0 !important;
+          p {margin-bottom: 0;}
+        }
+      }
+    }
+  }
+}//--------region content or sidebar
+
+
+
+
+
+
+
+

@@ -1,0 +1,109 @@
+/* _hamburger.scss file */
+// styles for hamburger menu
+
+.region-user-menu button.navbar-toggle {
+  margin: .5em .7em .5em 0;
+}
+
+button.navbar-toggle {
+  float: right;
+  border: /*1px solid $grey-icon-back*/ none;
+  border-radius: 4px;
+  background: $brand2;
+  padding: 6.5px 4px;
+  @include breakpoint(0 48em) {
+    margin-right: .7em !important;
+  }
+
+  span.icon-bar {
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: /*$grey-icon-front*/ #fff;
+    display: block;
+  }
+  span.icon-bar+.icon-bar {
+    margin-top: 4px;
+  }
+
+  &.collapsed {
+    background: $brand2 /*transparent*/;
+    &:hover {
+      background: /*$grey-icon-back*/ darken($brand2, 5%);
+    }
+  }
+
+  @include breakpoint($weird-screen) {
+    display: none;
+  }
+}
+
+div#masthead {
+  div.logo-hamburger {
+    display: block;
+    float: left;
+    @include breakpoint(0 48em) {
+      margin-bottom: .2em;
+      margin-left: .7em;
+    }
+
+    @include breakpoint($weird-screen) {
+      display: none;
+    }
+  }
+
+  ul.navbar {
+    &.collapsed {
+      display: none;
+
+      @include breakpoint($weird-screen) {
+        display: block;
+      }
+    }
+  }
+
+  @media(max-width: $weird-screen) {
+    li.logo {
+      display: none;
+    }
+    li.navbar-left {
+      float: none;
+    }
+    li.navbar-right {
+      float: none;
+    }
+    #block-cwrc-menu-links-login-link {
+      float: none;
+    }
+
+    ul.dropdown-menu {
+      &::before {
+        content: none;
+      }
+
+      position: inherit;
+      text-align: inherit;
+      width: auto;
+      padding: 0;
+      background: transparent;
+      border: none;
+      float: left;
+      width: 100%;
+      max-width: 100%;
+
+      a {
+        color: #fff;
+      }
+    }
+  }
+}
+
+ul.tabs.primary {
+  &.collapsed {
+    display: none;
+
+    @include breakpoint($weird-screen) {
+      display: block;
+    }
+  }
+}

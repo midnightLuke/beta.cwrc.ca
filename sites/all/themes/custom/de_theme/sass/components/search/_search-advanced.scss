@@ -1,0 +1,80 @@
+
+/* =============================================================================
+   ADVANCED SEARCH
+   ========================================================================== */
+
+
+.section-content .block #quicktabs-cwrc_advanced_search {
+  .block {
+   @include unblock;
+    margin-bottom: 0;
+  }
+
+  ul.quicktabs-tabs {
+    border-bottom: 2px solid $shade3;
+    float: left;
+    width: 100%;
+    padding-bottom: 0;
+    margin-bottom: 1em;
+    padding-left: .6em;
+      @include breakpoint(0 500px){
+        padding-left: 0;
+      }
+
+    li {
+      width: auto;
+      margin-bottom: 0;
+      border: 1px solid $shade3;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      background: #fafafa;
+      border-bottom: none;
+      margin-left: .2em;
+      @extend %transition;
+
+      @include breakpoint(0 500px){
+        width: 100%;
+      }
+
+      &:hover {
+        background: #fff;
+      }
+
+      &.active {
+        border-bottom: none;
+        background: #fff;
+
+        a {
+          color: $brand2 !important;
+        }
+      }
+
+      a {
+        text-decoration: none;
+        font-weight: $bold;
+        padding: .4em .7em;
+        display: inline-block;
+        color: $brand1;
+        font-size: .9em;
+      }
+    }
+  }
+
+  #block-islandora-solr-advanced {
+    .form-submit {
+      top: -3px;
+      position: relative;    }
+  }
+
+  .islandora-solr-advanced-controls {
+    margin-bottom: 1em;
+  }
+
+  .form-item.form-item-xquery {
+    margin: 0;
+  }
+
+  iframe {
+    margin-bottom: 0;
+  }
+}

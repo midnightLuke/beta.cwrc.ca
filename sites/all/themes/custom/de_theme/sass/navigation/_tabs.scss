@@ -1,0 +1,245 @@
+/* navigation/_tabs.scss */
+
+/* =============================================================================
+   USER TABS
+   ========================================================================== */
+
+.region-user-menu .hamburger {
+  button {
+    margin: .5em 0;
+  }
+}
+
+.region-user-menu {
+  background: $header-grey;
+  border-top: 1px solid $border-grey;
+
+   ul {
+    border-bottom: none;
+    margin-bottom: 0;
+
+    li {
+      border-right: 1px solid $border-grey;
+
+      &:first-child {
+        border-left: 1px solid $border-grey;
+      }
+
+      &.active.open a.dropdown-toggle:after {
+        @extend %icon-circle-up;
+        float: right;
+        top: 5px;
+        font-size: 1.2em;
+        margin-right: 0;
+        display: none;
+      }
+
+      a.active {
+       border-bottom: 3px solid $brand4;
+      }
+
+      a{
+        text-decoration: none;
+        font-weight: $xbold;
+        margin-right: 0em;
+        padding: .6em 1em;
+        line-height: 27px;
+        height: 45px;
+
+        &.active {
+          background-color: $header-grey;
+        }
+
+        &:hover {
+          background-color: darken($header-grey, 4%);
+        }
+
+        &.dropdown-toggle {
+          &:after {
+            @extend %icon-circle-down;
+            float: right;
+            top: 5px;
+            font-size: 1.2em;
+            margin-right: 0;
+            display: none;
+          }
+        }
+      }
+
+      &.action-tab {
+        float: none;
+      }
+      &.action-tab.first-tab {
+        border-left: none;
+      }
+    }
+  }
+
+  @include breakpoint(0 48em) {
+    .container {
+      padding: 0;
+    }
+
+    ul {
+      float: left;
+      width: 100%;
+      background: #fafafa;
+      border-top: 1px solid $border-grey;
+
+      li {
+        float: left;
+        width: 100%;
+        border-left: none !important;
+        border-right: none;
+        border-bottom: 1px solid #fff;
+        &:last-child{border-bottom: none;}
+        &.active.open a.dropdown-toggle:after {display: block;}
+
+        a {
+          display: block;
+          width: 100%;
+          height: auto;
+
+          &.active {
+            border-bottom: none;
+            color: $brand2;
+            background-color: #F3F3F3;
+          }
+
+          &.dropdown-toggle:after {display: block;}
+        }
+      }
+    }
+  } // -- end breakpoint
+
+}// -- end region
+
+
+//DROP-DOWN TABS
+
+ul.tabs {
+ li {
+  list-style: none;
+
+  ul.tabs-submenu.dropdown-menu{
+   //display: block;
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+    margin: 0;
+    right: auto;
+    padding: .7em;
+    border-radius: 3px;
+    top: 46px;
+    -webkit-box-shadow: 0px 2px 2px -1px rgba(77, 77, 77, 0.59);
+    -moz-box-shadow: 0px 2px 2px -1px rgba(77, 77, 77, 0.59);
+    box-shadow: 0px 2px 2px -1px rgba(77, 77, 77, 0.59);
+    width: 280px;
+    @include breakpoint(0 48em) {
+      position: relative;
+      float: left;
+      width: 100%;
+      top: 0;
+      background: #fafafa !important;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+      border-top: 1px solid #fff;
+    }
+
+    &:before {
+      content: none;
+      // content: "";
+      // width: 0;
+      // height: 0;
+      // border-left: 5px solid transparent;
+      // border-right: 5px solid transparent;
+      // border-bottom: 5px solid #fff;
+      // position: absolute;
+      // top: -5px;
+      // left: 20px;
+    }
+
+    li {
+      padding: 0em;
+      margin-bottom: 0em;
+      border-right: 0;
+      border-left: 0;
+      float: left;
+      width: 100%;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      a {
+        font-size: .8em;
+        font-weight: normal;
+        padding: .7em;
+        line-height: normal;
+        height: auto;
+        display: block;
+        width: 100%;
+        &:hover {border-radius: 5px;}
+        @include breakpoint(0 48em) {
+          padding: .6em .6em .6em 1.7em;
+          line-height: 27px;
+          font-size: 0.75em;
+        }
+
+        &.active {
+          border: 1px solid $shade3 !Important;
+          border-radius: 5px;
+          @include breakpoint(0 48em) {
+            border-radius: 0 !important;
+            border: none !important;
+            color: $brand2 !important;
+          }
+        }
+      }
+
+      &.divider-above {
+        border-top: 1px dotted #D2D1D1;
+      }
+      &.divider-below {
+        border-bottom: 1px dotted #D2D1D1;
+      }
+    }
+  }
+ }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

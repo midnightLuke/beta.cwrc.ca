@@ -1,0 +1,23 @@
+
+
+#block-islandora-saved-searches-saved-searches {
+  .content {
+    padding: 0;
+  }
+
+  ul {
+    float: left;
+    width: 100%;
+
+    li {
+     padding: 0em;
+     margin-bottom: 0;
+     border-bottom: 1px solid $shade1;
+     padding: .85em .8em;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}

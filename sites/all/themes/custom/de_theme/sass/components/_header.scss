@@ -1,0 +1,554 @@
+
+/* =============================================================================
+    HEADER ITEMS
+   ========================================================================== */
+
+.region-masthead {
+  @include breakpoint(0 48em){
+    padding-bottom: 0;
+    .container {
+      padding: 0;
+    }
+  }
+}
+
+//links
+
+#de-header {
+  a {
+    color: #fff;
+    @include breakpoint(0 48em){
+      color: $brand1;
+    }
+  }
+}
+
+
+//basic navbar styles
+
+.region-masthead ul.navbar {
+  float: left;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: ms(-.5);
+  @include breakpoint(0 48em){
+    background: #FAFAFA;
+  }
+
+    & > li {
+      list-style-type: none;
+      margin: 0;
+      line-height: 40px;
+      margin-left: ms(1);
+      @extend %transition;
+      a{text-decoration: none;}
+
+      @include breakpoint(0 48em) {
+        border-bottom: 1px solid #fff;
+        line-height: normal;
+        float: left !important;
+        width: 100%;
+        &:hover{background: #fafafa;}
+        a {
+          display: block;
+          font-weight: $xbold !important;
+          float: left;
+          width: 100%;
+          font-size: 0.95em !important;
+          position: relative;
+          padding: .6em 1em;
+          line-height: 27px;
+          &:before {
+            line-height: normal;
+            top: 0;
+            font-size: 16px;
+            float: left;
+            margin-right: .7em;
+            display: none;
+          }
+          span {
+            overflow: visible;
+            width: auto;
+            display: block;
+            height: auto;
+          }
+        }
+      }
+    }
+
+
+//icons on left
+
+  li.navbar-left {
+    float: left;
+
+    a {
+      font-size: 1.1em;
+    }
+  }
+
+
+//icons on the right
+
+  & > li.navbar-right {
+    float: right;
+    margin-left: 1.9em ;
+
+     & > a:after{
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 3px solid transparent;
+      border-right: 3px solid transparent;
+      border-top: 3px solid #fff;
+      position: relative;
+      top:22px;
+      margin-left: .3em;
+      float: right;
+      @include breakpoint(0 48em) {
+        border: none !important;
+        top: 5px;
+        margin-left: 0;
+        @include icon;
+        content: "\e994";
+        @include default-icomoon-icon-styles;
+        position: absolute !important;
+        right: .7em !important;
+        top: 1em !important;
+        font-size: 1.2em !important;
+      }
+    }
+
+      &.open > a:after{
+        @include breakpoint(0 48em) {
+        border: none !important;
+        top: 5px;
+        margin-left: 0;
+        @include icon;
+        content: "\e992";
+        @include default-icomoon-icon-styles;
+        position: absolute !important;
+        right: .7em !important;
+        top: 1em !important;
+        font-size: 1.2em !important;
+      }
+    }
+  }
+}
+
+
+//Drop-down
+
+  ul.dropdown-menu {
+    display: none;
+  }
+
+  li.navbar-right .item-list {
+    position: relative;
+  }
+
+  .open ul.dropdown-menu {
+    display: block;
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+    margin: 0;
+    padding: .7em;
+    border-radius: 3px;
+    right: 5px;
+    max-width: 100%;
+    -webkit-box-shadow: 0px 2px 2px -1px rgba(77,77,77,0.59);
+    -moz-box-shadow: 0px 2px 2px -1px rgba(77,77,77,0.59);
+    box-shadow: 0px 2px 2px -1px rgba(77,77,77,0.59);
+    @include breakpoint($weird-screen) {
+      max-width: 300px;
+    }
+    @extend %transition;
+    @include breakpoint(0 48em) {
+      box-shadow: none;
+      background: #FAFAFA !important;
+      right: 0 !important;
+      border-radius: 0;
+      border-top: 1px solid #fff !important;
+      a {color: $brand1;}
+    }
+
+    //arrow on drop-down
+
+    &:before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 5px solid #fff;
+      position: absolute;
+      top: -4px;
+      right: 22%;
+    }
+
+    //drop-down items
+
+    li {
+      margin-left: 0;
+      line-height: normal;
+      list-style-image: none;
+      list-style: none;
+      padding: .3em;
+      margin-bottom: .3em;
+      @extend %transition;
+      &:hover {background-color: #eee; border-radius: 3px;}
+      @include breakpoint(0 48em) {
+        margin-bottom: 0;
+        padding: 0 0 0 2em;
+        border-bottom: 1px solid #fff;
+        float: left;
+        width: 100%;
+      }
+
+      a {
+        color: $brand1 !Important;
+        display: block;
+        @include breakpoint(0 48em) {
+          font-weight: normal !important;
+        }
+      }
+    }
+  }
+
+
+
+//LOGO
+
+ul.navbar li.logo {
+  margin-left: 0;
+
+  img {
+    margin-top: 5px;
+  }
+}
+
+
+//LANGUAGE
+
+ul.navbar li.nav-language-switcher {
+
+  & > a {
+    font-weight: $bold;
+    font-size: 1.2em;
+  }
+
+  & > a:after{
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #fff;
+    position: relative;
+    top:16px;
+    margin-left: .2em;
+    @include breakpoint(0 48em) {
+      top: 5px !important;
+    }
+  }
+
+  ul.dropdown-menu {
+    width: 70px;
+    right: -2px;
+    text-align: center;
+  }
+}
+
+
+//MESSAGES
+
+.notification-icon {
+  width: 23px;
+  height: 24px;
+  overflow: hidden;
+  display: inline-block;
+  position: relative;
+  float: left;
+  font-size: 1.25em;
+  top: 4px;
+  @include breakpoint(0 48em) {
+    font-size: 1em;
+    top: 0;
+  }
+
+  &:before {
+    @extend %icon-notifications;
+    margin-right: 0;
+    line-height: 32px;
+    @include breakpoint(0 48em) {
+      position: relative;
+      line-height: 12px;
+      left: -14px !important;
+      font-size: 26px;
+      margin-right: 0em;
+      display: none;
+    }
+  }
+}
+
+.badge.notification-count {
+    background: #ac0033;
+    color: #fff;
+    font-weight: 900;
+    padding: .2em .6em;
+    margin-left: 0;
+    font-size: 7px;
+    top: 10px;
+    position: absolute;
+    height: 10px;
+    width: 9px;
+    z-index: 500;
+    line-height: 11px;
+    text-align: center;
+    border-radius: 2px;
+    padding: 0;
+    @include breakpoint(0 48em) {
+      position: relative !important;
+      width: 7px !important;
+      float: left;
+      top: -3px;
+      height: 9px !important;
+      font-size: 6px;
+      line-height: 9px;
+      left: 7px;
+      display: none !important;
+    }
+  &.notification-count-none {
+    visibility: hidden;
+  }
+}
+
+li.nav-notifications {
+  a:after {content: none !Important;}
+}
+
+
+//USER MENU
+
+#block-menu-button-user-menu {
+  display: none;
+}
+
+li.nav-user-menu {
+
+  > a {
+    overflow: hidden;
+
+  }
+
+   > a {
+    &:before {
+      @extend %icon-profile;
+      margin-right: 0;
+      font-size: 3em;
+      line-height: 40px;
+      left: -9px !important;
+      width: 26px;
+      @include breakpoint(0 48em) {
+        top: -7px !important;
+        font-size: 29px !important;
+        float: left;
+        margin-right: 0 !important;
+      }
+    }
+
+    &:after {
+      float: left !important;
+      left: -10px;
+      top: 24px !important;
+      @include breakpoint(0 48em) {
+        float: right !important;
+        left: auto;
+      }
+    }
+  }
+
+  span.user-menu {
+    overflow: hidden;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+  }
+
+  ul.dropdown-menu {
+    top: 40px;
+    right: -5px;
+
+    li.dropdown-header {
+      font-weight: $xbold;
+      text-transform: uppercase;
+      font-size: .8em;
+      margin-top: 1.2em;
+      color: #000;
+      border-bottom: 1px dotted #D2D1D1;
+      border-top: 1px dotted #D2D1D1;
+      padding-top: .6em;
+      padding-bottom: .6em;
+      margin-bottom: .5em;
+      padding-left: 0;
+      padding-right: 0;
+      @include breakpoint(0 48em) {
+        margin: 0;
+        float: left;
+        width: 100%;
+        padding: .6em 1em;
+        line-height: 27px;
+        &:hover{background: transparent !important;}
+      }
+
+      li p {
+        @include breakpoint(0 48em) {
+        margin: 0;
+        padding: .6em 1em;
+        line-height: 27px;
+        }
+      }
+
+      &:before {
+        @extend %icon-projects;
+        top: -4px;
+        font-weight: bold;
+        left: -2px;
+        @include breakpoint(0 48em) {
+          top: 4px;
+          left: -3px;
+          margin-right: .55em;
+        }
+      }
+      &:hover {background-color: #fff;}
+    }
+
+    li.separator {
+      line-height: 0;
+      border-top: 1px dotted #D2D1D1;
+      &:hover{background: transparent !important;}
+    }
+  }
+
+  ul.dropdown-menu:before {
+    right: 25px;
+  }
+}
+
+//LOGIN
+
+#block-cwrc-menu-links-login-link {
+  line-height: 40px;
+  float: right;
+  margin-left: 1.3em;
+  @include breakpoint(0 48em){
+    border-bottom: 1px solid #fff;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: $bold;
+
+    &:before {
+      @extend %icon-profile;
+      line-height: 41px;
+      margin-right: 0.2em !Important;
+      font-size: 2.5em !Important;
+    }
+  }
+}
+
+//?
+
+li.nav-help {
+  position: relative;
+
+ > a:before {
+    content: "?";
+    background: #fff;
+    color: $brand1;
+    width: 17.6px;
+    text-align: center;
+    display: inline-block;
+    font-weight: 900;
+    height: 17.5px;
+    border-radius: 30px;
+    line-height: 20px;
+    top: 1px;
+    position: relative;
+     @include breakpoint(0 48em) {
+      font-size: 13px !important;
+      height: 15.5px;
+      background: $brand1;
+      color: #fff;
+      width: 15.6px;
+     }
+  }
+
+  span.help-menu {
+    overflow: hidden;
+    width: 0;
+    height: 24px;
+    display: inline-block;
+  }
+
+  ul.dropdown-menu {
+    right: -5px;
+    width: 145px;
+    &:before {right: 19px;}
+  }
+}
+
+
+
+//HELP
+
+#block-de-contextual-help-contextual-help-link {
+  float: right;
+  line-height: 40px;
+
+  a{
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: .4em .7em;
+  }
+}
+
+
+//LOGIN
+
+.region-masthead ul.navbar {
+  @include breakpoint(0 48em) {
+    #block-cwrc-menu-links-login-link a {
+      padding: .6em 1em;
+      line-height: 27px;
+    }
+
+    #block-cwrc-menu-links-login-link a:before {
+      display: none;
+    }
+
+    > li.navbar-right,
+    #block-cwrc-menu-links-login-link,
+    > li {
+      margin-left: 0;
+    }
+
+
+
+
+  }
+}
+
+
+
+
+
+
+
+
+

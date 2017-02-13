@@ -1,0 +1,76 @@
+
+/* =============================================================================
+   HOMEPAGE NEWS AND EVENTS
+   ========================================================================== */
+
+.front .section-content .region-content .block.homepage-news-event {
+  position: relative;
+  padding-bottom: 4.5em;
+  margin-top: 0em;
+  margin-bottom: 1.5em;
+  float: left !important;
+  width: 100% !important;
+  margin-right: 0;
+  @include breakpoint(900px) {
+    width: 32% !important;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+    margin-right:  2% !important;
+    &:nth-child(3n+3) { margin-right: 0 !important;}
+  }
+
+
+  //FIELDS
+
+  .views-row {
+    padding: .8em .8em 0;
+    margin-bottom: 0;
+  }
+
+  .field-name-field-image img {
+    width: 100% !important;
+    margin: 0;
+    margin-bottom: 1em;
+  }
+
+  .view-events .views-field.views-field-field-event-date-1,
+  .view-News .views-field.views-field-created {
+    font-weight: $xbold;
+  }
+
+  .views-field.views-field-view-node {
+    position: absolute;
+    bottom: 1.5em;
+    right: 1.5em;
+    left: auto;
+  }
+
+  .views-field-nothing {
+    position: absolute;
+    bottom: 1.5em;
+    right: auto;
+    left: 1.5em;
+  }
+
+  span.read-more-link a {
+    &:after {
+      @extend %icon-arrow-right;
+      float: right;
+      margin-right: 0;
+      margin-left: .5em;
+    }
+  }
+}
+
+//GRID FIX
+
+.front #block-views-news-block-1 {
+ @include breakpoint(0px 480px) {
+  margin-top: 1.5em;
+ }
+}
+
+.front .section-content .region-content #block-views-events-block-1.block {
+  margin-right: 0;
+}
+

@@ -1,0 +1,528 @@
+/* =============================================================================
+    THEME COLOURS
+   ========================================================================== */
+
+//TEMPLATE COLOURS
+
+// THEME 1 - blood orange
+
+$theme1-main-colour: #c54f00;
+
+$theme1-secondary-colour: #af1100;
+
+
+// THEME 2 - Burntsienna
+
+$theme2-main-colour: #af1100;
+
+$theme2-secondary-colour: #c54f00;
+
+
+// THEME 3 - darktan
+
+$theme3-main-colour: #4a6f66;
+
+$theme3-secondary-colour: #726659;
+
+
+// THEME 4 - dessert
+
+$theme4-main-colour: #0073a3;
+
+$theme4-secondary-colour: #a14703;
+
+
+// THEME 5 - forest
+
+$theme5-main-colour: #765e44;
+
+$theme5-secondary-colour: #5b6050;
+
+
+// THEME 6 - marine
+
+$theme6-main-colour: #033f63;
+
+$theme6-secondary-colour: #28666e;
+
+
+// THEME 7 - medium blue
+
+$theme7-main-colour: #704a64;
+
+$theme7-secondary-colour: #0037a7;
+
+
+// THEME 8 - pomegranate
+
+$theme8-main-colour: #67152b;
+
+$theme8-secondary-colour: #417505;
+
+
+// THEME 9 - sage
+
+$theme9-main-colour: #726659;
+
+$theme9-secondary-colour: #4a6f66;
+
+
+// THEME 10 - slatemagenta
+
+$theme10-main-colour: #0037a7;
+
+$theme10-secondary-colour: #704a64;
+
+
+
+
+/* =============================================================================
+    THEME COLOUR CHANGES
+   ========================================================================== */
+
+//// THEME 1 - blood orange
+
+.cwrc-project-theme-bloodorange {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a  {color: $theme1-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover  {color: darken($theme1-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme1-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme1-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover {background:$theme1-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme1-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme1-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme1-main-colour !important;
+    &:hover{background-color: darken($theme1-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+      .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn   {
+      background-color: $theme1-main-colour !important;
+      &:hover{background-color: darken($theme1-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover {
+      background-color: $theme1-secondary-colour !important;
+      &:hover{background-color: darken($theme1-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection-object dl dt  {background-color:$theme1-secondary-colour !important; }
+}
+
+
+
+
+//// THEME 2 - Burntsienna
+
+.cwrc-project-theme-burntsienna {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a  {color: $theme2-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover  {color: darken($theme2-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme2-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme2-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover {background:$theme2-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme2-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme2-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme2-main-colour !important;
+    &:hover{background-color: darken($theme2-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn   {
+      background-color: $theme2-main-colour !important;
+      &:hover{background-color: darken($theme2-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover{
+      background-color: $theme2-secondary-colour !important;
+      &:hover{background-color: darken($theme2-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb {background-color:$theme2-secondary-colour !important; }
+}
+
+
+
+
+//// THEME 3 - darktan
+
+.cwrc-project-theme-darktan {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a  {color: $theme3-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover {color: darken($theme3-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme3-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme3-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover  {background:$theme3-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme3-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme3-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme3-main-colour !important;
+    &:hover{background-color: darken($theme3-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn   {
+      background-color: $theme3-main-colour !important;
+      &:hover{background-color: darken($theme3-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover {
+      background-color: $theme3-secondary-colour !important;
+      &:hover{background-color: darken($theme3-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb {background-color:$theme3-secondary-colour !important; }
+}
+
+
+
+
+// THEME 4 - dessert
+
+.cwrc-project-theme-desert {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a {color: $theme4-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover {color: darken($theme4-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme4-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme4-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover {background:$theme4-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme4-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme4-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme4-main-colour !important;
+    &:hover{background-color: darken($theme4-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn   {
+      background-color: $theme4-main-colour !important;
+      &:hover{background-color: darken($theme4-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover  {
+      background-color: $theme4-secondary-colour !important;
+      &:hover{background-color: darken($theme4-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb {background-color:$theme4-secondary-colour !important; }
+}
+
+
+
+
+// THEME 5 - forest
+
+.cwrc-project-theme-forest {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a {color: $theme5-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover {color: darken($theme5-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme5-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme5-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover  {background:$theme5-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme5-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme5-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme5-main-colour !important;
+    &:hover{background-color: darken($theme5-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn  {
+      background-color: $theme5-main-colour !important;
+      &:hover{background-color: darken($theme5-main-colour, 7%) !important; color: #fff;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover  {
+      background-color: $theme5-secondary-colour !important;
+      &:hover{background-color: darken($theme5-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb  {background-color:$theme5-secondary-colour !important; }
+}
+
+
+
+
+// THEME 6 - marine
+
+.cwrc-project-theme-marine {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a  {color: $theme6-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover {color: darken($theme6-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme6-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme6-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover  {background:$theme6-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme6-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme6-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme6-main-colour !important;
+    &:hover{background-color: darken($theme6-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, a.btn   {
+      background-color: $theme6-main-colour !important;
+      &:hover{background-color: darken($theme6-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover  {
+      background-color: $theme6-secondary-colour !important;
+      &:hover{background-color: darken($theme6-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb {background-color:$theme6-secondary-colour !important; }
+}
+
+
+
+
+// THEME 7 - medium blue
+
+.cwrc-project-theme-mediumblue {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a   {color: $theme7-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover {color: darken($theme7-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme7-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme7-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover  {background:$theme7-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme7-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme7-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme7-main-colour !important;
+    &:hover{background-color: darken($theme7-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn   {
+      background-color: $theme7-main-colour !important;
+      &:hover{background-color: darken($theme7-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover  {
+      background-color: $theme7-secondary-colour !important;
+      &:hover{background-color: darken($theme7-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb {background-color:$theme7-secondary-colour !important; }
+}
+
+
+
+
+// THEME 8 - pomegranate
+
+.cwrc-project-theme-pomegranate {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a  {color: $theme8-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover {color: darken($theme8-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme8-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme8-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover  {background:$theme8-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme8-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme8-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme8-main-colour !important;
+    &:hover{background-color: darken($theme8-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn  {
+      background-color: $theme8-main-colour !important;
+      &:hover{background-color: darken($theme8-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover  {
+      background-color: $theme8-secondary-colour !important;
+      &:hover{background-color: darken($theme8-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb {background-color:$theme8-secondary-colour !important; }
+}
+
+
+
+
+// THEME 9 - sage
+
+.cwrc-project-theme-sage {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a  {color: $theme9-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover {color: darken($theme9-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme9-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme9-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover  {background:$theme9-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme9-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme9-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme9-main-colour !important;
+    &:hover{background-color: darken($theme9-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn  {
+      background-color: $theme9-main-colour !important;
+      &:hover{background-color: darken($theme9-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover  {
+      background-color: $theme9-secondary-colour !important;
+      &:hover{background-color: darken($theme9-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb{background-color:$theme9-secondary-colour !important; }
+}
+
+
+
+
+// THEME 10 - slatemagenta
+
+.cwrc-project-theme-slatemagenta {
+
+  .region-content a, #block-views-project-featured-object-block .field-name-field-object a,   .field-name-field-social-links .field-item a:hover, .sidebar .block-menu-block ul li a, .islandora-basic-collection dl dd.read-more a {color: $theme10-secondary-colour;}
+
+  .region-content a:hover,#block-views-project-featured-object-block .field-name-field-object a:hover {color: darken($theme10-secondary-colour, 10%);}
+
+  .region-user-menu ul li a.active, .field-name-field-social-links .field-item a {border-color: $theme10-secondary-colour;}
+
+  .field-name-field-social-links .field-item a, h1#page-title, .field-name-title h2 {color: $theme10-main-colour;}
+
+  .region-main-suffix, .sidebar .block-menu-block ul li a.active, .sidebar .block-menu-block ul li a:hover  {background:$theme10-secondary-colour;}
+
+  .field.field-name-field-acknowledgements .field-type-text-long {background: $theme10-main-colour;}
+
+  .field-items .field-item:nth-child(even) .field-collection-view .field-type-text-long {background:$theme10-secondary-colour;}
+
+  .main-prefix-section-wrapper .block-menu-block ul.menu li a {
+    background-color: $theme10-main-colour !important;
+    &:hover{background-color: darken($theme10-main-colour, 7%) !important;}}
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .cwrc-dashboards-new-member-link-wrapper a, .fieldset-wrapper input.form-submit, input.form-submit, input#edit-submit, .field-name-field-featured-links .field-item a, .region-content form .form-actions a, .cwrc-workflow-stamps-block .cwrc-workflow-history-link-wrapper a, .sidebar #block-islandora-blocks-collections ul li a, .islandora-default-metadata a:first-of-type, .sidebar #block-islandora-blocks-collections ul li a, a.btn {
+      background-color: $theme10-main-colour !important;
+      &:hover{background-color: darken($theme10-main-colour, 7%) !important;}
+    }
+  }
+
+  .main-prefix-section-wrapper, .region-breadcrumb, .section-content {
+    .field-name-field-featured-links .field-item:nth-child(even) a, .sidebar .block-menu-block ul li a.active:hover  {
+      background-color: $theme10-secondary-colour !important;
+      &:hover{background-color: darken($theme10-secondary-colour, 7%) !important;}
+    }
+  }
+
+  .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb, .islandora-basic-collection dt, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb {background-color:$theme10-secondary-colour !important; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

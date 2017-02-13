@@ -1,0 +1,42 @@
+/* drupal/_tabs.scss */
+
+.front .tabs{
+  display: none;
+}
+
+.tabs{
+  @include navigation-list;
+  margin-bottom: ms();
+  border-bottom: 5px solid $light-grey;
+  li{
+    @include reset;
+  }
+  a{
+    color: $dark-grey;
+    transition: background-color 0.3s ease-out;
+    display: block;
+    float: left;
+    @include adjust-font-size-to(15px);
+    margin: 0;
+    margin-right: ms(-3);
+    padding: ms(-1) ms() ms(-2) ms();
+    @include breakpoint(max-width $standard-screen) {
+      padding-left: ms(-2);
+      padding-right: ms(-2);
+      @include adjust-font-size-to(12px);
+    }
+    text-decoration: none;
+    &.active{
+      background-color: $light-grey;
+    }
+    &:hover{
+      background-color: $neutral-grey;
+      color: black;
+    }
+    &:active{
+      background-color: shade(white,25%);
+    }
+  }
+}
+
+

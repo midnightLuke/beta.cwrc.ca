@@ -1,0 +1,135 @@
+/* =============================================================================
+    LISTS WITH ACTIONS ATTACHED - SPECIAL CWRC STYLE
+   ========================================================================== */
+
+
+//ACTION ITEMS STYLING
+
+@mixin lists-w-actions {
+
+
+  //ACTIONS LIST
+
+  .actions-list-group {
+    float: right !important;
+
+    //list items
+
+    li {
+      display: inline-block;
+      float: right !important;
+      padding-top: .3em;
+      margin-bottom: 0;
+      width: auto !important;
+      border-bottom: none;
+
+      a{
+        display: inline-block;
+        overflow: hidden;
+        height: 18px;
+        width: 23px;
+
+    //HIDDEN TEXT FOR SCREEN READERS
+
+        span.txt-icon {
+          display: block;
+        }
+
+    //ICON THAT TAKES PLACE OF TEXT - EDIT ICON
+
+        span.no-txt {
+          display: block;
+
+          &:after {
+            @extend %icon-edit;
+            @extend %border-radius-small;
+            font-size: 1.1em;
+            float: right;
+            display: block;
+            background: #C4CFD6;
+            color: #6D7982;
+            width: 18px;
+            height: 18px;
+            margin-right: .2em;
+            @extend %transition;
+          }
+
+          &:hover:after {
+            background: darken(#C4CFD6, 10%);
+          }
+        }
+
+    //DELETE ICON
+
+        span.delete-icon.no-txt:after {
+          @extend %icon-cross;
+          font-size: .7em;
+          height: 18px;
+          width: 18px;
+          line-height: 18px;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

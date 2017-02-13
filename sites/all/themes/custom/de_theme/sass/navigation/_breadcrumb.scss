@@ -1,0 +1,15 @@
+/* navigation/_breadcrumb.scss */
+
+.breadcrumb{
+  @include reset;
+  a{
+    @include adjust-font-size-to(12px);
+    text-transform: uppercase;
+    font-weight: $bold;
+    padding: 0 .5em;
+    }
+  margin: 1em 0 0;
+  border-top: 1px solid #DCDCDC;
+  border-bottom: 1px solid #DCDCDC;
+  padding: .2em 0;
+}

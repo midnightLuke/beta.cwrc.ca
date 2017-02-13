@@ -1,0 +1,186 @@
+#sidebar-second .block-search-filter{
+  .content li{
+    @include reset;
+    @include adjust-font-size-to(14px);
+    line-height: ms(.75);
+    margin-bottom: ms();
+  }
+  h2{
+    // @include svg-bkgd($misc, 'filter-dark');
+  }
+}
+
+
+//SEARCH PAGE FILTERS
+
+
+
+/* =============================================================================
+    FILTERS
+   ========================================================================== */
+
+.cwrc-search-wrapper {
+  float: left;
+  width: 100%;
+
+  .layouts-wrapper {
+    margin-bottom: 1em;
+
+    ul {
+      float: right;
+      width: 100%;
+      border-bottom: 1px solid $shade3;
+      margin-bottom: ms(0);
+      padding-bottom: .3em;
+        @include breakpoint(0 550px) {
+          width: 100%;
+          margin-top: 0;
+        }
+
+      li {
+        display: inline-block;
+        float: left;
+        width: auto;
+        margin-right: ms(0);
+        padding-right: ms(0);
+        border-right: 1px solid #ddd;
+        line-height: 14px;
+
+        a {
+          color: $brand1;
+          font-weight: $bold;
+          font-size: .9em;
+          text-decoration: none;
+          &:hover{color: $brand2;}
+
+          &.dropdown-toggle {
+            @extend %icon-circle-down;
+          }
+        }
+      }
+
+      li.active a {
+        color: $brand2;
+      }
+
+      li.grid,
+      li.list {
+        display: inline-block;
+        float: right;
+        overflow: hidden;
+        width: 30px;
+        height: 30px;
+        margin-bottom: 0;
+        margin-right: 0;
+        padding-left: 0;
+        line-height: 35px;
+        border-right: none;
+
+        a:before {
+         @extend %icon-list-view;
+        }
+      }
+
+      li.grid {
+        a:before {
+         content: "\e949" !important;
+        }
+      }
+    }
+  }
+
+  ul.pager {
+    float: left;
+    width: 100%;
+    margin-top: 1em;
+  }
+}
+
+
+//TOP FILTERS
+
+.sorts-wrapper {
+  width: 56%;
+  padding-bottom: 1em;
+}
+
+.layouts-wrapper {
+  width: 44%;
+}
+
+.sorts-wrapper, .layouts-wrapper {
+  float: left;
+      @include breakpoint(0 560px) {
+        width: 100%;
+      }
+
+  .form-item {
+    width: 38%;
+    float: left;
+    margin-right: 2%;
+      @include breakpoint(0 560px) {
+        width: 100%;
+        margin-right: 0;
+      }
+
+    select,
+    input {
+      width: 100%;
+    }
+  }
+
+  .form-submit {
+    width: 20%;
+    margin-right: 0 !important;
+    margin-top: 2.2em !important;
+        @include breakpoint(0 560px) {
+        width: 100%;
+        margin-top: 0em !important;
+        margin-bottom: 1.5em !important;
+      }
+  }
+}
+
+.layouts-wrapper {
+
+  .form-item.form-type-select {
+    width: 64%;
+    @include breakpoint(0 560px) {
+      width: 100%;
+    }
+  }
+
+  .form-submit {
+    width: 25%;
+    @include breakpoint(0 560px) {
+      width: 100%;
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+//With 2 sidebars
+
+.two-sidebars, .one-sidebar {
+
+  .sorts-wrapper, .layouts-wrapper {
+    @include breakpoint(0 1120px) {
+      width: 100%;
+    }
+  }
+
+  .layouts-wrapper {
+    .form-item.form-type-select {
+      @include breakpoint(0 1120px) {
+      width: 100%;
+    }
+  }
+
+    .form-submit {
+      @include breakpoint(0 1120px) {
+        width: 100%;
+        margin-top: 0 !important;
+      }
+    }
+  }
+}

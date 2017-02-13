@@ -1,0 +1,164 @@
+/* components/_blocks.scss file */
+// miscellaneous blocks that are not tied to a particular page or section
+@import 'blocks/language-block';
+@import 'blocks/carousel-block';
+@import 'blocks/block--islandora-bookmark-form';
+@import 'blocks/block--islandora-saved-searches';
+@import 'blocks/block--user-login';
+@import 'blocks/block--openid-connect-login';
+@import 'blocks/block--islandora-collection';
+@import 'blocks/block--homepage-slider';
+@import 'blocks/block--what-are-we';
+@import 'blocks/block--homepage-sponsors';
+@import 'blocks/block--menu-block-2';
+@import 'blocks/block--cwrc_projects-project_group_join';
+
+/* =============================================================================
+    GENERAL BLOCK STYLES
+   ========================================================================== */
+
+//body
+
+.section-content .block {
+  background: #fff;
+  border: 1px solid $shade3;
+  @extend %border-radius;
+  padding: .7em;
+  margin-bottom: 1em;
+  float: left !important;
+  width: 100% !important;
+
+  .content {
+    padding: .7em;
+    float: left;
+    width: 100%;
+  }
+}
+
+  .page-node-dashboard, .page-user-dashboard {
+    .section-content .block {
+      border: 1px solid #C8C8C8
+    }
+  }
+
+//header
+
+
+.section-content .block .islandora-object h2,
+.section-content .block header > h2,
+.section-content .block > h2 {
+  margin: -.7em -.7em .7em -.7em !important;
+  background-color: $header-grey;
+  padding: ms(-.5) ms(0);
+  margin-bottom: 0;
+  font-size: ms(0);
+  border-bottom: 1px solid $border-grey;
+  font-weight: $bold;
+  color: #000;
+  line-height: normal;
+  @extend %border-radius-top-right;
+  @extend %border-radius-top-left;
+
+  a {
+    text-decoration: none;
+    line-height: 18px;
+  }
+}
+
+/* =============================================================================
+    ISLANDORA
+   ========================================================================== */
+
+.section-content .block .islandora-object h2 {
+    margin-top: -.7em;
+    margin-left: -.7em;
+    margin-right: -.7em;
+}
+
+
+
+/* =============================================================================
+    SIDEBAR BLOCKS
+   ========================================================================== */
+
+//main header
+
+.page-user .sidebar .block h2 {
+  font-size: .95em;
+}
+
+//inner content
+
+.page-user .sidebar .block .view-content,
+.page-user .sidebar .block .content {
+  font-size: .8em;
+  float: left;
+  width: 100%;
+}
+
+//side blocks inside nodes
+
+.node-type-page {
+  .sidebar .block header h2{
+    margin: -.7em -.7em .7em -.7em;
+  }
+}
+
+//inner content sub header
+
+.page-user .sidebar .block .view-content,
+.page-user .sidebar .block .content {
+
+  h2, h3 {
+    font-size: .83em;
+    float: left;
+  }
+}
+
+//links
+
+.page-user .sidebar .block .view-content,
+.page-user .sidebar .block .content {
+  a{
+    text-decoration: none;
+    font-weight: $bold;
+  }
+}
+
+
+//no margin
+
+.page-islandora-search .section-content .block header > h2 {
+  margin: 0 !important;
+}
+
+
+/* =============================================================================
+    COLLAPSABLE BLOCKS
+   ========================================================================== */
+
+//collapsable blocks arrow
+
+div .collapsiblock a {
+  background: none;
+  &:before {
+    @extend %icon-circle-up;
+    color: #ABABAB;
+    float: right;
+    margin-right: 0;
+  }
+}
+
+div .collapsiblock.collapsiblockCollapsed a:before {
+    @extend %icon-circle-down;
+    float: right;
+    margin-right: 0;
+}
+
+
+//collapsed blocks
+
+.section-content .block.collapsiblock-processed h2.collapsiblockCollapsed {
+  @extend %border-radius-bottom-right;
+  @extend %border-radius-bottom-left;
+}

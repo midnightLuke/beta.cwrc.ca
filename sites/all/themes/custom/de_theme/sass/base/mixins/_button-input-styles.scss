@@ -1,0 +1,11 @@
+@mixin button-input-styles($bg-color:$brand-color,$text-color:white,$bg-color-hover:shade($brand-color,18%),$text-color-hover:tint(white,15%),$bg-color-active:shade($brand-color,30%)){
+  background-color: $bg-color;
+  color: $text-color;
+  &:hover{
+    background-color: $bg-color-hover;
+    color: $text-color-hover;
+  }
+  &:active{
+    background-color: $bg-color-active;
+  }
+}

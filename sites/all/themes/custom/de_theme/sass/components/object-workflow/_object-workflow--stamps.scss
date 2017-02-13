@@ -1,0 +1,184 @@
+
+
+/* =============================================================================
+    HISTORY STAMPS
+   ========================================================================== */
+
+
+.cwrc-workflow-stamps,
+.cwrc-workflow-stamps-block {
+
+
+//STATUS TITLE
+
+  .cwrc-workflow-stamp-row.activity-category {
+    @extend %header-w-circle-icon-div;
+    border-top: 1px solid $shade3;
+
+      span {
+        @extend %header-w-circle-icon-element;
+        &:before {content: "\e95d" !important; font-size: 1.8em !important; margin-right: .5em !important; top: 0px !important;}
+      }
+  }
+
+span.cwrc-workflow-label {
+  font-weight: $xbold;
+  margin-right: .3em;
+}
+
+
+//ACTIONS
+
+//blue - created / deposited / content_contribution / metadata contribution /
+
+.cwrc-workflow-stamp.created,
+.cwrc-workflow-stamp.deposited,
+.cwrc-workflow-stamp.content-contribution,
+.cwrc-workflow-stamp.metadata-contribution {
+  .cwrc-workflow-stamp-row.activity-category {
+    background: #DAF4FB;
+  }
+}
+
+//purple - checked / evaluated / peer-reviewed
+
+.cwrc-workflow-stamp.checked,
+.cwrc-workflow-stamp.peer-reviewed-evaluated {
+  .cwrc-workflow-stamp-row.activity-category {
+    background: #dee3fc;
+  }
+}
+
+//orange - rights / machine processed
+
+.cwrc-workflow-stamp.rights-assigned,
+.cwrc-workflow-stamp.machine-processed {
+  .cwrc-workflow-stamp-row.activity-category {
+    background: #ffeedc;
+  }
+}
+
+//green - published
+
+.cwrc-workflow-stamp.published {
+  .cwrc-workflow-stamp-row.activity-category {
+    background: #dafce2;
+  }
+}
+
+//yellow - user-tagged
+
+.cwrc-workflow-stamp.user-tagged {
+  .cwrc-workflow-stamp-row.activity-category {
+    background: #ffffdc;
+  }
+}
+
+//red - deleted withdrawn
+
+.cwrc-workflow-stamp.deleted,
+.cwrc-workflow-stamp.withdrawn {
+  .cwrc-workflow-stamp-row.activity-category {
+    background: #ff8787;
+  }
+}
+
+
+
+
+//   .cwrc-workflow-stamp.checked .cwrc-workflow-stamp-row.activity-category {
+//     background: #daf4fb;
+//   }
+
+//   .cwrc-workflow-stamp.machine-processed .cwrc-workflow-stamp-row.activity-category {
+//     background: #daf4fb;
+//   }
+
+// //green
+
+//   .cwrc-workflow-stamp.created .cwrc-workflow-stamp-row.activity-category {
+//     background: #d6f7de;
+//   }
+
+//   .cwrc-workflow-stamp.content-contribution .cwrc-workflow-stamp-row.activity-category {
+//     background: #d6f7de;
+//   }
+
+//   .cwrc-workflow-stamp.published .cwrc-workflow-stamp-row.activity-category {
+//     background: #d6f7de;
+//   }
+
+
+// //orange
+
+//   .cwrc-workflow-stamp.deleted .cwrc-workflow-stamp-row.activity-category {
+//     background: #FDD8CC;
+//   }
+
+//   .cwrc-workflow-stamp.withdrawn .cwrc-workflow-stamp-row.activity-category{
+//     background: #FDD8CC;
+//   }
+
+// //purple
+
+//   .cwrc-workflow-stamp.peer-reviewed-evaluated .cwrc-workflow-stamp-row.activity-category {
+//     background: #DDDAFB;
+//   }
+
+//   .cwrc-workflow-stamp.deposited .cwrc-workflow-stamp-row.activity-category {
+//     background: #DDDAFB;
+//   }
+
+//   .cwrc-workflow-stamp.user-tagged .cwrc-workflow-stamp-row.activity-category {
+//     background: #DDDAFB;
+//   }
+
+//   .cwrc-workflow-stamp.rights-assigned .cwrc-workflow-stamp-row.activity-category {
+//     background: #DDDAFB;
+//   }
+
+//   .cwrc-workflow-stamp.metadata-contribution .cwrc-workflow-stamp-row.activity-category {
+//     background: #DDDAFB;
+//   }
+
+
+ //ROWS
+
+ .cwrc-workflow-stamp-row {
+  padding: .4em .7em;
+  float: left;
+  width: 100%;
+  font-size: ms(-.3);
+  border-bottom: 1px dotted #EAEAEA;
+ }
+
+ .cwrc-workflow-stamp-row:last-child {
+  border-bottom: none;
+ }
+
+ .cwrc-workflow-stamps .cwrc-workflow-stamp-row:last-child {
+  margin-bottom: .5em;
+  background: red;
+ }
+
+
+ //BUTTON
+
+ .cwrc-workflow-history-link-wrapper {
+  padding: .7em;
+  float: left;
+  width: 100%;
+  border-top: 1px solid $shade3;
+
+  a {
+    @include btn-w-icon;
+    margin-bottom: 0;
+    padding: .75em 1.3em !important;
+
+    &:before {
+      @extend %icon-add-workflow-stamp;
+      font-size: 1.8em !important;
+    }
+  }
+ }
+}

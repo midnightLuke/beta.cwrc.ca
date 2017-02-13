@@ -1,0 +1,45 @@
+/* =============================================================================
+    Starred / flagged items
+   ========================================================================== */
+
+@mixin flagged-item{
+    float: left;
+
+    a {
+      padding: .8em 1em;
+      display: inline-block;
+    }
+
+    //removing glyph and putting nicer star
+
+    a.flag {
+      color: #A8840E !important;
+      overflow: hidden;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+
+      &:before {
+        @extend %icon-star;
+        margin-right: 0;
+        top: -1px;
+      }
+
+    //unflagged icon
+
+      &.flag-action {
+        color: #D5D5D5 !important;
+        &:hover {
+          color: #A8840E !important;
+        }
+      }
+    }
+
+    //throbber
+
+    span.flag-throbber {
+      display: inline-block;
+      position: relative;
+      top: -6px;
+    }
+}

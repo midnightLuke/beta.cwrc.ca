@@ -1,0 +1,7 @@
+@mixin button() {
+    display: block;
+    font-size: 20px;
+    text-decoration: none;
+    color: green;
+    @content;
+}

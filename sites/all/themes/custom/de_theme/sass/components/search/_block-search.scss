@@ -1,0 +1,213 @@
+// block search
+
+.block-search{
+  // remove in development
+  @include breakpoint(max-width $medium-screen) {
+    margin-top: 0 !important;
+  }
+  /////
+
+text-align: center;
+  @include breakpoint($narrow-screen) {
+    @include float-span(6,'last');
+    text-align: right;
+  }
+
+  @include breakpoint($medium-screen) {
+    @include float-span(4,'last');
+  }
+
+  h2{
+    @include squish-text;
+  }
+}
+
+
+// Header Search Block    ==============================================
+
+#block-cwrc-search-bar-search {
+  @include breakpoint(max-width 450px) {
+    padding: .8em 0 0;
+  }
+}
+
+#block-cwrc-search-bar-search header{
+  @include visually-hidden;
+
+  &:active, &:focus {
+    @include a11y-visually-hidden-focusable;
+  }
+}
+
+form#cwrc-search-bar-search {
+  float: left;
+  width: 100%;
+
+  //search wrapper
+
+  .basic_query_wrapper.form-wrapper {
+    background-color: #fff;
+    width: 70%;
+    margin-right: 5%;
+    padding: .2em;
+    border-radius: 4px;
+    float: left;
+    @include breakpoint(max-width 700px) {
+      width: 60%;
+        @include breakpoint(max-width 450px) {
+          width: 100%;
+          margin-right: 0;
+      }
+    }
+  }
+
+  //search bar input
+
+  .form-item.form-type-textfield {
+    width: 70%;
+    float: left;
+    margin-bottom: 0;
+    @extend %transition;
+    @include breakpoint(max-width 1024px) {
+      width: 60%;
+        @include breakpoint(max-width 770px) {
+        width: 50%;
+          @include breakpoint(max-width 550px){
+            width: 40%;
+        }
+      }
+    }
+  }
+
+  .form-type-textfield input {
+    width: 99%;
+    margin-right: 1%;
+    border: none;
+    border-color: none;
+    border-radius: 4px;
+    padding: .5em;
+    line-height: 27px;
+  }
+
+  //drop-down
+
+  .form-item-scope {
+    float: left;
+    width: 24%;
+    margin: 0;
+    line-height: 41px;
+    @extend %transition;
+
+    select {
+      width: 100%;
+    }
+
+    @include breakpoint(max-width 1024px) {
+      width: 32%;
+        @include breakpoint(max-width 770px) {
+        width: 40%;
+          @include breakpoint(max-width 700px) {
+          width: 38%;
+          font-size: .8em;
+            @include breakpoint(max-width 550px){
+              width: 45%;
+                @include breakpoint(max-width 450px) {
+                  width: 47%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+  //search sumbit button
+
+  input#edit-submit, input#edit-submit--2, input#edit-submit--3{
+    width: 10px;
+    float: right;
+    text-indent: -999px;
+    overflow: hidden;
+    background-color: transparent;
+    filter: none;
+    background-image: url('../img/search-icon.svg');
+    background-repeat: no-repeat;
+    background-position: center right;
+    margin-right: 1%;
+    margin-bottom: 0;
+    top: 4px;
+    position: relative;
+    //@include svg-bkgd('', 'search-icon', '.png');
+  }
+
+  //advanced search
+
+  a.advanced_search_button {
+    display: block;
+    line-height: 39px;
+    float: left;
+    padding-left: 4.5%;
+    border-left: 2px solid $brand1;
+    color: $brand2 !important;
+    color: #333;
+    top: 6px;
+    position: relative;
+    font-weight: $bold;
+
+      &:before {
+        @extend %folder-plus-icon;
+        margin-right: .4em;
+        font-size: 1.3em;
+        top: 9px;
+        display: none;
+      }
+
+    @include breakpoint(max-width 450px) {
+      border-left: none;
+      padding-left: 0;
+      text-align: center;
+      border-top: 1px solid #B3B3B3;
+      font-weight: $bold;
+      width: 100%;
+      margin-top: 1.5em;
+      padding-top: .5em;
+      padding-bottom: .2em;
+
+      &:before {
+       display: block;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

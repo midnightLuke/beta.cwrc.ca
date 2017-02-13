@@ -1,0 +1,20 @@
+/* =============================================================================
+    Dashboard - Who's Online
+   ========================================================================== */
+
+   //no padding on the paragraph for this block
+
+   #block-user-online {
+
+    h2:before {
+      @extend %icon-profile;
+      font-size: 31px !important;
+      left: -10px;
+      margin-right: 0 !important;
+    }
+
+      p {
+        margin-bottom: .5em;
+      }
+    }
+

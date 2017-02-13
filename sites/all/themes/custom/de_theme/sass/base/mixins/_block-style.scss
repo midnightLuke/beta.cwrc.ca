@@ -1,0 +1,10 @@
+/* =============================================================================
+    MAKE ITEM LIKE BLOCK
+   ========================================================================== */
+
+   @mixin block-style {
+    border:1px solid $shade3;
+    background: $bck-grey;
+    padding: .7em;
+    border-radius: 5px;
+   }

@@ -1,0 +1,16 @@
+// _base.scss contains references to mixins, settings, variables, 3rd party imports
+
+// @imports - 3rd party libraries
+@import 'base/imports';
+
+// @settings - color, type variables, etc.
+@import 'base/settings';
+
+// @mixins - helpful default mixins or custom mixins for the specific project
+@import 'base/mixins';
+
+// @utilities - helpful default mixins or custom mixins for the specific project
+@import 'base/utilities';
+
+//extends to be reused globally
+@import 'base/placeholders';

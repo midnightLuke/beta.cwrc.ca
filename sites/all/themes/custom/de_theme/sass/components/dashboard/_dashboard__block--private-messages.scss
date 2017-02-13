@@ -1,0 +1,40 @@
+/* =============================================================================
+    Dashboard - Private Messages
+   ========================================================================== */
+
+
+#block-cwrc-dashboards-user-privatemsg {
+
+  h2:before {
+    @extend %icon-message;
+    font-size: 25px !important;
+  }
+
+  //view all messages btn
+
+  .compose-new-message,
+  .view-all-messages {
+    margin: ms() 0 0;
+    float: left;
+
+      a {
+        @extend %btn-w-icon;
+        float: left;
+        margin-bottom: 0;
+
+        &:before {
+          @extend %icon-notifications;
+          height: 17px;
+          width: 20px;
+          line-height: 20px;
+        }
+    }
+  }
+
+  .view-all-messages a:before {
+    @extend %icon-bubble;
+    top: -1px;
+  }
+
+}
+

@@ -1,0 +1,313 @@
+
+/* =============================================================================
+    Islandora Colection
+   ========================================================================== */
+
+
+//GENERAL
+
+.page-islandora-object.page-islandora-object-islandoraroot .section-content  ul.pager {
+  float: left;
+  width: 100%;
+}
+
+.page-islandora-object-islandoracollectionCModel #block-system-main,
+.page-islandora-object-islandoraroot #block-system-main {
+  border: none;
+  padding: 0;
+}
+
+.page-islandora-object .islandora div.form-item.form-type-select.form-item-sort {
+  width: auto;
+}
+
+
+/* =============================================================================
+    Sort
+   ========================================================================== */
+
+.islandora-basic-collection .form-wrapper {
+  float: left;
+  padding: 0;
+  border: none;
+  margin-bottom: ms(.5);
+  width: 100%;
+  padding-bottom: ms(-2);
+  border-bottom: 1px solid $shade3;
+  border-radius: 0;
+
+  label {
+    text-transform: uppercase;
+    font-size: .7em;
+    font-weight: 900;
+    line-height: 20px;
+  }
+
+  legend {
+    display: none;
+  }
+
+  .form-item.form-type-select {
+    float: left;
+  }
+}
+
+.section-content #main .islandora-basic-collection .form-wrapper input.form-submit {
+  margin-top: 2.2em;
+  margin-left: ms(0);
+}
+
+
+/* =============================================================================
+    Object Items
+   ========================================================================== */
+
+.islandora-basic-collection-grid {
+  width: 100%;
+  float: left;
+}
+
+.page-islandora-search .results,
+.islandora-basic-collection {
+  overflow: visible;
+  top: -1em;
+  position: relative;
+
+
+//BOXES
+
+  ul.list-layout li,
+  ul.grid-layout li {
+    width: 31.5%;
+    margin: 0 2% 2% 0;
+    padding: 1em;
+    border: 1px solid lighten($brand3, 10%);
+    position: relative;
+    background: #fff;
+    border: 1px solid $shade3;
+    @extend %border-radius-small;
+    min-height: 99px;
+    width: 48.5%;
+    @include breakpoint(max-width 715px) {
+      min-height: 80px;
+      width: 98%;
+      margin: 2% 0;
+    }
+  }
+
+  ul.grid-layout li:nth-child(2n+2) {
+    @include breakpoint(420px) {
+     margin-right: 0;
+   }
+  }
+
+
+//WITHIN BOX
+
+.top-wrapper {
+  position: relative;
+}
+
+.right-wrapper {
+  .project-info {
+    a {
+      img {
+        width: auto;
+        height: 30px;
+        margin-top: .2em;
+        float: left;
+        margin-right: 1em;
+      }
+    }
+  }
+}
+
+.left-wrapper {
+  width: 45px;
+  height: 45px;
+  margin-right: 1em;
+  float: left;
+  margin-bottom: .3em;
+  @include breakpoint(1120px) {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.creation-info {
+  font-weight: $bold;
+  font-size: .8em;
+  margin-bottom: .5em;
+
+  .creator, .date {
+    line-height: 14px;
+  }
+
+  .date {
+    display: inline-block;
+  }
+}
+
+.summary {
+  text-indent: 0;
+  padding-left: 3.9em;
+  @include breakpoint(1120px) {
+    padding-left: 4.9em;
+  }
+}
+
+
+//CAPTION / TITLE
+.top-wrapper .right-wrapper .label,
+.islandora-basic-collection .right-wrapper .label {
+  padding: 0;
+  margin-bottom: .2em;
+
+  a {
+    text-decoration: none;
+    font-weight: $xbold;
+    word-wrap: break-word;
+  }
+}
+
+
+//IMAGES / ICONS
+
+  /*.cwrc-search-teaser-grid .left-wrapper a,
+  .cwrc-search-teaser-list .left-wrapper a,
+  .islandora-basic-collection .left-wrapper*/ a  {
+
+    .no-image{
+      float: left;
+      width: 100%;
+      height: 100%;
+      background-color: $brand4;
+      border-radius: 5px;
+      @extend %border-radius-small;
+
+        &:before {
+          content: '' !important;
+          display: inline-block;
+          height: 100%;
+          vertical-align: middle;
+          margin-right: 0em;
+        }
+
+        .no-image-icon {
+          display: inline-block;
+          vertical-align: middle;
+          width: 100%;
+          color: #fff;
+          text-align: center;
+
+          &:before {
+            @extend %icon-file-empty;
+            margin-right: 0 !important;
+            text-align: center;
+            float: none !Important;
+            margin: 0 auto;
+            display: block;
+            width: 100%;
+            font-size: 1.3em;
+            top: 3px;
+            line-height: normal;
+          }
+        }
+      }
+
+    img {
+      display: block;
+    }
+  }
+
+//if it has an img
+
+  /*.cwrc-search-teaser-grid .left-wrapper,
+  .cwrc-search-teaser-list .left-wrapper,
+  .islandora-basic-collection */.left-wrapper {
+    background: #fff !important;
+    border: 1px solid $shade3;
+    border-radius: 5px;
+    display: inline-block;
+    vertical-align: top;
+
+    a {
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      display: block;
+      transition: all 0.3s ease-in;
+      &.has-image:before {content: none; transition: all 0.3s ease-in;}
+      &.has-image:hover:before {
+        @extend %icon-file-empty;
+        float: right;
+        z-index: 800;
+        bottom: 6px;
+        top: auto;
+        height: 20px;
+        width: 20px;
+        right: 0;
+        background: $brand4;
+        border-radius: 2px;
+        position: absolute;
+        color: #fff;
+        font-size: 12px;
+        line-height: 20px;
+        transition: all 0.3s ease-in;
+      }
+
+      img {
+        display: block !important;
+        padding: 0em;
+        min-width: 100%;
+        min-height: 100%;
+        margin: auto;
+        position: absolute;
+        top: -100%;
+        right: -100%;
+        bottom: -100%;
+        left: -100%;
+        border-radius: 3px;
+        // height: 45px;
+        // width: 45px;
+      }
+    }
+  }
+}
+
+
+
+/* =============================================================================
+    List View
+   ========================================================================== */
+
+//List only
+
+.page-islandora-search .cwrc-search-wrapper .results ul.list-layout,
+.islandora-basic-collection ul.list-layout {
+  padding-bottom: .5em;
+  margin-bottom: .5em;
+  width: 100% !important;
+
+  li {
+    float: left;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid $shade3;
+    padding: 1em 0;
+    border-radius: 0;
+    margin: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+

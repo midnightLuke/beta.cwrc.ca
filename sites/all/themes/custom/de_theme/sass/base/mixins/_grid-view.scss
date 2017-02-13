@@ -1,0 +1,60 @@
+@mixin grid-view {
+//  .views-row {
+    float: left !important;
+    width: 32%;
+    margin-right: 2% !important;
+    @include block-style;
+    padding: 1em 1em 2.5em 1em !important;
+    margin-bottom: 2%;
+    background: #fff;
+    position: relative;
+
+    &:last-child {border-bottom: 1px solid $shade3; padding-bottom: 1em;}
+    &:nth-child(3n+3){margin-right: 0 !important;}
+
+    @include breakpoint(0 48em) {
+      width: 48%;
+      &:nth-child(2n+2){margin-right: 0 !important;}
+      &:nth-child(3n+3){margin-right: 2%;}
+    }
+
+    @include breakpoint(0 38em) {
+      width: 100%;
+      margin-right:0 !important;
+    }
+//  }
+
+  .field-name-field-image {
+    margin-bottom: 1em !important;
+
+    img {
+      width: 100% !important;
+      margin-bottom: 1em;
+    }
+  }
+
+  .read-more-link a {
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+  }
+
+  .view-all-link a {
+    position: absolute;
+    left: 1em;
+    bottom: 1em;
+  }
+}
+
+//3 column grid for basic blocks
+
+@mixin grid-basic-block {
+  float: left ;
+  width: 32% !important;
+  margin-right: 2% !important;
+  &:last-child{margin-right: 0 !important;}
+  @include breakpoint(0 51em) {
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "de_theme",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "breakpoint-sass": "~2.4.6",
+    "dropkick": "~2.0.1",
+    "FlexSlider": "*",
+    "iosOrientationFix": "*",
+    "jquery-placeholder": "~2.0.8",
+    "jquery-searcher": "~0.2.0",
+    "matchHeight": "~0.5.2",
+    "modular-scale": "~2.0.6",
+    "respond": "~1.4.2",
+    "sass-toolkit": "~2.7.0",
+    "SimpleStateManager": "~2.4.0",
+    "singularity": "~1.5.1",
+    "tablesaw": "~1.0.4",
+    "velocity": "^1.2.2",
+    "inuit-box-sizing": "~0.2.0",
+    "inuit-normalize": "~3.0.2",
+    "slick-carousel": "~1.5.8"
+  }
+}

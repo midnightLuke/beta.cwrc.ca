@@ -1,0 +1,171 @@
+/* navigation/_sub-nav.scss */
+
+.block-sub-nav{
+
+  .menu{
+    @include reset;
+  }
+  // all list items
+  .menu li {
+    @include reset;
+    list-style: none;
+  }
+
+  // all links
+  .menu li a{
+    display: block;
+    text-decoration: none;
+    @include adjust-font-size-to(13px);
+    line-height: ms(.75);
+  }
+
+
+
+  // GENERAL
+
+  .menu-block-wrapper > .menu > .active-trail .menu{
+    margin-top: ms(-2);
+    padding-left: ms(-1);
+    li{
+      margin-bottom: ms(-2);
+      &.last{
+        margin-bottom: 0;
+      }
+    }
+    a{
+      &:hover{
+      }
+      .active,
+      .active-trail{
+
+      }
+    }
+  }
+
+
+  // FIRST LEVEL
+
+
+  // 1st level list items
+
+  .menu-block-wrapper > .menu > li{
+    margin-bottom: ms(-2);
+    &.last{
+      margin-bottom: 0;
+    }
+  }
+
+  // 1st level links
+
+  .menu-block-wrapper > .menu > li > a{
+    // border-radius: 2px;
+    // background-color: $light-grey;
+    // color: $dark-grey;
+    // padding: ms(-3) ms();
+    // transition: background-color 0.3s ease-out, color 0.3s ease-out;
+    // &:hover{
+    //   background-color: $neutral-grey;
+    // }
+    // &:active{
+    //   background-color: $neutral-grey;
+    // }
+    // &.active-trail{
+    //   background-color: $dark-grey;
+    //   color: white;
+    //   // &:hover{
+    //   // }
+    //   // &:active{
+    //   // }
+    // }
+  }
+
+  // SECOND LEVEL
+
+    // 2nd level list
+    // .menu-block-wrapper > .menu > .active-trail > .menu{
+
+    // }
+
+    // 2nd level list items
+
+    // .menu-block-wrapper > .menu > .active-trail > .menu > li{
+
+    // }
+
+
+    // 2nd level links
+
+    .menu-block-wrapper > .menu > .active-trail > .menu > li > a{
+      // border-radius: 2px;
+      // border: 1px solid $light-grey;
+      // color: $dark-grey;
+      // padding: ms(-3) ms();
+      // transition: background-color 0.3s ease-out, color 0.3s ease-out, border-color 0.3s ease-out;
+      // &:hover{
+      //   background-color: $light-grey;
+      // }
+      // &:active{
+      //   background-color: $neutral-grey;
+      //   border-color: $neutral-grey;
+      // }
+      // &.active-trail{
+      //   background-color: $dark-grey;
+      //   color: white;
+      //   &:hover{
+      //   }
+      //   &:active{
+      //   }
+      // }
+    }
+
+
+    // THIRD LEVEL
+
+    // .menu-block-wrapper > .menu > .active-trail > .menu > li.expanded > .menu{
+
+    // }
+
+    // .menu-block-wrapper > .menu > .active-trail > .menu > li.expanded .menu > li{
+
+    // }
+
+    .menu-block-wrapper > .menu > .active-trail > .menu > li.expanded > .menu > li a{
+      // border-radius: 2px;
+      // border: 1px solid $light-grey;
+      // color: $dark-grey;
+      // padding: ms(-3) ms();
+      // transition: background-color 0.3s ease-out, color 0.3s ease-out, border-color 0.3s ease-out;
+      // &:hover{
+      //   background-color: $light-grey;
+      // }
+      // &:active{
+      //   background-color: $neutral-grey;
+      //   border-color: $neutral-grey;
+      // }
+      // &.active-trail{
+      //   background-color: $dark-grey;
+      //   color: white;
+      //   &:hover{
+      //   }
+      //   &:active{
+      //   }
+      // }
+    }
+
+
+    // FOURTH LEVEl
+
+    // 4th level list
+    // .menu-block-wrapper > .menu > .active-trail > .menu > li.expanded > .menu li.expanded .menu{
+      // border-left-color: $brand-color;
+    // }
+
+
+    // everything else
+
+  // .menu li .menu{
+    // a:hover{
+      // color:  $brand-color;
+    // }
+  // }
+}

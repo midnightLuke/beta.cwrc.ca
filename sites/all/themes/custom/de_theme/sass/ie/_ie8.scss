@@ -1,0 +1,68 @@
+/* ie/_ie8.scss */
+
+
+.lt-ie9{
+
+
+
+  #logo{
+    img {
+      @include breakpoint(max-width $standard-screen) {
+        width:auto;
+      }
+    }
+  }
+
+
+  .page-eform-submit-staffing-request *, .page-eform-submit-staffing-request *:after, .page-eform-submit-staffing-request *:before {
+    box-sizing: content-box !important;
+  }
+
+
+  .ui-datepicker select.ui-datepicker-month{
+    width:  45%;
+  }
+
+
+  .block-main-nav{
+    .menu-block-1 > .menu > li .menu-wrapper > .menu{
+      @include rhythm-borders(1px,0,$base-font-size,solid);
+      border-color: darken(white,30);
+    }
+
+    .menu-block-1 .menu-wrapper{
+      background-image: url('../images/misc-icons/arrow-up5.png') !important;
+    }
+
+  }
+
+  .tools #block-intra-user-my-echidnet .content-wrapper .content{
+    @include rhythm-borders(1px,0,$base-font-size,solid);
+    border-color: shade(white,15%);
+  }
+
+  .group-banner-copy{
+    .field-name-field-banner-image{
+      img{
+        width:  auto;
+      }
+    }
+  }
+
+
+  // water cooler
+
+  .block-watercooler-photo-gallery{
+    width:  100% !important;
+    float:  right;
+    clear:  right;
+    margin-right: 0;
+  }
+
+  .photo-gallery-landing{
+    img{
+      width:  inherit;
+      height: auto !important;
+    }
+  }
+}

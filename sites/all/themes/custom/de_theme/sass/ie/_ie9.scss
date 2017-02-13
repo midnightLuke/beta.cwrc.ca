@@ -1,0 +1,150 @@
+/* ie/_ie9.scss */
+
+
+// .lt-ie10,
+// .ie9 {
+
+  //body{background: green;}
+
+
+
+  //HEADER
+
+  li.nav-user-menu > a:before {
+    font-size: 38px !important;
+  }
+
+  li.nav-help > a:before {
+    height: 17px;
+    line-height: 18px;
+    top: 0px;
+    width: 17.5px;
+  }
+
+  #block-cwrc-menu-links-login-link a:before {
+    font-size: 15px;
+  }
+
+
+  //FRONT PAGE WHAT ARE WE
+
+  #block-cwrc-homepage-slider-writing header h2:before, #block-cwrc-homepage-slider-collecting header h2:before, #block-views-what-we-are-sharing-block header h2:before {
+    font-size: 25px;
+  }
+
+  #block-cwrc-homepage-slider-collecting header h2:before {font-size: 35px;}
+
+
+  //FORMS
+
+  select {
+    padding: 0;
+    line-height: normal;
+  }
+
+
+  //ISLANDORA COLLAB
+
+  .islandora-basic-collection dt:before, .islandora-basic-collection .islandora-basic-collection-object .islandora-collectioncmodel dt:before, .islandora-basic-collection dl.islandora-basic-collection-object dt.islandora-basic-collection-thumb:before {
+    font-size: 22px !important;
+  }
+
+
+  //SEARCH
+
+  .cwrc-search-wrapper .results ul li .below .no-image:before {
+    font-size: 17px !important;
+    padding: .85em .75em .8em .9em;
+  }
+
+
+  //PROFILE
+
+  article.profile .field-name-field-full-name:before {
+    font-size: 19px !important;
+  }
+
+
+  //USER DASHBOARD
+
+  #block-cwrc-dashboards-user-privatemsg .view-all-messages a:before{
+    font-size: 10px !important;
+   }
+
+   #block-cwrc-dashboards-user-privatemsg .compose-new-message a:before {
+    font-size: 22px;
+   }
+
+   #block-cwrc-dashboards-user-bookmark-lists .content .new-bookmark a:before {
+    font-size: 18px !important;
+   }
+
+   .lists-with-actions .actions-list-group li a span.no-txt:after {font-size: 16px;}
+   .lists-with-actions .actions-list-group li a span.delete-icon.no-txt:after {
+    font-size: 12px;
+   }
+
+  .admin-access-wrapper a:before {
+    font-size: 22px !important;
+  }
+
+
+  //PROJECTS
+
+  #block-cwrc-dashboards-project-utilities ul.cwrc-dashboard-utilities-list li a:before {
+    font-size: 18px !important;
+  }
+
+  #block-cwrc-dashboards-project-utilities ul.cwrc-dashboard-utilities-list li.back-up a:before {
+    font-size: 15px !important;
+  }
+
+  .cwrc-dashboards-new-member-link-wrapper a:before {
+    font-size: 14px !important;
+  }
+
+  #block-views-dd0cd778927866856aefa269a3cfc970 .field-items .field-item a:before {
+    font-size: 15px;
+  }
+
+
+//}///-----end
+
+.cwrc.ui-layout-west, #tree.ui-layout-center.jstree.jstree-1.jstree-cwrc.ui-layout-pane.ui-layout-pane-center  {
+  -ms-overflow-style: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

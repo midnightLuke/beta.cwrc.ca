@@ -1,0 +1,42 @@
+
+/* =============================================================================
+   VIEW NEWS
+   ========================================================================== */
+
+.view-News .views-row {
+  float: left;
+  width: 100%;
+}
+
+//POSTED
+
+.view-News .views-field.views-field-created {
+  font-weight: $bold;
+}
+
+.view-News.view-display-id-page {
+  .views-field-title a {
+    font-size: ms(.5);
+  }
+
+  .field-name-field-image {
+    float: left;
+  }
+
+  .field-name-field-image img {
+    width: auto !important;
+  }
+}
+
+.view-News .views-field.views-field-view-node {
+  float: right;
+}
+
+.view-News.view-display-id-page {
+  .field-name-body {
+    padding-left: 6.2em;
+    @include breakpoint(0 400px) {
+      padding-left: 0;
+    }
+  }
+}

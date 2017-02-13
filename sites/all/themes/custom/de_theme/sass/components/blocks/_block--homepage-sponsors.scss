@@ -1,0 +1,68 @@
+
+/* =============================================================================
+   BLOCK HOMEPAGE SPONSORS
+   ========================================================================== */
+
+#block-cwrc-theme-compat-sponsors-homepage-block {
+  float: left;
+  width: 100%;
+  border-top: 1px solid $shade3;
+  margin: 3.5em 0;
+  padding: 2em 0 0 0;
+
+ ul.sponsors {
+  margin: 0 5%;
+  padding: 0;
+  width: 90%;
+
+  li {
+    margin-bottom: 0;
+    list-style: none;
+    list-style-image: none;
+    display: inline-block;
+    float: left;
+
+    &.sponsor-1 {
+      width: 18%;
+      margin-right: 10%;
+
+      img {
+        width: 100%;
+      }
+    }
+
+
+    &.sponsor-2 {
+      width: 70%;
+      img {
+        width: 100% !important;
+        max-width: none
+      }
+    }
+
+    @include breakpoint(0 650px) {
+      &.sponsor-1, &.sponsor-2 {
+        width: 100%;
+        margin: 0;
+        img {width: auto;}
+      }
+
+      &.sponsor-1 {
+        margin-bottom: 1.5em;
+      }
+    }
+  }
+ }
+
+  span.more-sponsors a {
+    display: block;
+    width: 100%;
+    float: right;
+    text-align: right;
+    margin: 2em 0 0 0;
+    border-top: 1px solid $shade3;
+    border-bottom: 1px solid $shade3;
+    padding: 1em 0;
+    font-weight: $bold;
+  }
+}

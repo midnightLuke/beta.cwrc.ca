@@ -1,0 +1,57 @@
+
+/* =============================================================================
+   VIEW EVENTS
+   ========================================================================== */
+
+//DATE AND TIME
+
+.region-content .view .view-events {
+  font-size: .9em;
+}
+
+.view-events .views-field.views-field-field-event-date-1 {
+  float: left;
+  width: 100%;
+  font-weight: $bold;
+
+  .field-name-field-event-date {
+    display: inline-block;
+    margin: 0;
+    margin-right: .1em
+  }
+}
+
+//PAGE ONLY
+
+.region-content .view.view-events.view-display-id-page {
+
+  .views-field-title a {
+    font-size: ms(.5);
+  }
+
+  .views-field.views-field-field-event-date-1 {
+    &:before {
+      @include circle-icon;
+      @extend %icon-calendar;
+    }
+  }
+
+  .field.field-name-field-location {
+    float: left;
+    width: 100%;
+    &:before {
+      @include circle-icon;
+      @extend %icon-place;
+      font-size: 23px !important;
+      margin-right: 0 !important;
+    }
+
+    .field-items {
+      padding-left: 2.1em;
+    }
+  }
+
+  .views-row {
+    @include grid-view;
+  }
+}

@@ -1,0 +1,39 @@
+/* =============================================================================
+   BUTTON
+   ========================================================================== */
+
+@mixin btn{
+  font-weight: $xbold !important;
+  color: #fff;
+  background-color: $brand4;
+  font-size: 11.5px !important;
+  line-height: 16px;
+  padding: .75em 1.3em;
+  display: inline-block;
+  text-decoration: none;
+  margin: 0 .5em .8em 0;
+  @extend %border-radius;
+  @extend %transition;
+
+    &:hover {
+      background-color: darken($brand4, 7%);
+    }
+}
+
+@mixin btn-blue {
+  font-weight: $xbold !important;
+  color: #fff;
+  background-color: $brand2;
+  font-size: 11.5px !important;
+  line-height: 16px;
+  padding: .75em 1.3em;
+  display: inline-block;
+  text-decoration: none;
+  margin: 0 .5em .8em 0;
+  @extend %border-radius;
+  @extend %transition;
+
+    &:hover {
+      background-color: darken($brand2, 7%);
+    }
+}

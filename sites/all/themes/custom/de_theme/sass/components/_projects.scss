@@ -1,0 +1,536 @@
+/* =============================================================================
+    PROJECTS SECTIONS
+   ========================================================================== */
+
+
+//GENERAL
+
+.cwrc-project-homepage .section-content .region-content {
+  background-color: #fff;
+
+  .block {
+    padding: 0 !important;
+    background: none;
+    border: none;
+  }
+
+  .group-footer,
+  .group-left{
+    width: 100%;
+    margin-right: 0;
+    background: #fff;
+    margin-bottom: 0;
+    clear: none;
+    @include breakpoint($standard-screen) {
+     width: 63.46809%;
+    }
+  }
+
+  .group-right {
+    width: 100%;
+    @include breakpoint($standard-screen) {
+     width: 26.40426%;
+    }
+  }
+}
+
+
+//PAGE TITLE
+
+.cwrc-project-homepage {
+   h1#page-title {
+
+    &:before {
+      content: none;
+    }
+   }
+ }
+
+
+//PROJECT TITLE
+
+.cwrc-project-homepage .field-name-title h2 {
+  font-weight: bold !important;
+  font-size: 1.8em;
+}
+
+//INTRODUCTION;
+
+.cwrc-project-homepage .field-name-field-project-intro {
+  font-size: ms(1);
+  font-weight: 300;
+  margin: 1.4em 0;
+}
+
+.node-project .field {
+  ul li {
+    list-style: disc;
+  }
+}
+
+//BODY
+
+.cwrc-project-homepage .group-left .field, .cwrc-project-homepage .group-right .field {
+
+  // ul, ol {
+  //   @include reset;
+  //   li {
+  //     @include reset;
+  //   }
+  // }
+
+  ul, ol {
+    @include reset;
+    margin: 0 0 1em 0;
+    width: 100%;
+    float: left;
+
+    li {
+      @include reset;
+      ul, ol {
+        margin: .2em 0 .2em 2em;
+      }
+    }
+  }
+
+
+}
+
+
+
+
+/* =============================================================================
+   BANNER
+   ========================================================================== */
+
+.region-project-banner {
+  width: 100%;
+  height: 300px;
+
+  .field-name-field-banner-image {
+    width: 100%;
+    height: 300px;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+
+/* =============================================================================
+   FEATURED OBJECT
+   ========================================================================== */
+
+ #block-views-project-featured-object-block {
+  border: none;
+  margin-top: 1.5em;
+  border-radius: 0;
+
+
+  h2 {
+    background: none;
+    color: $brand1;
+    padding: 0 0 1em 0;
+    margin: 0 0 1em 0 !important;
+    border-bottom: 1px solid $shade3;
+    border-radius: 0;
+    font-size: 1.2em;
+
+    a {
+      font-weight: $xbold;
+      &:before{content: none;}
+    }
+  }
+
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .view {
+    margin-top: .5em;
+    float: left;
+  }
+
+  .field-name-field-image img {
+    border-radius: 5px;
+    border: 1px solid $shade3;
+    margin-bottom: 0;
+    float: left;
+    margin-left: 0;
+    margin-right: 1em;
+    margin-bottom: .5em;
+    @include breakpoint(0 400px) {
+      width: 100%;
+      margin: 0 0 1em;
+    }
+  }
+
+  .field-label {
+    display: none;
+  }
+
+  .field-name-field-object a {
+    text-decoration: none;
+    margin-bottom: .5em;
+    font-weight: bold;
+    color: $brand1;
+    font-size: 1.2em;
+    display: block;
+  }
+ }
+
+
+/* =============================================================================
+    SIDEBAR
+   ========================================================================== */
+
+.group-left,
+.group-footer,
+.cwrc-project-homepage .section-content .group-right .field {
+  border-radius: 5px;
+  margin-bottom: ms(0);
+  background: #fff;
+}
+
+.cwrc-project-homepage .field-name-group-group {
+  span {
+    margin-top: .7em;
+    display: block;
+  }
+}
+
+//sidebar content
+
+.cwrc-project-homepage .field-name-field-acknowledgements.field-type-field-collection {
+  a {
+    color: #fff !important;
+  }
+
+  .field-item {
+    margin-top: .5em;
+  }
+
+  .field-name-field-title {
+    font-size: 1.1em;
+    font-weight: $bold;
+  }
+
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .field-type-text-long {
+    padding: 1em;
+    background: #eee;
+    color: $brand1;
+    float: right;
+    width: 100%;
+
+    .field-item {
+      margin-top: 0;
+    }
+  }
+}
+
+
+.cwrc-project-theme-bloodorange, .cwrc-project-theme-burntsienna, .cwrc-project-theme-darktan, .cwrc-project-theme-desert, .cwrc-project-theme-forest, .cwrc-project-theme-marine, .cwrc-project-theme-mediumblue, .cwrc-project-theme-pomegranate, .cwrc-project-theme-sage, .cwrc-project-theme-slatemagenta {
+  &.cwrc-project-homepage .field-name-field-acknowledgements.field-type-field-collection .field-type-text-long{
+    color: #fff;
+  }
+}
+
+//SIDEBAR MENU
+
+.cwrc-project-theme-default .sidebar .block-menu-block ul li a {
+  color: $brand4;
+}
+
+.sidebar .block-menu-block ul li a.active:hover {
+  background-color: darken($brand4, 7%);
+}
+
+
+/* =============================================================================
+    FEATURED LINKS
+   ========================================================================== */
+
+.field-name-field-featured-links {
+  margin-bottom: 1.8em !important;
+  float: left;
+  width: 100%;
+
+  .field-item {
+    margin-bottom: .7em;
+
+    a {
+      @include btn-w-icon;
+      display: block;
+      color: #fff !important;
+      padding: 1.2em .8em;
+      font-size: .9em !important;
+      width: 100%;
+
+      &:before {
+        @extend %icon-link;
+      }
+    }
+
+    &:last-child,
+    &:last-child a {
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+
+/* =============================================================================
+    SOCIAL LINKS
+   ========================================================================== */
+
+.cwrc-project-homepage .field-name-field-social-links {
+  margin-top: 1em;
+  float: left;
+  width: 100%;
+
+  .field-item {
+    float: left;
+    width: 100%;
+    margin-bottom: .7em;
+  }
+
+  .field-item a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: $bold;
+    color: $brand1;
+    font-size: .9em;
+    display: block;
+    border: 1px solid $brand1;
+    padding: .7em;
+    border-radius: 5px;
+
+    &:before {
+      @extend %icon-star;
+      top: -1px;
+    }
+    &.facebook:before {
+      @extend %icon-facebook;
+      top: 0;
+    }
+    &.twitter:before {
+      @extend %icon-twitter;
+      top: 0;
+    }
+  }
+}
+
+
+
+/* =============================================================================
+    RELATED PROJECTS
+   ========================================================================== */
+
+.field-name-field-related-projects {
+  border-bottom: 1px solid $shade3;
+  padding: 1em 0;
+  border-radius: 0 !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 1.8em;
+
+  .field-label {
+    border-bottom: 1px solid $shade3;
+    border-radius: 0 ;
+    padding-bottom: 1em;
+    font-size: 1.1em;
+  }
+
+  .field-items {
+    padding: 1em 0 1.2em;
+
+    .field-item {
+      margin-bottom: .7em;
+      &:last-child{margin-bottom: 0;}
+
+      a{
+        font-weight: $bold;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+
+
+/* =============================================================================
+    SPONSORS
+   ========================================================================== */
+
+.cwrc-project-homepage .group-footer .field-collection-container{
+  float: left;
+  margin-top: 1em;
+  width: 100%;
+
+  .field-label {
+    font-size: 1.2em;
+    margin-bottom: .7em;
+    border-bottom: 1px solid $shade3;
+    padding: 0 0 1em 0;
+  }
+
+  .field-items {
+    float: left;
+
+    .field-item {
+      float: left;
+      margin-right: 1.5em;
+      margin-bottom: 1.5em;
+
+      img {
+        max-height: 115px;
+        width: auto;
+      }
+    }
+  }
+}
+
+
+
+/* =============================================================================
+   JOIN GROUP
+   ========================================================================== */
+
+.cwrc-project-homepage .field-name-group-join-form {
+  border: 1px solid $shade3;
+  float: left;
+  width: 100%;
+  padding: .7em;
+}
+
+.cwrc-project-homepage .section-content #block-cwrc-projects-project-group-join.block {
+  margin-bottom: 0;
+}
+
+.cwrc-project-homepage .section-content .region-content #block-cwrc-projects-project-group-join.block form .form-actions a,
+.cwrc-project-homepage .section-content .region-content #block-cwrc-projects-project-group-join.block form .form-actions input#edit-submit {
+  margin-bottom: 0 !important;
+  margin: 0 .5em 0em 0 !important;
+  margin-top: 0 !important;
+}
+
+
+
+
+/* =============================================================================
+   FOOTER REGION - CONTACT
+   ========================================================================== */
+
+.node-type-project .section-content {
+  border-bottom: none;
+  padding-bottom: 5em;
+}
+
+.node-type-project #footer .region-footer  {
+  color: $brand1;
+  background: #fff !important;
+
+  h3, a {
+    color: $brand1;
+  }
+}
+
+.node-type-project .region-main-suffix {
+  background-color: $brand4;
+  margin-bottom: 0;
+  padding-top: 4.5em;
+  padding-bottom: 4em;
+}
+
+#block-views-dd0cd778927866856aefa269a3cfc970 {
+  width: 100%;
+  float: left;
+  color: #fff;
+  a{color: #fff !important; text-decoration: none;}
+
+  h2 {
+    display: inline-block;
+    float: left;
+    color: #fff;
+    font-weight: $xbold;
+    margin-right: 1.5em;
+    line-height: 27px;
+  }
+
+  .field-items {
+    float: left;
+    width: auto !important;
+    display: inline-block;
+    margin-right: 1.5em;
+    margin-bottom: 1em;
+
+    .field-item a {
+      line-height: 27px;
+      &:before {
+        background: #fff;
+        color: $brand1;
+        border-radius: 25px;
+        line-height: 25px;
+        font-size: 1.5em;
+        width: 25px;
+        height: 25px;
+      }
+    }
+  }
+
+  .field-name-field-phone-number {
+    a:before {
+      @extend %icon-phone;
+    }
+  }
+
+  .field-name-field-email-address {
+    a:before {
+      @extend %icon-message;
+      font-size: 1.1em !important;
+    }
+  }
+
+  .field-name-field-copyrights {
+    float: right;
+    a {text-decoration: underline;}
+  }
+}
+
+
+
+/* =============================================================================
+    IMPORT
+   ========================================================================== */
+
+@import 'projects/project-themes';
+@import 'projects/project-admin-settings';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

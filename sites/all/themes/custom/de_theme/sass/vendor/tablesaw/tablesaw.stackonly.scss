@@ -1,0 +1,39 @@
+/* tablesaw.stackonly.scss Echidna overrides */
+
+// import base file
+@import "../bower_components/tablesaw/dist/stackonly/tablesaw.stackonly";
+
+// echidna tablesaw reset overrides. Customizations
+// should be done in the components sass partial
+// (eg. components/_custom.scss)
+
+.tablesaw th,
+.tablesaw td {
+  padding: 0;
+}
+
+.tablesaw thead tr:first-child th {
+  padding:0;
+}
+
+.tablesaw-stack tbody tr {
+  border-bottom: none;
+}
+
+@media only all {
+  .tablesaw-stack td .tablesaw-cell-label,
+  .tablesaw-stack th .tablesaw-cell-label {
+    padding: 0;
+  }
+
+  .tablesaw-stack th .tablesaw-cell-label-top,
+  .tablesaw-stack td .tablesaw-cell-label-top {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+// initiate tablesaw at our smallest breakpoint
+.view-staff-directory .view-content {
+  @include tablesaw-stack(48em);
+}

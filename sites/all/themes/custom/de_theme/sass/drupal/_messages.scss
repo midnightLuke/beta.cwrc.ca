@@ -1,0 +1,25 @@
+/* drupal/_messages.scss */
+
+div.messages{
+  @include reset;
+  margin-bottom: ms();
+  margin-top: 0;
+  padding: ms(-1);
+  padding-left: ms(1.75);
+  border-radius: 5px;
+}
+
+
+//WARNING USED FOR STAMPS
+
+.messages.warning {
+  border-radius: 5px;
+  background-image: none;
+  padding-left: 1em;
+  color: $brand1;
+  border-color: #FFF38F;
+  background-color: #FFFDE0;
+  &:before {
+    @extend %icon-bell;
+  }
+}

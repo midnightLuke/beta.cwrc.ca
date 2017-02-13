@@ -1,0 +1,14 @@
+@mixin button-link-styles($bg-color: transparent, $text-color: $brand-color, $bg-color-hover: shade(white,8%), $text-color-hover: tint(black,8%), $bg-color-active: $brand-color, $text-color-active: white, $border-width: 0, $border-style: solid, $border-color: $neutral-grey) {
+  background-color: $bg-color;
+  font-weight: $bold;
+  color: $text-color;
+  border: $border-width $border-style $border-color;
+  &:hover{
+    background-color: $bg-color-hover;
+    color: $text-color-hover;
+  }
+  &:active{
+    background-color: $bg-color-active;
+    color: $text-color-active;
+  }
+}

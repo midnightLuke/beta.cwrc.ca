@@ -1,0 +1,92 @@
+/* =============================================================================
+    PROJECT DASHBOARD - UTILITIES
+   ========================================================================== */
+
+
+#block-cwrc-dashboards-project-utilities{
+
+  .content {
+    padding: 0;
+  }
+
+  h2:before {
+    top: 2px;
+    left: -5px !important;
+  }
+
+  ul.cwrc-dashboard-utilities-list li {
+    padding: 0;
+    margin-bottom: 0;
+    position: relative;
+
+    a {
+      @extend %transition;
+      display: block;
+      border-bottom: 1px solid $shade3;
+      color: $brand1;
+      font-weight: $normal;
+      line-height: 12px;
+      padding: 1em;
+
+      &:before {
+        @extend %icon-find-and-replace;
+        font-size: 1.5em !Important;
+        line-height: 13px !Important;
+        left: -7px !Important;
+        width: 25px !Important;
+      }
+
+      &:hover {
+        color: $brand2;
+      }
+    }
+
+    &:last-child {
+      a {
+        border-bottom: none;
+      }
+    }
+
+    &.find-replace {
+      a:before {
+        font-size: 1.8em !Important;
+      }
+    }
+
+    &.back-up {
+      a:before {
+        @extend %icon-floppy-disk;
+        font-size: 1em !Important;
+      }
+    }
+
+    &.edit-menu{
+      a:before {
+        @extend %icon-edit;
+        font-size: 1.2em !Important;
+        line-height: 15px;
+      }
+    }
+
+    &.add-page{
+      a:before {
+        content: "+";
+        font-weight: $bold;
+        top: -4px;
+      }
+    }
+
+    &.edit-settings{
+      a:before {
+        @extend %icon-settings;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+

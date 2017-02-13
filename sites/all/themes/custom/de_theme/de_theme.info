@@ -1,0 +1,80 @@
+name =  de_theme
+description =  de_theme theme based on the Aurora base theme.
+core = 7.x
+base theme = aurora
+
+; ========================================
+; Regions
+; ========================================
+
+; Header
+regions[masthead]       = 'Masthead'
+regions[masthead_secondary]     = 'Secondary Masthead'
+regions[navigation]     = 'Main Navigation'
+
+; Content
+regions[breadcrumb]    = 'Breadcrumb Region'
+regions[main_prefix]    = 'Main Content Region Prefix'
+regions[main_prefix_right] = 'Main Content Region Prefix (Right)'
+regions[toolbar]        = 'Toolbar Region'
+regions[user_menu]      = 'User Menu'
+regions[project_banner] = 'Project Banner'
+regions[slider_region] = 'Slider Region'
+regions[sidebar_first]  = 'Sidebar Primary'
+regions[content]        = 'Main Content Region'
+regions[sidebar_second] = 'Sidebar Secondary'
+regions[main_suffix]    = 'Main Content Region Suffix'
+
+; Footer
+regions[sponsor_region] = 'Sponsor Region'
+regions[footer]         = 'Footer'
+
+; ========================================
+; Stylesheets
+; ========================================
+
+; remove core stylesheets
+stylesheets[all][] = system.menus.css
+stylesheets[all][] = comment.css
+stylesheets[all][] = field_collection.theme.css
+
+; stylesheets from Bower Components
+; stylesheets[all][] = 'bower_components/example_component/component.css'
+
+; stylesheets from vendor packages
+; stylesheets[all][] = 'css/vendor/package/file.css
+
+; contains all compiled code from sass directory
+stylesheets[all][] = 'css/de_theme.css'
+
+; uncomment the below if we will not be maintaining the clients website
+; stylesheets[all][] = 'css/maintain.css'
+
+; i don't need to explain this
+stylesheets[print][] = 'css/print.css'
+
+; ========================================
+; Bower components (should be loaded via template if possible if not used sitewide)
+; ========================================
+
+scripts[] = bower_components/slick-carousel/slick/slick.min.js
+scripts[] = bower_components/SimpleStateManager/dist/ssm.min.js
+scripts[] = bower_components/matchHeight/jquery.matchHeight-min.js
+
+; ========================================
+; Scripts
+; ========================================
+
+scripts[] = dist/vendor/appendAround.min.js
+scripts[] = dist/vendor/jquery.flexverticalcenter.min.js
+scripts[] = dist/script.min.js
+scripts[] = dist/header.js
+
+; ========================================
+; Modernizr
+; ========================================
+
+
+; ========================================
+; Settings
+; ========================================

@@ -1,0 +1,271 @@
+
+// Carousel Block    ==============================================
+
+//BACKGROUDN BANNER
+
+.page-islandora-object.page-islandora-object-islandoraroot {
+  .region-project-banner {
+    height: auto;
+  }
+}
+
+
+//BUTTONS
+
+.view-nodequeue-projects-featured, .view-homepage-slider  {
+  position: relative;
+  z-index: 10;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    &:before {
+      content:"";
+      background-image: url('../img/texture-bck.png');
+      position: absolute;
+      top: 0;
+      height: 400px;
+      height: 100%;
+      width: 100%;
+    }
+
+  .view-content {
+   @extend .container;
+    padding-top: 6em;
+    padding-bottom: 6em;
+    @include breakpoint(0 745px){
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    }
+  }
+
+  button {
+    text-indent: -999px;
+    overflow: hidden;
+    width: 35px;
+    height: 65px;
+    background-image: url('../img/slide-arrow-left.png');
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-color: transparent;
+    filter:none;
+    border: none;
+    position: absolute;
+    z-index: 100;
+    top: 35%;
+    left: 0;
+    float: left;
+    @include breakpoint(0 1250px){
+      left: 3%;
+      height: 38px;
+      top: 48%;
+    }
+
+    &.slick-next {
+      background-image: url('../img/slide-arrow-right.png');
+      background-repeat: no-repeat;
+      background-position: center right;
+      float: right;
+      left: auto;
+      right: 0;
+      @include breakpoint(0 1250px){
+        right: 3%;
+      }
+    }
+  }
+}
+
+//focus padding
+
+.slick-initialized .slick-slide {
+  padding: .5em 0 .3em 0;
+}
+
+//SLIDER
+
+.slick-slider {
+  position: relative;
+  display: block;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  -ms-touch-action: pan-y;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.slick-list {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin: 0 4em;
+  padding: 0;
+  @include breakpoint(0 745px){
+    margin: 0 1.7em;
+  }
+}
+
+.slick-track {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: block;
+  @include breakpoint(0 745px){
+    text-align: center;
+      &:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -0.25em; /* Adjusts for spacing */
+    }
+  }
+}
+
+.slick-initialized .slick-slide {
+  display: block;
+  float: left;
+  height: 100%;
+  min-height: 1px;
+  @include breakpoint(0 745px){
+    display: inline-block !important;
+    vertical-align: middle;
+    float: none !important;
+    padding: 0 .7em;
+
+    .field {
+      float: left;
+    }
+  }
+}
+
+
+//INNER SLIDER
+
+#block-views-66553d96d3282749a55e20a1851a2cac {
+  h2 {
+    @include visually-hidden;
+  }
+}
+
+.view-nodequeue-projects-featured {
+  color: #fff;
+  a {
+    color: #fff;
+  }
+
+  .field {
+    top: 1em;
+    position: relative;
+
+    @include breakpoint(0 745px){
+      width: 100%;
+      top: 0;
+    }
+  }
+}
+
+.view-nodequeue-projects-featured .field.field-name-field-logo {
+  float: left;
+  margin-right: 1em;
+  padding-left: 1em;
+  top: 0;
+  position: relative;
+  z-index: 700;
+  @include breakpoint(0 745px){
+    margin-right: 0;
+    padding-left: .1em;
+  }
+
+  img {
+    border-radius: 5px;
+    @include breakpoint(0 745px){
+      width: 100%;
+      margin-bottom: 1em;
+    }
+  }
+}
+
+.view-nodequeue-projects-featured .field-name-title a {
+  text-decoration: none;
+  font-weight: $xbold;
+  font-size: ms(1);
+  cursor: pointer;
+  @include breakpoint(0 745px){
+    font-size: ms(.2);
+  }
+}
+
+.view-nodequeue-projects-featured .field-name-body {
+  font-weight: $bold;
+  position: relative;
+  z-index: 100;
+}
+
+.view-nodequeue-projects-featured .field-name-node-link {
+  top: 2em;
+  @include breakpoint(0 745px){
+    top: 0;
+    margin:1em 0;
+  }
+
+  a {
+    text-transform: uppercase;
+    font-weight: $xbold;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

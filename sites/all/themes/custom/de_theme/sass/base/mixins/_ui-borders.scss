@@ -1,0 +1,4 @@
+// default borders
+@mixin ui-borders($border-width: 1px, $border-style: solid, $border-color: $ui-borders-color) {
+  border: $border-width $border-style $border-color;
+}

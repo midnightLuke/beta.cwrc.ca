@@ -1,0 +1,134 @@
+
+/* =============================================================================
+    ADMIN SETTINGS
+   ========================================================================== */
+
+.page-node-edit.node-type-project.admin-menu form.node-project-form{
+
+ fieldset.form-wrapper {
+  a.fieldset-title {
+    font-size: 1.3em;
+  }
+ }
+
+ fieldset.collapsible.form-wrapper label {
+  text-transform: none;
+  font-weight: $xbold;
+ }
+
+  .form-type-managed-file,
+  .fieldset-wrapper > .field-type-text.field-name-title-field.field-widget-text-textfield {
+    margin-bottom: 1em;
+  }
+
+ .form-type-managed-file,
+ .fieldset-wrapper > .field-type-text.field-name-title-field.field-widget-text-textfield,
+ .fieldset-wrapper > .form-item {
+    background-color: #FBFBFB;
+    padding: .7em;
+    border-radius: 5px;
+    border: 1px solid $shade3;
+  }
+
+  .field-widget-text-textarea,
+  .field-widget-text-textarea-with-summary {
+    background-color: #FBFBFB;
+    padding: .7em;
+    border-radius: 5px;
+    border: 1px solid $shade3;
+    margin-bottom: 1em;
+
+    .form-item {
+      background: none;
+      padding: 0;
+      border: none;
+    }
+
+    fieldset.filter-wrapper.form-wrapper {
+      background: #fff;
+      margin-top: .7em;
+      padding: .7em;
+      border: 1px solid $shade3;
+    }
+  }
+
+  table#field-related-projects-values,
+  table#field-featured-links-values,
+  #field-social-links-add-more-wrapper table{
+    @extend %blue-table;
+  }
+
+  table#field-sponsors-values,
+  table#field-featured-objects-values {
+
+    @extend %blue-table;
+    margin-top: 1em;
+    tr:nth-child(odd) {
+      background-color: #fff;
+    }
+
+    tr td {
+      border-bottom: 1px solid $shade3;
+    }
+  }
+
+  .group-contact .fieldset-wrapper {
+    background-color: #FBFBFB;
+    padding: .7em;
+    border-radius: 5px;
+    border: 1px solid $shade3;
+  }
+
+  table#field-sponsors-values {
+      tr td {
+        padding: 0em .4em 1.5em;
+      }
+      tr td:nth-child(2) .form-type-managed-file{
+        background-color: #FBFBFB;
+        padding: .7em;
+        border-radius: 5px;
+        border: 1px solid $shade3;
+        margin: 1.5em 0;
+      }
+    }
+
+    .field-name-field-featured-links {
+      margin-bottom: 1em !important;
+    }
+
+    .field-name-field-related-projects {
+      padding: 0;
+    }
+
+    table#field-featured-objects-values {
+      td {
+        padding: 1.5em .4em 1.5em;
+      }
+    }
+
+    .form-type-managed-file .image-widget img.file-icon {
+      width: auto !important;
+    }
+
+    .field-type-field-collection {
+      .field-name-field-title {
+        margin-bottom: 1em;
+      }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

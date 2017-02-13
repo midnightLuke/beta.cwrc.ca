@@ -1,0 +1,323 @@
+/* drupal/_forms.scss */
+
+.form-required,
+.marker{
+  color: $brand-color;
+}
+
+
+// form inputs   ==============================================
+
+//button
+
+input.form-submit,
+input#edit-submit {
+  @include btn;
+  border: none;
+  // background-color: $brand2;
+  // border: none;
+  // border-radius: 4px;
+  // padding: .5em .9em;
+  // color: #fff;
+  // margin-right: .5em;
+  // @extend %transition;
+
+  // &:hover {
+  //   background-color: $brand1;
+  // }
+}
+
+#autocomplete {
+  li {
+    margin-bottom: 0 !Important;
+    padding: .2em .4em;
+  }
+}
+
+//text / email fields / select
+
+select,
+textarea.form-textarea,
+input.form-text{
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: .5em;
+
+  @include breakpoint(0 768px){
+    width: 100%;
+  }
+}
+
+//select
+
+select{
+  height: 35px;
+  line-height: 37px;
+  padding: .5em 0;
+}
+
+select[multiple] {
+  height: auto !important;
+}
+
+//widget
+
+.ui-widget, .ui-widget-content, form .ui-widget select {
+  font-family: $font1 !important;
+  font-size: 15px;
+}
+
+
+//description
+
+.form-item .description {
+  font-size: 15px !important;
+}
+
+//FIELDSET AND LEGEND
+
+fieldset {
+  border: 1px solid $shade3;
+  padding: .8em;
+  padding-bottom: 0.8em !Important;
+  border-radius: 5px;
+
+  legend {
+    font-weight: $bold !Important;
+    font-size: .8em;
+    color: $brand2;
+  }
+}
+
+fieldset.collapsible.collapse-processed {
+  border-radius: 3px;
+}
+
+fieldset.collapsible.collapse-processed.collapsed {
+  border-radius: 0;
+}
+
+fieldset.collapsible.form-wrapper {
+
+  label {
+    text-transform: uppercase;
+  }
+
+  legend  {
+    font-weight: $bold !Important;
+    font-size: .8em;
+  }
+}
+
+//in sidebar block
+
+.sidebar .block {
+  fieldset {
+    input, select, textarea {
+      font-size: .8em;
+    }
+  }
+
+  form {
+    position: relative;
+    width: 100%;
+
+    .form-item,
+    input, select {
+      width: 100%;
+    }
+
+    .form-submit {
+      width: auto;
+    }
+  }
+}
+
+
+//VERTICAL TAB PANES
+
+div.vertical-tabs {
+  border-radius: 5px;
+  background: #F9F9F9;
+  margin: 0;
+
+  a.token-dialog {
+    margin: ms(0);
+    display: block;
+  }
+}
+
+.vertical-tabs fieldset.vertical-tabs-pane {
+  padding: 1em;
+}
+
+.vertical-tabs ul.vertical-tabs-list {
+  border-top: none;
+
+  li:last-child {
+    &.selected{border-bottom: none;}
+  }
+}
+
+.vertical-tabs ul.vertical-tabs-list li {
+  border-left: none;
+
+  a {
+    float: left;
+  }
+}
+
+.vertical-tabs ul.vertical-tabs-list li a:hover {
+  float: left;
+  width: 100%;
+}
+
+//SELECTED
+
+.vertical-tabs ul.vertical-tabs-list li.selected {
+  background: #F9F9F9;
+}
+
+.vertical-tabs ul.vertical-tabs-list li.vertical-tab-button:first-child  {
+  &.selected{border-top-left-radius: 5px;}
+}
+
+.vertical-tabs ul.vertical-tabs-list li.vertical-tab-button:last-child {
+  &.selected {border-bottom-left-radius: 5px;}
+}
+
+.vertical-tabs {
+    #edit-help a {
+      @include btn;
+      margin-top: ms(0);
+      float: right;
+    }
+  }
+
+.vertical-tabs ul.vertical-tabs-list li:last-child {
+  border-bottom-left-radius: 5px;
+}
+
+//tables in tabs
+
+.vertical-tabs {
+  table {
+    //borders around table
+    tbody tr:last-child td{
+      border-bottom: 1px solid #EAEAEA;
+    }
+
+    tbody tr td:first-child {
+      border-left: 1px solid #EAEAEA;
+    }
+
+    tbody tr td:last-child {
+      border-right: 1px solid #EAEAEA;
+    }
+
+    thead th {
+      background: $brand2;
+      color: #eee;
+      padding-bottom: 0;
+      padding: .5em 0;
+
+      .form-checkbox {
+        left: 7px;
+        position: relative;
+      }
+
+      &:nth-child(1) {
+        @extend %border-radius-top-left;
+      }
+
+      &:last-child {
+         @extend %border-radius-top-right;
+      }
+    }
+
+    tbody tr:last-child td:first-child{
+      @extend %border-radius-bottom-left;
+    }
+
+    tbody tr:last-child td:last-child{
+      @extend %border-radius-bottom-right;
+    }
+
+  }
+}
+
+
+//DRAGGABLE HANDLES
+
+a.tabledrag-handle .handle {
+  height: 22px;
+  width: 24px;
+}
+
+
+//CKEDITOR
+
+.page-admin-config-content-ckeditor-edit .section-content .block ul li {
+  width: auto !important;
+}
+
+.cke_skin_v2 .cke_top, .cke_skin_v2 .cke_bottom, .cke_shared .cke_skin_v2 {
+  background-color: #DEDEDE !important;
+}
+
+.cke_skin_v2 .cke_rcombo .cke_label,
+.cke_skin_v2 .cke_button a, .cke_skin_v2 .cke_button a.cke_off {
+  background-color: #FDFDFD !important;
+}
+
+.cke_skin_v2 .cke_button a, .cke_skin_v2 .cke_button a:hover, .cke_skin_v2 .cke_button a:focus, .cke_skin_v2 .cke_button a:active, .cke_skin_v2 .cke_button a.cke_off {
+  height: 23px !important;
+  border: 1px solid #d0d0d0 !important;
+}
+
+//select
+.cke_skin_v2 .cke_rcombo .cke_text {
+  height: 24px !important;
+}
+
+.cke_skin_v2 .cke_contents,
+.cke_skin_v2 .cke_bottom,
+.cke_skin_v2 .cke_top {
+  border: 1px solid $shade3 !important;
+}
+
+
+//CHECKBOXES
+
+th.views-field-views-bulk-operations,
+td.views-field-views-bulk-operations {
+  input.form-checkbox {
+    width: 20px;
+    height: 20px;
+    position: relative;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

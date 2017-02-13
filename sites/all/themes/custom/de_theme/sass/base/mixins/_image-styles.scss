@@ -1,0 +1,24 @@
+// basic styles, padding. detect ie variable and do fixes plus border
+
+@mixin image-style{
+  @extend %box-ui-light-simple;
+  height: auto !important;
+  margin-bottom: ms();
+  @include breakpoint($small-screen) {
+    width:  (100%/3) !important;
+  }
+}
+
+@mixin image-style-left{
+  @include breakpoint($small-screen) {
+    float:  left;
+    margin-right: ms()
+  }
+}
+
+@mixin image-style-right{
+  @include breakpoint($small-screen) {
+    float:  right;
+    margin-left: ms()
+  }
+}

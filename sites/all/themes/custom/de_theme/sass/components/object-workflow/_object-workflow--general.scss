@@ -1,0 +1,454 @@
+
+
+/* =============================================================================
+    ISLADORA PAGES FOR OBJECT WORKFLOW SETTINGS
+   ========================================================================== */
+
+
+ //GENERAL
+
+.section-content  #block-cwrc-workflow-recent-stamps.block {
+  padding: 0;
+
+  .content {
+    padding: 0em 0;
+  }
+
+  h2 {
+    margin: 0 !important;
+  }
+}
+
+.page-islandora-object {
+  .sidebar .block {
+    padding-bottom: 0;
+
+    h2 {
+      margin: -.7em -.7em 0 -.7em;
+    }
+  }
+}
+
+.block-islandora-blocks, .page-islandora-object .islandora-objects {
+  word-break: break-word;
+}
+
+
+/* =============================================================================
+    SCHEMA COLLECTION - PAGE - HISTORY
+   ========================================================================== */
+
+  .region-content {
+    .block {
+
+      .cwrc-workflow-stamp-row.activity-category {
+        border-top: none;
+      }
+
+      .cwrc-workflow-stamps {
+        width: 100%;
+        float: left;
+
+        .cwrc-workflow-stamp {
+          width: 100%;
+          border: 1px solid $shade3;
+          float: left;
+          border-radius: 5px;
+          margin-bottom: .7em;
+        }
+
+        .cwrc-workflow-stamp:first-child {
+          .cwrc-workflow-stamp-row {
+            border-radius: 5px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+            border-top: none;
+          }
+        }
+      }
+    }
+  }
+
+
+
+/* =============================================================================
+    SCHEMA COLLECTION - Visualize
+   ========================================================================== */
+
+  .region-content .fullscreen-link-wrapper {
+    a {
+      @include btn;
+    }
+  }
+
+
+//ADD WORKFLOW STAMP
+
+form#islandora-workflow-rest-entry-form {
+
+  .form-item-force-act-email {
+    label {
+      font-weight: $xbold;
+      margin-left: 1em;
+      line-height: 12px;
+    }
+
+    .form-checkbox {
+      display: inline-block;
+      width: auto;
+      float: left;
+    }
+
+    .description {
+      float: left;
+      margin: .5em 0 0 0;
+    }
+  }
+
+  fieldset fieldset {
+    margin-bottom: 0;
+  }
+}
+
+
+.form-item-force-ass-email {
+    #edit-force-ass-email {
+      display: inline-block;
+      width: auto;
+      float: left;
+    }
+
+    label {
+      font-weight: $xbold;
+      margin-left: 1em;
+      line-height: 12px;
+    }
+
+    .description {
+      float: left;
+      margin: .5em 0 0 0;
+    }
+}
+
+
+form#islandora-workflow-rest-entry-form {
+  width: 100%;
+  position: relative;
+
+  label {
+    font-size: ms(-1);
+  }
+
+  select,
+  input {
+    width: 100%;
+  }
+
+  .form-submit {
+    width: auto;
+  }
+
+}
+
+
+//ADD WORKFLOW STAMP POP-UP
+
+.cwrc-workflow-modal-message {
+  margin-bottom: ms(0);
+}
+
+.cwrc-workflow-stamp-form-modal {
+  button.remodal-cancel {
+    @include btn;
+    float: right;
+  }
+
+  .form-submit {
+    float: right;
+    width: auto !important;
+    margin-right: 0;
+  }
+}
+
+form#islandora-workflow-rest-entry-form label {
+  float: left;
+}
+
+.cwrc-workflow-modal-form fieldset.collapsible.form-wrapper legend {
+  text-align: left;
+}
+
+
+//MANAGE
+
+form#islandora-xacml-editor-form {
+  .islandora_xacml_block_description,
+  .islandora_xacml_block {
+    .form-submit {
+      position: relative;
+      top: -18px;
+      margin-left: .5em !important;
+      margin-bottom: 1em;
+      @include breakpoint(0 448px) {
+        top:0;
+      }
+    }
+  }
+
+  .islandora_xacml_block .form-submit{
+    top: -39px;
+      @include breakpoint(0 448px) {
+        top:0;
+      }
+  }
+
+  #islandora_xacml_dsid_mime {
+    margin-bottom: 1em;
+    border: 1px solid $shade3;
+    padding: .7em;
+    border-radius: 5px;
+  }
+
+  input#edit-submit {
+    margin-left: 0 !important;
+  }
+
+}
+
+//WORKFLOW REPORTS
+
+#islandora-workflow-rest-reports-form {
+  table {
+   @extend %blue-table;
+   margin-bottom: ms(0);
+  }
+
+  #cwrc-workflow-fields-wrapper .form-submit {
+    margin-bottom: ms(0);
+  }
+
+  h1 {
+    font-size: ms(.5);
+    font-weight: $bold;
+    margin-top: 1em;
+  }
+
+  .fieldset-wrapper h1 a {
+    text-decoration: none !important;
+    padding: 0 !important;
+    background: transparent;
+    background-color: transparent !important;
+    color: $brand1 !important;
+    font-size: 1.1em !important;
+    margin-bottom:  .5em !important;
+    margin-top: 1.5em !important;
+  }
+
+  .fieldset-wrapper{
+    .form-submit {
+      margin-bottom: 2em !important;
+    }
+  }
+
+  .fieldset-wrapper {
+    width: 100%;
+    position: relative;
+
+    .form-item.form-type-textfield {
+      position: relative;
+      width: 100%;
+      float: left;
+      display: block;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  #edit-workflow-permissions-fs {
+    .form-item-view-roles,
+    .form-item-edit-roles {
+      @include breakpoint(0 660px) {
+        width: 100% !important;
+      }
+    }
+  }
+
+  #edit-workflow-solr-fs {
+    width: 100%;
+    position: relative;
+
+    select {
+      @include breakpoint(0 660px) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+
+
+/* =============================================================================
+    DATASTREAM - Edit
+   ========================================================================== */
+
+form#xml-form-builder-datastream-form {
+  .form-item {
+    background: #FBFBFB;
+    padding: .7em;
+    border: 1px solid $shade3;
+    border-radius: 5px;
+  }
+
+  .form-item {
+    word-break:break-all;
+  }
+
+  .form-item.form-type-tabs {
+
+    .xml-form-elements-tabs {
+      background: #fff !Important;
+      padding: 0;
+      border: none !Important;
+    }
+  }
+}
+
+.xml-form-elements-tabs {
+  form .ui-state-default, form .ui-widget-content .ui-state-default {
+    background: red;
+    background-image: none;
+  }
+}
+
+form .ui-state-default, form .ui-widget-content .ui-state-default {
+  background: red;
+  background-image: none;
+}
+
+
+
+
+//TABS
+
+//wrapper
+
+form .ui-widget-content {
+  border: 1px solid $shade3 !important;
+  padding: .7em;
+}
+
+form .ui-widget-content .ui-widget-content {
+  border-top: none !important;
+}
+
+//tab wrapper
+
+.xml-form-elements-tabs ul.ui-widget-header {
+  background: #EAEAEA;
+  border: 1px solid $shade3;
+  padding: .5em .5em 0 .5em;
+}
+//tabs
+
+.section-content .block .ui-state-default {
+  width: auto !important;
+}
+
+//link
+
+//default
+
+form .ui-state-default, form .ui-widget-content .ui-state-default {
+  background: #F7F7F7 !important;
+  top: 0px;
+}
+
+//active
+
+form .ui-state-active, form .ui-widget-content .ui-state-default.ui-state-active {
+  border: 1px solid $shade3 !important;
+  background: #fff !important;
+}
+
+form .xml-form-elements-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+  padding-bottom: 0;
+  border-bottom-width: 0;
+  top: 1px;
+  border-bottom: none !Important;
+}
+
+form .ui-state-default a {
+  font-weight: bold;
+  font-size: .9em;
+}
+
+div.xml-form-elements-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+  font-weight: bold !Important;
+}
+
+//x icon
+
+.ui-tabs .ui-tabs-nav li.ui-state-default span.ui-icon.ui-icon-close {
+  position: absolute;
+  top: 0;
+  margin: 0 !Important;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-state-default span.expand-tabpanel-icon.ui-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+//TOPICS
+
+.xml-form-elements-tags {
+  span.tag-list > span {
+    @include btn;
+    background-color: #fff;
+    color: $brand1;
+    border: 1px solid $shade3;
+    margin-top: ms(0);
+
+    &:hover {
+      background-color: #FDFDFD !Important;
+    }
+  }
+
+  span.tag-list > span > span.remove-tag {
+    background-image: none;
+    width: 20px;
+    background-color: #C4CFD6 !Important;
+    height: 20px;
+    display: inline-block;
+    top: -1px;
+    margin-left: .5em;
+    border-radius: 3px;
+
+    &:after {
+      content: "-";
+      color: #6D7982;
+      line-height: 18px;
+      padding-left: .1em;
+      font-size: 1.6em;
+    }
+  }
+
+  span.remove-tag:hover,
+  span.remove-tag,
+  span.edit-tag:hover,
+  span.edit-tag {
+    background-color: transparent !Important;
+  }
+
+  span.remove-tag {
+    top: 2px;
+    position: relative;
+  }
+}
+
+
+
+

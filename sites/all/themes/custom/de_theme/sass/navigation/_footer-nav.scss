@@ -1,0 +1,14 @@
+/* navigation/_footer-nav.scss */
+
+#footer .menu{
+  float:  right;
+  @include reset;
+  @include navigation-list;
+  @include adjust-font-size-to(14px,1,$base-font-size);
+  li{
+    @include apply-side-rhythm-border(right,0px,.5,$base-font-size,none);
+  }
+  a{
+    color:  darken(white,20);
+  }
+}

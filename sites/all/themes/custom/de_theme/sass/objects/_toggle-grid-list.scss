@@ -1,0 +1,55 @@
+
+.section-content .block {
+  .islandora-objects-display-switch, .islandora-basic-collection-display-switch {
+    position: Relative;
+    top: 3.5em;
+    z-index: 500;
+
+    ul.links {
+      float: right;
+
+      li {
+        display: inline-block;
+        margin-left: .5em;
+        width: auto;
+
+        a{
+          background-repeat: no-repeat;
+          background-position: center right;
+          display: block;
+          position: relative;
+          width: 25px;
+          height: 25px;
+          overflow: hidden;
+          color: lighten($brand1, 40%);
+          @extend %transition;
+          padding-top: 5px;
+
+          //grid
+
+          &.islandora-view-grid {
+            &:before {
+              @extend %icon-grid-view;
+            }
+          }
+
+          //list
+
+          &.islandora-view-list {
+            &:before {
+              @extend %icon-list-view;
+            }
+          }
+
+          &:hover {
+           color: $brand1;
+          }
+
+          &.active:before{
+           color: $brand1;
+          }
+        }
+      }
+    }
+  }
+}

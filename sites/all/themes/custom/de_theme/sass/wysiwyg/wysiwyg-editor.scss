@@ -1,0 +1,25 @@
+/* wysiwyg/wysiwyg-editor.scss */
+
+// This file is used to bring in theme styles to
+// the Drupal backened for a more consistent editor experience.
+// You can include the _objects.scss partial if more specific
+// styles are requested to be shown while editing.
+
+// digital echidna base file
+@import 'base';
+
+// @authors unclassed element styles
+// _elements.scss contains authors unclassed HTML elements
+// such as h1, h2, table, etc
+@import 'elements';
+
+// @placehodlers
+// _playceholders.scss contains re-usable code that cuts down
+// on code duplication but allow the flexibility of using the same code blocks in different files
+@import 'base/placeholders';
+
+// bring in authors editor styles from wysiwyg/_wysiwyg-styles.scss
+@import 'wysiwyg-styles';
+
+// This file adjusts element styles that appear in the wysiwyg area
+@import 'wysiwyg-overrides';

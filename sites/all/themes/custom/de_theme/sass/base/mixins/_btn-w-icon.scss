@@ -1,0 +1,25 @@
+/* =============================================================================
+    Button with Icon
+   ========================================================================== */
+
+   @mixin btn-w-icon {
+    @include btn;
+    //padding: .55em 1.3em;
+    background-color: $brand4;
+    padding-right: 1.2em;
+    padding-left: .8em;
+    margin-right: 1em;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &:before {
+      @extend %icon-starred-project;
+      font-size: 18px;
+      top: -1px;
+      position: relative;
+      float: left;
+      margin-right: .5em;
+    }
+   }

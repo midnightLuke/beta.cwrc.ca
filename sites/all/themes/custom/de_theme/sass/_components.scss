@@ -1,0 +1,43 @@
+/* _components.scss file */
+// @imports all SASS partials from the /components folder.
+// contains styles for components constructed from objects and their extensions, or detailed page design. eg. a sidebar call to action that is styled specifically for events
+
+// Add or remove partials as necessasary. If a particular setup is using
+// the components/forums, remove comment @import components/forums
+// from this file
+
+// If adding new functionlaity that is specific to the project, create a new
+// SASS partial with the appropriate name and save it in the /components folder
+
+// pages / user interface
+
+@import 'components/section-content';
+@import 'components/blocks';
+//@import 'components/blog';
+@import 'components/brand';
+//@import 'components/comments';
+//@import 'components/events';
+// @import 'components/forums';
+//@import 'components/news';
+@import 'components/nodes';
+@import 'components/search';
+@import 'components/user';
+@import 'components/webforms';
+@import 'components/islandora';
+//@import 'components/collaboratory';
+@import 'components/dashboard';
+@import 'components/header';
+@import 'components/messages';
+@import 'components/footer';
+@import 'components/projects';
+@import 'components/object-workflow';
+@import 'components/find-and-replace';
+@import 'components/permissions';
+@import 'components/admin-manage-pages';
+//@import 'components/administrator-profile';
+@import 'components/object-viewer';
+@import 'components/views';
+@import 'components/homepage';
+@import 'components/EAP';
+@import 'components/cwrc-writer';
+@import 'components/jquery_ui';

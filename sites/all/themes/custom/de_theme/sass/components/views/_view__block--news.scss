@@ -1,0 +1,15 @@
+
+/* =============================================================================
+   VIEW BLOCK NEWS
+   ========================================================================== */
+
+.block-views .view-News .views-field-title a{
+  &:before {
+    @include circle-icon;
+    @extend %icon-news-paper;
+  }
+}
+
+#block-views-news-block {
+  padding-bottom: .7em !important;
+}

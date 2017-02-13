@@ -1,0 +1,207 @@
+
+/* =============================================================================
+   FACET SIDEBAR
+   ========================================================================== */
+
+
+//QUERY SIDEBAR ISANDORA QUERY
+
+  #block-islandora-solr-cwrc-basic-facets,
+  #block-islandora-solr-current-query,
+  #block-islandora-solr-basic-facets,
+  .islandora-solr-query-wrap {
+    h4,
+    h3 {
+      margin-bottom: .5em;
+      color: $brand2;
+      font-size: 1.1em;
+      font-weight: $xbold;
+    }
+
+    h4 {
+      font-size: ms(-.7);
+      text-transform: uppercase;
+      color: $brand1;
+      margin: .5em 0;
+      float: left;
+      display: block;
+      width: 100%;
+    }
+  }
+
+  ul.islandora-solr-filter-list,
+  ul.islandora-solr-query-list.query-list {
+    margin: 0;
+    padding:0;
+    width: 100%;
+    float: left;
+
+    li {
+      display: inline-block;
+      float: left;
+      word-break: break-word;
+      @include btn;
+      background-color:  #FBFBFB;
+      padding: .8em 1.27202em 0.6em;
+      color: $brand1;
+      border: 1px solid $shade3;
+      &:hover {background-color: #fff; color: $brand1;}
+
+      a {
+        position: relative;
+        right: -6px;
+        display: inline-block;
+        overflow: hidden;
+        height: 17px;
+        width: 17px;
+        color: #6D7982;
+        background: #C4CFD6;
+        line-height: 32px;
+        border-radius: 2px;
+        top: 0px;
+        float: right;
+        margin-left: .5em;
+        @extend %transition;
+
+        &:before {
+          @extend %icon-cross;
+          padding-top: .2em;
+          padding-left: .4em;
+          top: -1px;
+          font-size: 9px !important;
+        }
+
+        &:hover {
+          background: darken(#C4CFD6, 10%);
+        }
+      }
+    }
+  }
+
+
+//FACETS WRAPPERS
+
+  .islandora-solr-facet-wrapper {
+    border:1px solid $shade3;
+    padding: .5em;
+    border-radius: 5px;
+    margin-bottom: 1em;
+    float: left;
+    width: 100%;
+
+    h4 {
+      margin: 1.5em 0 .7em !important;
+    }
+
+    h4:first-of-type {
+      margin: 0 !important;
+      margin-bottom: .7em !important;
+    }
+  }
+
+  .islandora-solr-facet-wrapper:last-child {
+    margin-bottom: 0;
+  }
+
+  ul.islandora-solr-facet {
+    margin: 0;
+    padding:0;
+    width: 100%;
+    float: left;
+    margin-bottom: .5em !important;
+
+    li {
+      display: inline-block;
+      float: left;
+      word-break: break-word;
+      @include btn;
+      background-color: #FBFBFB;
+      padding: .8em 1.27202em 0.6em;
+      color: $brand1;
+      border: 1px solid $shade3;
+      &:hover {background-color: #FBFBFB; color: $brand1;}
+      &:last-child {margin-bottom: 0;}
+
+      a {
+        color: $brand1;
+        font-weight: $bold !important;
+        line-height: 23px;
+      }
+
+
+      span.plusminus {
+        top: 3px;
+        position: relative;
+        margin-bottom: .5em;
+
+        a {
+          position: relative;
+          right: 0px;
+          display: inline-block;
+          overflow: hidden;
+          height: 17px;
+          width: 17px;
+          color: #6D7982;
+          background: #C4CFD6;
+          line-height: 16px;
+          border-radius: 2px;
+          top: 0px;
+          float: right;
+          margin-left: .3em;
+          font-weight: $xbold;
+          padding-left: .1em;
+          font-size: 1.8em;
+          @extend %transition;
+
+          &:hover {
+            background: darken(#C4CFD6, 5%);
+          }
+
+          &.minus {
+            font-size: 2em;
+            line-height: 14px;
+            padding-left: .2em;
+          }
+        }
+      }
+    }
+  }
+
+
+//show more
+
+a.soft-limit {
+  @include btn;
+  margin-top: .7em !important;
+  margin-bottom: 1em !important;
+}
+
+//date range
+
+.islandora-solr-date-filter {
+  float: left;
+  border: 1px solid $shade3;
+  padding: .7em;
+  border-radius: 5px;
+  width: 100%;
+  background-color: #FBFBFB;
+
+  a.toggle-date-range-filter {
+    font-size: .8em;
+  }
+}
+
+
+//SEARCH RESULT
+
+.islandora-solr-search-result {
+  .solr-value {
+    word-break: break-all;
+
+    a{
+      text-decoration: none;
+    }
+  }
+}
+
+

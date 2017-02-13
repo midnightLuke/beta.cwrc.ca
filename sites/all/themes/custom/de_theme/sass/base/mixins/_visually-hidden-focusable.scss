@@ -1,0 +1,6 @@
+@mixin a11y-visually-hidden-focusable {
+    position: static !important;
+    clip: auto;
+    overflow: visible;
+    height: auto;
+}

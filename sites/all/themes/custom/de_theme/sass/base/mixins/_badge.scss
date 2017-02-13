@@ -1,0 +1,15 @@
+/* =============================================================================
+    BADGE (NOTIFICATIONS)
+   ========================================================================== */
+
+   @mixin badge {
+    @extend %border-radius-small;
+    background: $brand4;
+    color: #fff;
+    font-weight: $xbold;
+    padding: .2em .6em;
+    margin-left: .3em;
+    font-size: 9px;
+    top: -1px;
+    position: relative;
+   }

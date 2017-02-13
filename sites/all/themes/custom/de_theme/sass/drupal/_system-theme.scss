@@ -1,0 +1,41 @@
+/* drupal/_system-theme.scss */
+
+.item-list ul{
+  @include reset;
+  li{
+    @include reset;
+    @include no-bullets;
+  }
+}
+
+.links.inline{
+  @include reset;
+  @include no-bullets;
+}
+
+.form-item,
+.form-actions{
+  margin: 0;
+}
+
+.form-item{
+  margin-bottom: ms();
+}
+
+.form-item .description {
+  @include reset-font;
+  margin-top: ms(-1);
+  @include adjust-font-size-to(14px);
+  color:  $dark-grey;
+}
+
+.form-checkboxes .form-item,
+.form-radios .form-item {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.form-type-radio .description,
+.form-type-checkbox .description {
+  margin-left: ms(1.5);
+}

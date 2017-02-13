@@ -1,0 +1,43 @@
+
+#tabs {
+  ul.tabs {
+    ul.tabs-submenu {
+      li.facebook-action-bar, li.twitter-action-bar, li.gplus-action-bar {
+        a {
+          border-radius: 5px;
+          color: #fff !important;
+          margin-bottom: .3em;
+          &:before {color: #fff;}
+        }
+      }
+
+      li.facebook-action-bar  {
+        a {
+          background: #3b5998;
+          &:hover {background: darken(#3b5998, 5%);}
+          &:before {
+            @extend %icon-facebook;
+          }
+        }
+      }
+      li.twitter-action-bar {
+        a {
+          background: #167cba;
+          &:hover {background: darken(#167cba, 5%);}
+          &:before {
+            @extend %icon-twitter;
+          }
+        }
+      }
+      li.gplus-action-bar {
+        a {
+          background: #d14736;
+          &:hover {background: darken(#d14736, 5%);}
+          &:before {
+            @extend %icon-google;
+          }
+        }
+      }
+    }
+  }
+}

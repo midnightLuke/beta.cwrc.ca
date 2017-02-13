@@ -1,0 +1,183 @@
+html body.admin-menu {
+  margin: 0 !important;
+}
+
+body,
+div {
+  background: transparent !important;
+}
+
+html, body {
+  background: none;
+  font-size: 100% !important;
+}
+
+body, body * {
+  font-family: Georgia, serif !important;
+  color: black !important;
+}
+
+article {
+  border-top: 5px solid #000;
+}
+
+.node-type-project .region-main-suffix {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#logo,
+#admin-menu,
+.messages,
+#skip-link,
+#userbar,
+.book-navigation,
+#block-search-form,
+.region-navigation,
+.sidebar,
+.pager,
+.block-echidnet-submit-blocks,
+.block-submit-content,
+.tabs,
+.de-gallery-wrapper,
+#global-communications,
+#footer,
+.flag-outer-add-to-calendar,
+.region-masthead-secondary,
+.field-name-field-tags,
+.region-masthead-secondary,
+.region-project-banner,
+.region-main-prefix-right,
+#header {
+  display: none !important;
+}
+
+.container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+.content-section {
+  float: none;
+  border: 0 !important;
+}
+
+.not-front .content-section, .not-front.one-sidebar.sidebar-second .content-section, .front.one-sidebar .content-section, .content-section {
+  border: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  float: none;
+  margin: 0;
+}
+
+.one-sidebar #main {
+  width: 100%;
+  float: none;
+}
+
+.region-content {
+  padding: 0 !important;
+}
+
+.region-masthead .container {
+  padding: 0;
+}
+
+#site-name {
+  font-size: 20px;
+}
+
+.field-name-field-pull-quote {
+  border-bottom: none;
+  float: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.field-name-field-pull-quote .field-item {
+  padding: 0;
+}
+
+.field-name-field-date, .submitted-by, .views-field-field-date, .views-field-created, .views-field-field-posted-date, .views-field-field-expiry-date, .field-name-field-expiry-date, #comments .submitted {
+  padding: 0;
+}
+
+.list-view .post-meta {
+  padding: 0;
+}
+
+.list-view-images .views-field-field-classified-type, .node-classified-ad .field-name-field-classified-type, .node-event .field-name-field-event-type {
+  padding: 0;
+}
+
+.block-watercooler {
+  width: 100%;
+  margin: 0;
+  float: none;
+}
+.block-watercooler h2 {
+  border: none !important;
+  background: none;
+}
+.block-watercooler .view-content {
+  border: none;
+}
+.block-watercooler .more-link {
+  display: none;
+}
+
+* {
+  color: #000 !important;
+  /* Black prints faster: h5bp.com/s */
+  box-shadow: none !important;
+  text-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+a,
+a:visited {
+  text-decoration: underline;
+}
+
+a[href]:after {
+  content: none;
+}
+
+pre,
+blockquote {
+  border: 1px solid #999;
+  page-break-inside: avoid;
+}
+
+thead {
+  display: table-header-group;
+  /* h5bp.com/t */
+}
+
+tr,
+img {
+  page-break-inside: avoid;
+}
+
+img {
+  max-width: 100% !important;
+}
+
+@page {
+  margin: 1cm;
+}
+p,
+h2,
+h3 {
+  orphans: 3;
+  widows: 3;
+}
+
+h2,
+h3 {
+  page-break-after: avoid;
+}
+
+/*# sourceMappingURL=print.css.map */

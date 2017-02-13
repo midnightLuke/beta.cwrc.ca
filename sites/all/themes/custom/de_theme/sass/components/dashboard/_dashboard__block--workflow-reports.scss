@@ -1,0 +1,36 @@
+/* =============================================================================
+    Dashboard - Workflow Reports
+   ========================================================================== */
+
+#block-cwrc-dashboards-project-workflow-reports,
+#block-cwrc-dashboards-user-workflow-reports {
+  h2:before {
+    @extend %icon-view-workflow-stamp;
+    font-size: 28px !important;
+    left: -8px !important;
+    margin-right: 0 !important;
+  }
+  .content {
+    padding: 0em;
+
+    ul.lists-with-actions {
+      border-bottom: none;
+      @extend %border-radius-bottom-right;
+      @extend %border-radius-bottom-left;
+
+      li:first-child:last-child {
+        @extend %border-radius-bottom-right;
+        @extend %border-radius-bottom-left;
+      }
+    }
+  }
+}
+
+#block-cwrc-dashboards-project-workflow-reports {
+  li{
+    line-height: 27px;
+    span.txt-item-in-list {
+    top:0;
+    }
+  }
+}

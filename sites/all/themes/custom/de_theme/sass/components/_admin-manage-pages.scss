@@ -1,0 +1,125 @@
+
+@import 'admin-pages/admin-manage-pages--object-management';
+
+/* =============================================================================
+   ADMIN MANAGE PAGES
+   ========================================================================== */
+
+//WEBFORM - MANAGE FIELDS
+
+.page-admin-structure-types-manage-webform {
+  #field-display-overview-wrapper table {
+    margin: 1em 0 ;
+  }
+}
+
+
+//GROUPS
+
+.view-og-members-admin.view-id-og_members_admin.view-display-id-default {
+  ul {
+    float: left;
+    margin-bottom: 1em;
+    background: $bck-grey;
+    border:1px solid $shade3;
+    border-radius: 5px;
+
+    li {
+      padding: .2em .5em;
+      border-bottom: 1px solid $shade3;
+      margin-bottom: 0;
+      &:last-child {border-bottom: none;}
+    }
+  }
+
+  .view-filters {
+    float: left;
+    border: none;
+    background: none;
+    padding: 0;
+    margin-bottom: 0;
+    @include breakpoint(0 790px) {
+      input {
+        width: 100%;
+      }
+
+      .views-exposed-widget {
+        width: 100%;
+        margin-bottom: 1em;
+        margin-top: 0;
+      }
+
+      input.form-submit {
+        margin-top: 0 !important;
+      }
+    }
+
+    #edit-state-wrapper {
+      margin-right: 1em;
+    }
+
+    #edit-uid-wrapper {
+      margin-right: 1em;
+    }
+
+    .views-submit-button .form-submit {
+      margin-top: 2.3em !important;
+      @include breakpoint(0 790px) {
+        margin-top: 0 !important;
+      }
+    }
+  }
+
+  .view-content {
+    float: left;
+    width: 100%;
+    margin: 1em 0 0;
+
+    .vbo-views-form .cwrc-dashboards-new-member-link-wrapper a {
+      color: #fff;
+    }
+  }
+
+  .container-inline {
+    float: left;
+    width: 100%;
+
+    .fieldset-wrapper {
+      margin-top: -1em;
+    }
+
+    select#edit-operation {
+      margin-right: .8em;
+    }
+  }
+
+  table {
+    @extend %blue-table;
+    margin-top: 1em;
+    float: left;
+  }
+
+  form p:first-of-type {
+    float: left;
+  }
+}
+
+form#views-form-og-members-admin-default {
+  .form-actions a {
+    margin-top: 1.1em;
+  }
+}
+
+
+//PERMISSIONS
+
+form#user-admin-permissions {
+  thead tr th {
+    padding: 1em;
+  }
+}
+
+
+
+
+

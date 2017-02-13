@@ -1,0 +1,27 @@
+/* ie/_iex.scss */
+
+
+.lt-ie9{
+  // landing page grid display
+  .landing-page.grid-display{
+    .row-end-third{
+      // 3 column grid @ 48em/768px
+      @include breakpoint($weird-screen)  {
+        margin-right: 0;
+      }
+      // reset grid to 4 column grid @ 60em/960px
+      @include breakpoint($standard-screen) {
+        @include float-span(1, $grid: 4, $gutter: .05);
+      }
+    }
+
+    .row-end-fourth{
+      @include breakpoint($standard-screen)  {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+
+

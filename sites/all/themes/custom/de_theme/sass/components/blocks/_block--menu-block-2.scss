@@ -1,0 +1,53 @@
+
+/* =============================================================================
+    MENU BLOCK PRIMARY
+   ========================================================================== */
+
+   .section-content #block-menu-block-2.block {
+    overflow: hidden;
+
+      header h2 {
+        margin: 0 0 0em 0 !important;
+        border-bottom: none;
+      }
+
+      .menu-name-main-menu {
+        float: left;
+        margin-left: 0;
+        width: 100%;
+
+        ul {
+
+          li {
+
+            a {
+              text-align: left;
+              border-bottom: none;
+              border-top: 1px solid $shade3;
+
+              &:hover {
+                background: #fbfbfb;
+                color: inherit;
+              }
+            }
+
+            a.active {
+              background: #424242;
+              color: #fff;
+
+              &:hover {
+                background: darken(#424242, 10%);
+              }
+            }
+
+            &.last a {
+              border-radius: 0 !important;
+            }
+
+            &.first a {
+              border-radius: 0;
+            }
+          }
+        }
+      }
+   }

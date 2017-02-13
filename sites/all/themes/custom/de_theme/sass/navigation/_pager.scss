@@ -1,0 +1,62 @@
+/* navigation/_pager.scss */
+
+/* =============================================================================
+    Pager
+   ========================================================================== */
+
+.pager{
+  @include reset;
+  @include clearfix(true);
+  margin-top: ms(1);
+  li{
+    @include no-bullets;
+    float: left;
+    margin-right: 0em;
+    width: auto !important;
+  }
+
+  .pager-current{
+    padding: .1em .7em;
+    @include adjust-font-size-to(13px);
+    background: $brand2;
+    @extend %circle-radius;
+    color: #fff;
+    margin-right: .5em;
+  }
+
+  .pager-ellipsis{
+    margin-right: ms();
+  }
+
+  a{
+    @extend %button-link;
+    @include button-link-styles(
+      //$bg-color: shade(white,8%),
+      //$bg-color-hover: $neutral-grey,
+      //$bg-color-active: $neutral-grey,
+      //$text-color: $dark-grey,
+      //$text-color-hover: $dark-grey,
+      //$text-color-active: $dark-grey
+    );
+    margin-right: 0;
+    color: $brand2;
+  }
+
+  a:hover {
+    background-color: #fff;
+  }
+
+  .pager-next{
+    clear: left;
+    @include breakpoint($small-screen) {
+      clear: none;
+    }
+  }
+
+  .pager-next,.pager-last{
+    margin-top: ms(-1);
+    @include breakpoint($small-screen) {
+      margin-top: 0;
+    }
+  }
+}

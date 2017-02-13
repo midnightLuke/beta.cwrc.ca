@@ -1,0 +1,47 @@
+
+/* =============================================================================
+    SAVE THIS SEARCH
+   ========================================================================== */
+
+#block-islandora-saved-searches-save-search {
+  float: right;
+  width: 100%;
+
+  header {
+    margin: -.7em -.7em .7em;
+  }
+
+  label {
+    font-size: .65em;
+    font-weight: $xbold;
+    margin-right: .3em;
+  }
+
+
+  input.form-text {
+     @include breakpoint(0 660px) {
+      width: 100%;
+     }
+  }
+
+  .form-item.form-type-textfield {
+    float: left;
+    margin-bottom: 0;
+      @include breakpoint(0 660px) {
+        width: 100%;
+     }
+  }
+
+  .form-submit {
+    float: left;
+    display: inline;
+    margin-right: 0;
+    margin-top: 1.6em;
+    width: auto;
+  }
+
+  .description {
+    margin-top: .3em;
+    font-size: .7em;
+  }
+}

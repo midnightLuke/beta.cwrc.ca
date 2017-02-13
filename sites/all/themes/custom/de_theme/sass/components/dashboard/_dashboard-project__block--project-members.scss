@@ -1,0 +1,23 @@
+/* =============================================================================
+    PROJECT DASHBOARD - PROJECT MEMBERS
+   ========================================================================== */
+
+
+//PROJECT MEMEBERS
+
+//add new member
+
+.cwrc-dashboards-new-member-link-wrapper a{
+  @extend %btn-w-icon;
+  margin: 0;
+
+  &:before {
+    @extend %icon-user-plus;
+  }
+}
+
+//table
+
+#block-views-project-members-block .content table{
+ font-size: 1.2em;
+}

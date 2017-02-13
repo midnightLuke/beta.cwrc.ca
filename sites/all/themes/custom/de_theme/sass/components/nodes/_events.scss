@@ -1,0 +1,65 @@
+
+/* =============================================================================
+   EVENTS NODE
+   ========================================================================== */
+
+.node-type-event .region-content .field-name-field-event-date {
+  padding: 1em 0;
+  margin: 1em 0 1.5em;
+  border-top: 1px solid $shade3;
+  border-bottom: 1px solid $shade3;
+  width: 100%;
+
+  .field-label:before {
+    @include circle-icon;
+    @extend %icon-calendar;
+  }
+
+  .field-items {
+    margin-left: 2.2em;
+  }
+}
+
+.node-type-event .region-content .field-name-field-image {
+  float: left;
+  @include breakpoint(0 630px) {
+    width: 100%;
+  }
+
+  img {
+    float: left;
+    width: auto !important;
+    margin: 0 1em 1em 0;
+    border-radius: 5px;
+    @include breakpoint(0 630px) {
+      width: 100% !important;
+      margin: 0 0 1em 0;
+    }
+  }
+}
+
+.node-type-event .region-content .field-name-field-location {
+  float: left;
+  margin-bottom: 1em;
+  .field-label:before {
+    @include circle-icon;
+    @extend %icon-place;
+    font-size: 22px !important;
+    margin-right: .6em !important;
+  }
+
+  .field-items {
+    margin-left: 2.2em;
+  }
+}
+
+.node-type-event .region-content .field-name-body {
+  float: left;
+}
+
+.page-node-edit.node-type-article,
+.page-node-edit.node-type-event {
+  .field-type-addressfield, .field-name-field-image {
+    float: none;
+  }
+}

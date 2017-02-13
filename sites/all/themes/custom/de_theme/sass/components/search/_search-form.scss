@@ -1,0 +1,26 @@
+
+.search-form{
+  margin-bottom: ms(1);
+}
+.search-form .form-wrapper{
+  @extend %box-ui-light;
+  @include ui-box($bg-color: shade(white,2%), $box-padding: ms(1));
+  label{
+    @include adjust-font-size-to(14px);
+    font-weight:  $bold;
+  }
+
+  .form-item-keys{
+    margin-top: 0;
+    margin-bottom: ms();
+    display: block;
+  }
+
+  #edit-keys{
+    @extend %form-item-text;
+  }
+
+  .form-submit{
+    @extend %button-input;
+  }
+}

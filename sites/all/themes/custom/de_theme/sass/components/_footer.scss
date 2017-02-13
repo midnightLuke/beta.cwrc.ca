@@ -1,0 +1,31 @@
+
+/* =============================================================================
+   FOOTER
+   ========================================================================== */
+
+.region-footer{
+  background-color: $brand1;
+  color: #fff;
+  padding: ms(3) 0;
+  font-size: ms(-.4);
+
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .block h3 {
+    color: #fff;
+    font-weight: $xbold;
+  }
+
+  .block strong {
+    font-weight: $xbold;
+    margin-left: ms(.5);
+  }
+}
+
+.region-sponsor-region {
+  float: left;
+  width: 100%;
+}

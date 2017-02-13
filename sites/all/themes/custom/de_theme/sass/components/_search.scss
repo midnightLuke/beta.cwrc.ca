@@ -1,0 +1,65 @@
+
+// @import 'components/search/search-form';
+@import 'components/search/search-results';
+@import 'components/search/search-filter';
+@import 'components/search/block-search';
+@import 'components/search/search-advanced';
+@import 'components/search/search-facets-sidebar';
+
+
+/* =============================================================================
+   SEARCH
+   ========================================================================== */
+
+.page-cwrc-search {
+  .section-content #block-system-main {
+    @include unblock;
+  }
+}
+
+
+#block-islandora-solr-cwrc-current-query {
+  h3 {
+    display: none;
+  }
+}
+
+
+.page-islandora-search .section-content #sidebar-first .block {
+  header {
+    margin: -.7em;
+    margin-bottom: ms(0);
+  }
+}
+
+.page-islandora-search .section-content .region-content .block{
+  border: none;
+  padding: 0;
+}
+
+
+//TOOLBAR REGION
+
+.region-toolbar {
+ margin-bottom: ms(0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

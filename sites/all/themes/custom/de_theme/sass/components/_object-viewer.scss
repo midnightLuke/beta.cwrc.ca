@@ -1,0 +1,160 @@
+/* =============================================================================
+    OBJECT VIEWER
+   ========================================================================== */
+
+#book-viewer {
+
+  div#BRcontainer {
+    border-radius: 5px;
+  }
+
+  .BRicon {
+    width: 38px;
+  }
+
+  div#BRnav {
+    box-shadow: none;
+    background-color: #f7f7f7;
+    border: 1px solid $shade3;
+    border-top: none;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  #BookReader {
+    border-radius: 5px;
+    background-color: #C3C3C3;
+  }
+
+  //toolbar
+
+  #BRtoolbar {
+    background-color: #f7f7f7;
+    border: 1px solid $shade3;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    overflow: visible;
+    box-shadow: none;
+
+    form#booksearch input[type=search]{
+      border: 1px solid $shade3;
+      border-radius: 3px;
+    }
+  }
+
+  #BRnavCntlBtm {
+
+  }
+
+  .BRnavCntl {
+    background-color: #FAFAFA;
+    float: none;
+    width: 40px;
+  }
+}
+
+div#BRnavpos {
+  float: none;
+  width: auto;
+}
+
+//PAGER
+
+div#BRpager {
+  height: 30px;
+  top: 5px
+}
+
+div#BRnavline {
+  top: -17px;
+}
+
+#BRpager .ui-slider-handle {
+  height: 21px;
+  top: 8px;
+  margin-left: 0;
+}
+
+
+//Cmodel news clippings when styles get stripped
+
+.islandora-print {
+  font-family: $font1 !important;
+
+  .section-content {
+    border-top: none;
+    border-bottom: none;
+
+    .block {
+      border: none;
+    }
+  }
+
+  form#cwrc-search-bar-search .basic_query_wrapper.form-wrapper {
+    background-color: #fff !important;
+    border-radius: 4px !important;
+  }
+
+  a[href]:after {
+    content: none !important;
+  }
+
+  .region-breadcrumb {
+    display: none;
+  }
+
+  .region-main-prefix {
+    display: block;
+    width: 100%;
+    padding: 0 1em;
+  }
+
+  #de-header {
+    display: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

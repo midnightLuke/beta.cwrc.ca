@@ -1,0 +1,12 @@
+/* wysiwyg/_wysiwyg-overrides.scss */
+
+// This file adjusts element styles that appear in the wysiwyg area
+
+body{
+  background-color: white;
+  @include adjust-font-size-to(15px);
+}
+
+.cke_editable{
+  padding: ms();
+}

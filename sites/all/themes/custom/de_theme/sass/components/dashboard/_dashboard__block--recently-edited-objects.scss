@@ -1,0 +1,63 @@
+
+/* =============================================================================
+    RECENTLY EDITED OBJECTS
+   ========================================================================== */
+
+#block-cwrc-dashboards-project-recently-edited {
+  h2:before {
+    font-size: 15px !important;
+  }
+}
+
+//LOCKED OBJECTS
+
+table td.cwrc-object-locked-owned{
+  &:after{
+    @extend %icon-locked;
+    float: right;
+    color: #D4456F;
+    margin-right: 1em;
+  }
+
+  span.hide-txt {
+    overflow: hidden;
+    text-indent: -100px;
+    width: 1px;
+    height: 1px;
+    display: block;
+  }
+}
+
+table td.cwrc-object-locked-not-owned{
+  &:after{
+    @extend %icon-locked;
+    float: right;
+    color: #D4456F;
+    margin-right: 1em;
+  }
+
+  span.hide-txt {
+    overflow: hidden;
+    text-indent: -100px;
+    width: 1px;
+    height: 1px;
+    display: block;
+  }
+}
+
+table td.cwrc-object-not-locked{
+  &:after{
+    @extend %icon-unlocked;
+    float: right;
+    color: #4FAF4F;
+    margin-right: 1em;
+  }
+
+  span.hide-txt {
+    overflow: hidden;
+    text-indent: -100px;
+    width: 1px;
+    height: 1px;
+    display: block;
+  }
+}

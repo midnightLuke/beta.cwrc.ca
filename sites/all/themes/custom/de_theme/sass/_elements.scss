@@ -1,0 +1,604 @@
+/* _elements.scss */
+// contains authors unclassed HTML element styles such as h1, h2, table, etc
+
+
+/* =============================================================================
+    General Elements
+   ========================================================================== */
+
+
+html{
+  font-size: 100%;
+  color: $dark-grey;
+  overflow-y: scroll; //inuit css
+  min-height: 100%; //inuit css
+  -moz-osx-font-smoothing: grayscale; //inuit css
+   -webkit-font-smoothing: antialiased; //inuit css
+}
+
+body{
+
+}
+
+html, button, input, select, textarea {
+  font-family: $font1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+dl,
+pre,
+table,
+fieldset,
+form
+details,
+blockquote,
+object,
+iframe,
+pre,
+address,
+code,
+dl,
+dt,
+dd,
+embed,
+audio,
+video,
+.form-actions,
+.headline-type,
+.highlight-type{
+  @include adjust-font-size-to(ms());
+  margin: 0 0 ms() 0;
+}
+
+strong,b{
+  font-weight:  $bold;
+}
+
+em{
+  font-style: italic;
+}
+
+a{
+  color: $brand2;
+  transition: color 0.3s ease-out;
+  &:hover{
+    text-decoration: none;
+    color: darken($brand2, 10%);
+  }
+}
+
+/* Set consistent quote types.
+*/
+
+q {
+  quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-weight:  $normal;
+  font-family:  $font1;
+  b,strong{
+    font-weight: $normal;
+  }
+}
+
+h1{
+  @include reset;
+  @include adjust-font-size-to(26px);
+  line-height: ms(.5);
+  margin-bottom: ms(-4);
+  @include breakpoint($medium-screen) {
+    margin-bottom: ms(-3);
+    @include adjust-font-size-to(32px);
+    line-height: ms(.5);
+  }
+  a{
+    color: $dark-grey;
+  }
+}
+
+h2{
+  color: $brand1;
+  @include adjust-font-size-to(22px);
+  line-height: ms(.5);
+  margin-bottom: ms(-1);
+  @include breakpoint($medium-screen) {
+    @include adjust-font-size-to(26px);
+    line-height: ms(.25);
+  }
+  a{
+    color: $brand1;
+  }
+  b,strong{
+    font-weight: $normal;
+  }
+}
+
+h3{
+  color: $brand2;
+  font-weight: $bold;
+  @include adjust-font-size-to(17px);
+  @include breakpoint($medium-screen) {
+    @include adjust-font-size-to(19px);
+  }
+  a{
+    color: $brand2;
+  }
+}
+
+h4{
+  color: $brand4;
+  font-weight: $bold;
+  @include breakpoint($medium-screen) {
+    margin-bottom: 0;
+  }
+}
+
+h5{
+  font-weight: $bold;
+  @include breakpoint($medium-screen) {
+    margin-bottom: 0;
+  }
+}
+
+h6{
+  @include adjust-font-size-to(14px);
+  line-height: ms(.75);
+  margin-top: ms(1);
+  text-transform: uppercase;
+  font-weight: $bold;
+  @include breakpoint($medium-screen) {
+    margin-bottom: 0;
+  }
+}
+
+blockquote{
+  @include adjust-font-size-to(ms(.5));
+  line-height: ms(.75);
+  border-left: 10px solid $dark-grey;
+  background-color: shade(white,5%);
+  margin: ms() ms(1) ms() ms(1);
+  padding: ms(-1) ms(1);
+  font-style: italic;
+  p{
+    display: inline;
+    &:last-child{
+      margin-bottom: 0;
+    }
+  }
+}
+
+// figure{
+//   caption{
+
+//   }
+// }
+
+label{
+  color: $dark-grey;
+  margin-bottom: ms(-2);
+  font-weight: $bold;
+}
+
+input,
+textarea{
+  margin:0;
+  // vertical-align:bottom;
+}
+
+textarea{
+  vertical-align: top;
+  word-break: normal;
+}
+
+
+
+// a lot of this stuff removes IE7 base styles
+table{
+  width:  100% !important; // ckeditor puts a default of 500px for table width
+  border: none;
+  font-size: .95em;
+  @include breakpoint(0 900px) {
+    overflow-x: auto;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @extend %border-radius-top-left;
+  border-collapse: separate;
+  //border: 1px solid $neutral-grey;
+  p{
+    @include reset;
+  }
+  tbody{
+    //border-top: 1px solid $neutral-grey;
+  }
+  th,td{
+    // @include reset;
+    padding: ms(-1.5);
+    @include adjust-font-size-to(13px);
+    border: none;
+    vertical-align: top;
+    line-height: ms(.5);
+   // border-bottom: 1px solid $neutral-grey;
+    @include breakpoint($weird-screen)  {
+      line-height: ms(1);
+    }
+  }
+
+  th a img {
+    height: 10px;
+    width: 8px;
+    margin-left: .2em;
+  }
+
+  tr{
+    margin: 0 !important;
+    padding:  0 !important;
+  }
+
+  tr.odd{
+    background-color: shade(white,5%);
+  }
+
+
+  tr:nth-child(odd) {
+    background-color: shade(white,5%);
+  }
+
+
+  tr.even{
+    background-color: white;
+  }
+
+  tr:nth-child(even) {
+    background-color: white;
+  }
+
+  thead tr{
+   // border-bottom: 2px solid $brand-color;
+  }
+
+  th{
+    font-weight: $xbold;
+    vertical-align: middle;
+    border-bottom: 3px solid #ddd;
+  }
+
+  th,
+  thead th{
+    // background-color: white;
+    color: $brand1;
+    // border-right: 1px solid $neutral-grey;
+   // border-right: 1px solid $dark-grey;
+    //border-left: 1px solid $dark-grey;
+  }
+
+  th.select-all input {
+    left: 5px;
+    position: relative;
+  }
+
+  //borders around table
+  tbody tr:last-child td{
+    border-bottom: 1px solid #EAEAEA;
+  }
+
+  tbody tr td:first-child {
+    border-left: 1px solid #EAEAEA;
+  }
+
+  tbody tr td:last-child {
+    border-right: 1px solid #EAEAEA;
+  }
+
+
+  thead th {
+    background: $brand2;
+
+    &:nth-child(1) {
+      @extend %border-radius-top-left;
+    }
+
+    &:last-child {
+       @extend %border-radius-top-right;
+    }
+  }
+
+  tbody tr:last-child td:first-child{
+    @extend %border-radius-bottom-left;
+  }
+
+  tbody tr:last-child td:last-child{
+    @extend %border-radius-bottom-right;
+  }
+
+  td{
+    //border-right: 1px solid $neutral-grey;
+    vertical-align: middle;
+  }
+
+  caption{
+    caption-side: bottom;
+    background: #fafafa;
+    font-size: .8em;
+    padding: .4em;
+  }
+}
+
+
+//BLUE TABLE STYLE
+
+%blue-table {
+  width:  100% !important; // ckeditor puts a default of 500px for table width
+  border: none;
+  font-size: .95em;
+  margin-bottom: ms(0);
+
+  thead label {
+    color: #fff;
+  }
+
+  @extend %border-radius-top-left;
+  border-collapse: separate;
+  //border: 1px solid $neutral-grey;
+  p{
+    @include reset;
+  }
+  tbody{
+    //border-top: 1px solid $neutral-grey;
+  }
+  th,td{
+    // @include reset;
+    padding: ms(-1.5);
+    @include adjust-font-size-to(13px);
+    border: none;
+    vertical-align: top;
+    line-height: ms(.5);
+   // border-bottom: 1px solid $neutral-grey;
+    @include breakpoint($weird-screen)  {
+      line-height: ms(1);
+    }
+  }
+
+  th a {
+    color: #fff !important;
+  }
+
+  td.active {
+    background-color: #E0EFF7;
+  }
+
+  tr{
+    margin: 0 !important;
+    padding:  0 !important;
+  }
+
+  tr.odd{
+    background-color: #EEF5F9;
+  }
+
+
+  tr:nth-child(odd) {
+    background-color: #EEF5F9;
+  }
+
+
+  tr.even{
+    background-color: white;
+  }
+
+  tr:nth-child(even) {
+    background-color: white;
+  }
+
+  thead tr{
+   // border-bottom: 2px solid $brand-color;
+  }
+
+  th{
+    font-weight: $xbold;
+    vertical-align: middle;
+  }
+
+  th,
+  thead th{
+    // background-color: white;
+    color: white;
+    // border-right: 1px solid $neutral-grey;
+   // border-right: 1px solid $dark-grey;
+    //border-left: 1px solid $dark-grey;
+  }
+
+  //borders around table
+  tbody tr:last-child td{
+    border-bottom: 1px solid #EAEAEA;
+  }
+
+  tbody tr td:first-child {
+    border-left: 1px solid #EAEAEA;
+  }
+
+  tbody tr td:last-child {
+    border-right: 1px solid #EAEAEA;
+  }
+
+
+  thead th, th {
+    background: $brand2;
+
+    &:nth-child(1) {
+      @extend %border-radius-top-left;
+    }
+
+    &:last-child {
+       @extend %border-radius-top-right;
+    }
+  }
+
+  tbody tr:last-child td:first-child{
+    @extend %border-radius-bottom-left;
+  }
+
+  tbody tr:last-child td:last-child{
+    @extend %border-radius-bottom-right;
+  }
+
+  td{
+    //border-right: 1px solid $neutral-grey;
+    vertical-align: middle;
+  }
+
+  caption{
+    caption-side: bottom;
+  }
+}
+
+
+// lists
+
+ul,ol{
+  li{
+    margin-bottom: ms(-1);
+    list-style-position: inside !important;
+  }
+}
+
+ul{
+  padding-left: ms(.5);
+  li{
+    list-style: disc;
+  }
+}
+
+ol{
+  padding-left: ms(1);
+  li{
+    list-style: decimal;
+  }
+}
+
+img{
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+}
+
+a img:hover{
+  opacity: .75;
+}
+
+// from kickstart
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+.jwplayer {
+  margin: 0 auto;
+  float: none;
+}
+
+
+//MAINTENANCE
+
+.maintenance-page #content{
+  position: relative;
+  margin:  0 auto;
+  padding:  0 2em;
+}
+
+.maintenance-page {
+
+  h1.title {
+    font-weight: $bold;
+  }
+
+  header {
+    position: relative;
+    margin:  0 auto 2em;
+    padding:  .7em 2em;
+    background: #333;
+  }
+
+  #name-and-slogan h1 a {
+    text-decoration: none;
+    overflow: hidden;
+    width: 45px;
+    height: 20px;
+    display: block;
+  }
+
+  #name-and-slogan h1#site-name a {
+    display: none;
+  }
+}
+
+.jwplayer {
+  margin: 0 auto !important;
+  float: none;
+}
+
+//CONTEXTUAL LINKS
+
+a.contextual-links-trigger {
+  margin: 0 !important;
+  padding: 0 2px !important;
+  width: 28px !important;
+  border: none !important;
+}
+
+ul.contextual-links li {
+  margin: 0 !important;
+  padding: 0 .3em !important;
+  float: none !important;
+}
+
+.sidebar #block-islandora-blocks-collections ul.contextual-links li a,
+.block-menu-block ul.contextual-links li a,
+ul.contextual-links li a {
+  //display: block;
+  line-height: normal !important;
+  margin: 0.25em 0 !important;
+  padding: 0.25em 1em 0.25em 0.5em !important;
+  border: none !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+  background-color: #fff !important;
+}
+
+
+
+/* =============================================================================
+    Reusable Classes That are Used Throughout The Site
+   ========================================================================== */
+
+
+
+.front #block-system-main {
+  border: none;
+  padding: 0;
+}
+
+.front article {
+  //display: none;
+}
+
+
+
+
+
+
+
+
+
+
+

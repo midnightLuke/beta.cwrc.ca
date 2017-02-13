@@ -1,0 +1,1617 @@
+/* =============================================================================
+    Placeholders
+   ========================================================================== */
+
+   //Box shadow
+
+   %box-shadow {
+    -webkit-box-shadow: -1px 8px 9px -9px rgba(41,41,41,1);
+    -moz-box-shadow: -1px 8px 9px -9px rgba(41,41,41,1);
+    box-shadow: -1px 8px 9px -9px rgba(41,41,41,1);
+   }
+
+   ////BORDER RADIUS
+
+   //all
+
+   %border-radius{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+   }
+
+   //smaller radius all
+
+   %border-radius-small{
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+   }
+
+   //circle radius
+
+   %circle-radius {
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    border-radius: 60px;
+   }
+
+   //top left
+
+   %border-radius-top-left{
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-left-radius: 5px;
+   }
+
+   //top right
+
+   %border-radius-top-right{
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-right-radius: 5px;
+   }
+
+    //bottom left
+
+   %border-radius-bottom-left{
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-left-radius: 5px;
+   }
+
+    //bottom right
+
+   %border-radius-bottom-right{
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-right-radius: 5px;
+   }
+
+   //TRANSITIONS
+
+   %transition {
+     -webkit-transition: all 0.3s ease-out; /* Safari */
+     transition: all 0.3s ease-out;
+   }
+
+   //RED BUTTON
+   .btn,
+   %red-btn {
+     @include red-btn;
+   }
+
+   //ICON BUTTON
+
+   %btn-w-icon {
+     @include btn-w-icon;
+   }
+
+   //CIRCLE ICON
+
+   %circle-icon {
+    @include circle-icon;
+   }
+
+
+/* =============================================================================
+    ICON STYLES
+   ========================================================================== */
+
+/*
+
+icons with borders
+
+   %icon-place {
+    @include icon;
+    content: "\e900";
+   }
+
+   %icon-organization {
+    @include icon;
+    content: "\e901";
+   }
+
+   %icon-person {
+    @include icon;
+    content: "\e902";
+   }
+
+   %icon-locked {
+    @include icon;
+    content: "\e903";
+   }
+
+   %icon-user-locked {
+    @include icon;
+    content: "\e904";
+   }
+
+   %icon-starred-project {
+    @include icon;
+    content: "\e905";
+   }
+
+   %icon-content-model {
+    @include icon;
+    content: "\e906";
+   }
+
+   %icon-internet-archive {
+    @include icon;
+    content: "\e907";
+   }
+
+   %icon-collection {
+    @include icon;
+    content: "\e908";
+   }
+
+   %icon-object {
+    @include icon;
+    content: "\e909";
+   }
+
+   %icon-media-critical-edition {
+    @include icon;
+    content: "\e90a";
+   }
+
+   %icon-media-text {
+    @include icon;
+    content: "\e90b";
+   }
+
+   %icon-media-audio{
+    @include icon;
+    content: "\e90c";
+   }
+
+   %icon-media-image{
+    @include icon;
+    content: "\e90d";
+   }
+
+   %icon-media-video{
+    @include icon;
+    content: "\e90e";
+   }
+
+   %icon-grid-view{
+    @include icon;
+    content: "\e90f";
+   }
+
+   %icon-list-view{
+    @include icon;
+    content: "\e910";
+   }
+
+   %icon-blog{
+    @include icon;
+    content: "\e911";
+   }
+
+   %icon-phone{
+    @include icon;
+    content: "\e912";
+   }
+
+   %icon-facebook{
+    @include icon;
+    content: "\e913";
+   }
+
+   %icon-twitter{
+    @include icon;
+    content: "\e914";
+   }
+
+   %icon-search{
+    @include icon;
+    content: "\e915";
+   }
+
+   %icon-share{
+    @include icon;
+    content: "\e916";
+   }
+
+   %icon-huvis{
+    @include icon;
+    content: "\e917";
+   }
+
+   %icon-notifications{
+    @include icon;
+    content: "\e918";
+   }
+
+   %icon-magic-circle{
+    @include icon;
+    content: "\e919";
+   }
+
+   %icon-plot-it{
+    @include icon;
+    content: "\e91a";
+   }
+
+   %icon-dynamic-table-of-context{
+    @include icon;
+    content: "\e91b";
+   }
+
+   %icon-book-reader{
+    @include icon;
+    content: "\e91c";
+   }
+
+   %icon-cwrc-writer{
+    @include icon;
+    content: "\e91d";
+   }
+
+   %icon-add-bookmarks{
+    @include icon;
+    content: "\e91e";
+   }
+
+   %icon-see-bookmarks{
+    @include icon;
+    content: "\e91f";
+   }
+
+   %icon-projects{
+    @include icon;
+    content: "\e920";
+   }
+
+   %icon-view-workflow-stamp{
+    @include icon;
+    content: "\e921";
+   }
+
+   %icon-add-workflow-stamp{
+    @include icon;
+    content: "\e922";
+   }
+
+   %icon-sort-by-last-modified{
+    @include icon;
+    content: "\e923";
+   }
+
+   %icon-find-and-replace{
+    @include icon;
+    content: "\e924";
+   }
+
+   %icon-sort-alphabetically{
+    @include icon;
+    content: "\e925";
+   }
+
+   %icon-export{
+    @include icon;
+    content: "\e926";
+   }
+
+   %icon-manage-users{
+    @include icon;
+    content: "\e927";
+   }
+
+   %icon-edit{
+    @include icon;
+    content: "\e928";
+   }
+
+   %icon-media-unlocked{
+    @include icon;
+    content: "\e929";
+   }
+
+   %icon-home{
+    @include icon;
+    content: "\e92a";
+   }
+
+   %icon-locked{
+    @include icon;
+    content: "\e92b";
+   }
+
+   %icon-profile{
+    @include icon;
+    content: "\e92c";
+   }
+
+   %icon-settings{
+    @include icon;
+    content: "\e92d";
+   }
+
+   %icon-send-a-message{
+    @include icon;
+    content: "\e92e";
+   }
+
+   %icon-message-recieved{
+    @include icon;
+    content: "\e92f";
+   }
+
+   %icon-message{
+    @include icon;
+    content: "\e930";
+   }
+
+   %icon-collection-title{
+    @include icon;
+    content: "\e931";
+   }
+
+   %icon-event-type{
+    @include icon;
+    content: "\e932";
+   }
+
+   %icon-annotation{
+    @include icon;
+    content: "\e933";
+   }
+
+   %icon-assigned-to{
+    @include icon;
+    content: "\e934";
+   }
+
+   %icon-peer-reviewed{
+    @include icon;
+    content: "\e935";
+   }
+
+   %icon-unchecked{
+    @include icon;
+    content: "\e936";
+   }
+
+   %icon-checked{
+    @include icon;
+    content: "\e937";
+   }
+
+   %icon-new-list{
+    @include icon;
+    content: "\e9cf";
+   }
+*/
+
+
+  //CUSTOM
+
+   %icon-organization {
+    @include icon;
+    content: "\e93a";
+   }
+
+   %icon-place{
+    @include icon;
+    content: "\e93b";
+   }
+
+   %icon-locked{
+    @include icon;
+    content: "\e93c";
+   }
+
+   %icon-person{
+    @include icon;
+    content: "\e93d";
+   }
+
+   %icon-starred-project{
+    @include icon;
+    content: "\e93e";
+   }
+
+   %icon-content-model{
+    @include icon;
+    content: "\e940";
+   }
+
+   %icon-internet-archive{
+    @include icon;
+    content: "\e941";
+   }
+
+   %icon-collection{
+    @include icon;
+    content: "\e942";
+   }
+
+   %icon-object{
+    @include icon;
+    content: "\e943";
+   }
+
+   %icon-media-text{
+    @include icon;
+    content: "\e944";
+   }
+
+   %icon-media-critical-edition{
+    @include icon;
+    content: "\e945";
+   }
+
+   %icon-media-audio{
+    @include icon;
+    content: "\e946";
+   }
+
+   %icon-media-image{
+    @include icon;
+    content: "\e947";
+   }
+
+   %icon-media-video{
+    @include icon;
+    content: "\e948";
+   }
+
+   %icon-grid-view{
+    @include icon;
+    content: "\e949";
+   }
+
+   %icon-list-view{
+    @include icon;
+    content: "\e94a";
+   }
+
+   %icon-phone{
+    @include icon;
+    content: "\e94b";
+   }
+
+   %icon-blog{
+    @include icon;
+    content: "\e94c";
+   }
+
+   %icon-facebook{
+    @include icon;
+    content: "\e94d";
+   }
+
+   %icon-twitter{
+    @include icon;
+    content: "\e94e";
+   }
+
+   %icon-share{
+    @include icon;
+    content: "\e94f";
+   }
+
+   %icon-search{
+    @include icon;
+    content: "\e950";
+   }
+
+   %icon-huvis{
+    @include icon;
+    content: "\e951";
+   }
+
+   %icon-notifications{
+    @include icon;
+    content: "\e952";
+   }
+
+   %icon-dynamic-table-of-context{
+    @include icon;
+    content: "\e953";
+   }
+
+   %icon-magic-circle{
+    @include icon;
+    content: "\e954";
+   }
+
+   %icon-plot-it{
+    @include icon;
+    content: "\e955";
+   }
+
+   %icon-add-bookmarks{
+    @include icon;
+    content: "\e956";
+   }
+
+   %icon-book-reader{
+    @include icon;
+    content: "\e957";
+   }
+
+   %icon-cwrc-writer{
+    @include icon;
+    content: "\e958";
+   }
+
+   %icon-projects{
+    @include icon;
+    content: "\e959";
+   }
+
+   %icon-see-bookmarks{
+    @include icon;
+    content: "\e95a";
+   }
+
+   %icon-add-workflow-stamp{
+    @include icon;
+    content: "\e95b";
+   }
+
+  %icon-view-workflow-stamp{
+    @include icon;
+    content: "\e95d";
+   }
+
+   %icon-sort-by-last-modified{
+    @include icon;
+    content: "\e95c";
+   }
+
+   %icon-find-and-replace{
+    @include icon;
+    content: "\e95e";
+   }
+
+   %icon-sort-alphabetically{
+    @include icon;
+    content: "\e95f";
+   }
+
+   %icon-export{
+    @include icon;
+    content: "\e960";
+   }
+
+   %icon-manage-users{
+    @include icon;
+    content: "\e961";
+   }
+
+   %icon-edit{
+    @include icon;
+    content: "\e962";
+   }
+
+   %icon-home{
+    @include icon;
+    content: "\e963";
+   }
+
+   %icon-unlocked{
+    @include icon;
+    content: "\e966";
+   }
+
+   %icon-settings{
+    @include icon;
+    content: "\e965";
+   }
+
+   %icon-message-recieved{
+    @include icon;
+    content: "\e967";
+   }
+
+   %icon-message{
+    @include icon;
+    content: "\e968";
+   }
+
+   %icon-profile{
+    @include icon;
+    content: "\e969";
+   }
+
+   %icon-send-a-message{
+    @include icon;
+    content: "\e96a";
+   }
+
+   %icon-assigned-to{
+    @include icon;
+    content: "\e96b";
+   }
+
+   %icon-collection-title{
+    @include icon;
+    content: "\e96c";
+   }
+
+   %icon-event-type{
+    @include icon;
+    content: "\e96d";
+   }
+
+   %icon-annotation{
+    @include icon;
+    content: "\e96e";
+   }
+
+   %icon-checked{
+    @include icon;
+    content: "\e96f";
+   }
+
+   %icon-unchecked{
+    @include icon;
+    content: "\e971";
+   }
+
+   %icon-peer-reviewed{
+    @include icon;
+    content: "\e970";
+   }
+
+   %icon-folder-search{
+    @include icon;
+    content: "\e938";
+   }
+
+   %icon-citation{
+    @include icon;
+    content: "\e927";
+   }
+
+
+//DEFAULT
+
+  %icon-calendar-2{
+    @include icon;
+    content: "\e925";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-news-paper{
+    @include icon;
+    content: "\e975";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-pencil{
+    @include icon;
+    content: "\e907";
+    @include default-icomoon-icon-styles;
+  }
+
+   %icon-pencil-2{
+    @include icon;
+    content: "\e976";
+    @include default-icomoon-icon-styles;
+   }
+
+  %icon-image{
+    @include icon;
+    content: "\e908";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-images{
+    @include icon;
+    content: "\e909";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-books{
+    @include icon;
+    content: "\e90a";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-file-empty{
+    @include icon;
+    content: "\e90b";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-files-empty{
+    @include icon;
+    content: "\e90c";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-file-text2{
+    @include icon;
+    content: "\e90d";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-file-picture{
+    @include icon;
+    content: "\e90e";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-file-music{
+    @include icon;
+    content: "\e90f";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-file-play{
+    @include icon;
+    content: "\e910";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-copy{
+    @include icon;
+    content: "\e912";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-folder{
+    @include icon;
+    content: "\e913";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-folder-open{
+    @include icon;
+    content: "\e914";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-price-tags{
+    @include icon;
+    content: "\e915";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-envelop{
+    @include icon;
+    content: "\e916";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-location{
+    @include icon;
+    content: "\e917";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-alarm{
+    @include icon;
+    content: "\e918";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-bell2{
+    @include icon;
+    content: "\e919";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-drawer{
+    @include icon;
+    content: "\e91a";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-pie-chart{
+    @include icon;
+    content: "\e91b";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-stats-dots{
+    @include icon;
+    content: "\e91c";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-stats-bars{
+    @include icon;
+    content: "\e91d";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-meter{
+    @include icon;
+    content: "\e91e";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-clipboard{
+    @include icon;
+    content: "\e91f";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-volume-medium{
+    @include icon;
+    content: "\e920";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-share{
+    @include icon;
+    content: "\e921";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-mail2{
+    @include icon;
+    content: "\e922";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-file-pdf{
+    @include icon;
+    content: "\e923";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-libreoffice{
+    @include icon;
+    content: "\e924";
+    @include default-icomoon-icon-styles;
+  }
+
+   %icon-news{
+    @include icon;
+    content: "\e975";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-file-text{
+    @include icon;
+    content: "\e977";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-paste{
+    @include icon;
+    content: "\e9cf";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-folder-plus{
+    @include icon;
+    content: "\e939";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-folder-minus{
+    @include icon;
+    content: "\e978";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-pushpin{
+    @include icon;
+    content: "\e979";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-history{
+    @include icon;
+    content: "\e97a";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-clock{
+    @include icon;
+    content: "\e97b";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-bell{
+    @include icon;
+    content: "\e97c";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-calendar{
+    @include icon;
+    content: "\e97d";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-floppy-disk{
+    @include icon;
+    content: "\e97e";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-bubble{
+    @include icon;
+    content: "\e97f";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-user-plus{
+    @include icon;
+    content: "\e980";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-user-minus{
+    @include icon;
+    content: "\e981";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-user-check{
+    @include icon;
+    content: "\e982";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-unchecked{
+    @include icon;
+    content: "\e967";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-wrench{
+    @include icon;
+    content: "\e983";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-cog{
+    @include icon;
+    content: "\e984";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-cloud-download{
+    @include icon;
+    content: "\e985";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-cloud-upload{
+    @include icon;
+    content: "\e986";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-earth{
+    @include icon;
+    content: "\e987";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-link{
+    @include icon;
+    content: "\e988";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-flag{
+    @include icon;
+    content: "\e989";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-eye{
+    @include icon;
+    content: "\e98a";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-blocked{
+    @include icon;
+    content: "\e98b";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-cross{
+    @include icon;
+    content: "\e98c";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-checkmark{
+    @include icon;
+    content: "\e98d";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-arrow-up{
+    @include icon;
+    content: "\e98e";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-arrow-right{
+    @include icon;
+    content: "\e98f";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-arrow-down{
+    @include icon;
+    content: "\e990";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-arrow-left{
+    @include icon;
+    content: "\e991";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-circle-up{
+    @include icon;
+    content: "\e992";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-circle-right{
+    @include icon;
+    content: "\e993";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-circle-down{
+    @include icon;
+    content: "\e994";
+    @include default-icomoon-icon-styles;
+   }
+
+   %icon-circle-left{
+    @include icon;
+    content: "\e995";
+    @include default-icomoon-icon-styles;
+   }
+
+   %folder-plus-icon {
+    @include icon;
+    content: "\e939";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-book {
+    @include icon;
+    content: "\e900";
+    @include default-icomoon-icon-styles;
+  }
+
+   %icon-redo {
+    @include icon;
+    content: "\e901";
+    @include default-icomoon-icon-styles;
+  }
+
+   %icon-users {
+    @include icon;
+    content: "\e902";
+    @include default-icomoon-icon-styles;
+  }
+
+   %icon-star {
+    @include icon;
+    content: "\e905";
+    @include default-icomoon-icon-styles;
+  }
+
+
+   %icon-bookmark {
+    @include icon;
+    content: "\e903";
+    @include default-icomoon-icon-styles;
+  }
+
+   %icon-bookmarks {
+    @include icon;
+    content: "\e904";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-heart {
+    @include icon;
+    content: "\e906";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-facebook {
+    @include icon;
+    content: "\ea90";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-twitter {
+    @include icon;
+    content: "\ea96";
+    @include default-icomoon-icon-styles;
+  }
+
+  %icon-google{
+    @include icon;
+    content: "\ea8b";
+    @include default-icomoon-icon-styles;
+  }
+
+/* =============================================================================
+    DEFAULT
+   ========================================================================== */
+
+
+/* _placeholders.scss */
+// contains re-usable code that cuts down on code duplication but allows the flexibility of using the same code blocks in different files. Also helpful when direct access to elements in Drupal cannot be accessed to add classes to
+// modify these as required for projects. create new ones for patterns recognized while theming.
+
+
+// @page layouts
+// extension for titles with meta post data right under
+
+// %title-with-meta{
+  // @include rhythm(0,0,0,0,$base-font-size);
+// }
+
+// extension for articles with post footer data
+
+// %article-footer{
+//   margin-bottom: ms(-1);
+//   border-bottom: 1px solid shade(white,20%);
+//   @extend %pie-clearfix;
+// }
+
+// %article-footer-data{
+//   .flag-outer{
+//     float:  left;
+//   }
+//   .field-type-taxonomy-term-reference{
+//     float:  right;
+//   }
+// }
+
+
+// @box styles
+
+%box-ui-light{
+  @include ui-box;
+  @include ui-borders;
+  // @include box-shadow($ui-borders-color 0px 0px 3px);
+  box-shadow: $ui-borders-color 0px 0px 3px;
+  // @include border-radius(2px);
+  border-radius: 2px;
+}
+
+
+%box-ui-light-simple{
+  @include ui-box($box-padding: ms(-2));
+  @include ui-borders;
+}
+
+// @date styles
+
+%date-time{
+  display: block;
+  color: $light-grey;
+  @include adjust-font-size-to(14px);
+  // background-position: left center;
+  background-position: left ms(-2);
+  padding-left: ms(1);
+  // @include svg-bkgd($toolbar, 'icon-calendar-dark');
+  background-size: ms() auto;
+  // @include svg-bkgd($misc, 'clock-dark');
+}
+
+// %date{
+//   @include reset;
+//   display: block;
+//   color: $light-grey;
+//   @include adjust-font-size-to(14px);
+//   margin-bottom: ms(-1);
+//   margin-top: ms(-1);
+//   .field-content{
+//     @include reset;
+//   }
+//   .date-time,
+//   .field-item,
+//   .field-content{
+//     background-position: left center;
+//     padding-left: ms(1);
+//   }
+// }
+
+// %standard-date{
+//   .date-time,
+//   .field-content{
+//     @include svg-bkgd($toolbar, 'icon-calendar-dark');
+//   }
+// }
+
+// %standard-date-time{
+  // .date-time,
+  // .field-item,
+  // .field-content{
+    // @include svg-bkgd($misc, 'clock-dark');
+  // }
+// }
+
+// %date-time{
+//   background-position: left center;
+//   padding-left: ms(1);
+// }
+
+// button types
+
+// rounded rectangle button for form inputs
+%button-input{
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  @include adjust-font-size-to(14px);
+  border-radius: 2px;
+  transition: all 0.3s ease-out;
+
+  text-transform: uppercase;
+  padding: ms(-2) ms(1);
+  box-shadow: shade(white,35%) 0px 0px 10px;
+  @include button-input-styles;
+
+  &:hover{
+    box-shadow: shade(white,45%) 0px 7px 15px;
+  }
+
+  &:active{
+    box-shadow: shade(white,35%) 0px 0px 10px;
+  }
+}
+
+// simple button with variable border and background hover and active states
+%button-link{
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease-out;
+  display: inline-block;
+  @include adjust-font-size-to(13px);
+  border-radius: 2px;
+
+  padding: ms(-4) ms(-1);
+  @include button-link-styles;
+}
+
+// stretches full width of box. Similar to %button-link and @button-link-styles with overrides
+%box-button-link{
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  // @include transition(all 0.3s ease-out);
+  transition: all 0.3s ease-out;
+  display: block;
+  @include adjust-font-size-to(13px);
+  padding: ms(-3) ms(-1);
+  @include button-link-styles;
+}
+
+// @misc
+
+%tag-box{
+  text-transform: uppercase;
+  color:  white;
+  background-color: black;
+  display: inline-block;
+  @include adjust-font-size-to(13px);
+  padding: ms(-3) ms(-1);
+  margin-bottom: ms(-1);
+  text-decoration: none;
+}
+
+
+%box-ui-form{
+  @include ui-box($bg-color: shade(white,2%));
+  padding: ms();
+  margin-top: ms();
+  margin-bottom: ms(-1);
+  @include breakpoint($narrow-screen) {
+    margin: ms(1) ms(2);
+  }
+  @include breakpoint($weird-screen) {
+    margin-left: ms(4);
+    margin-right: ms(4);
+    padding: ms(2);
+  }
+}
+
+// %intranet-form{
+//   @extend %box-ui-light;
+//   @extend %box-ui-form;
+
+//   fieldset{
+//     margin-bottom: 0;
+//   }
+
+//   legend{
+//     @include adjust-font-size-to(16px);
+//     font-weight: $bold;
+//     @include list-divider;
+//     margin-bottom: ms(-3);
+//     width: 100%;
+//   }
+
+//   .ckeditor_links{
+//     @include adjust-font-size-to(14px);
+//     margin-top: ms(-2);
+//   }
+
+//   .filter-wrapper{
+//     padding: 0;
+//   }
+
+//   .form-text{
+//     @extend %form-item-text;
+//     background-color: white;
+//     border: 1px solid $neutral-grey;
+//   }
+
+//   .form-type-checkbox label,
+//   .form-type-date-select label,
+//   .form-radios label{
+//     font-weight: $normal;
+//   }
+
+//   .field-type-text-with-summary,
+//   .field-type-datetime,
+//   .field-type-image{
+//     margin-bottom: ms();
+//   }
+
+//   .field-type-taxonomy-term-reference{
+//     .form-item{
+//       margin-bottom: ms(-1);
+//     }
+//   }
+
+//   .field-type-video .form-item,
+//   .field-type-image .form-item{
+//     margin-bottom: 0;
+//   }
+
+//   // .field-type-file,
+//   .field-type-datetime,
+//   .field-type-video,
+//   .field-type-image{
+//     border-bottom: none;
+//     padding-bottom: 0;
+//     margin-top: 0;
+//     fieldset label{
+//       text-transform: uppercase;
+//       @include adjust-font-size-to(12px);
+//       margin-bottom: 0;
+//       color: $brand-color;
+//     }
+//   }
+
+//   .vertical-tabs{
+//     border-color: $ui-borders-color;
+//     background-color:white;
+//     li{
+//       list-style: none;
+//     }
+//     .fieldset-wrapper{
+//       padding-top: ms(-1);
+//     }
+//   }
+
+//   // .form-file{
+
+//   // }
+
+//   #edit-actions{
+//     margin-top: ms(1);
+//   }
+
+//   .form-submit{
+//     @extend %button-input;
+//   }
+
+//   #edit-preview-changes{
+//     margin-left: ms();
+//     @include button-input-styles(
+//       $bg-color: white,
+//       $bg-color-hover: $light-grey,
+//       $bg-color-active: $neutral-grey,
+//       $text-color: $dark-grey,
+//       $text-color-hover: $dark-grey
+//     );
+//   }
+
+//   #edit-delete{
+//     margin-left: ms();
+//     @include button-input-styles(
+//       $bg-color: $dark-grey,
+//       $text-color: white,
+//       $bg-color-hover: $light-grey,
+//       $text-color-hover: white,
+//       $bg-color-active: black
+//     );
+//   }
+// }
+
+// form fields
+
+%form-item-text{
+  @include form-field-reset;
+  width: 100%;
+  padding: ms(-2) ms(-1);
+  background-color: shade(white,5%);
+  @include adjust-font-size-to($base-font-size);
+  @include breakpoint($weird-screen)  {
+    background-color: white;
+    border: 1px solid $neutral-grey;
+  }
+}
+
+// component layouts
+
+// 1 / 2 / 3 / 4 colum content grid layout
+%grid-display{
+  .views-row{
+    margin-bottom: 2.43902%;
+
+    // 2 column grid @ 29em/464px
+    @include breakpoint($small-screen)  {
+      @include float-span(1, $grid: 2, $gutter: .05);
+    }
+
+
+    // 3 column grid @ 48em/768px
+    @include breakpoint($weird-screen)  {
+      @include float-span(1, $grid: 3, $gutter: .05);
+      margin-bottom: 1.6129%;
+    }
+    @include breakpoint($standard-screen) {
+      @include float-span(1, $grid: 4, $gutter: .05);
+    }
+  }
+
+  // could be views-row:nth-child(2n+2) but this way don't have to use JS for IE
+  .views-row-even{
+    margin-right: 0;
+    // reset grid to 3 column grid @ 48em/768px
+    @include breakpoint($weird-screen)  {
+      @include float-span(1, $grid: 3, $gutter: .05);
+    }
+    // reset grid to 4 column grid @ 60em/960px
+    @include breakpoint($standard-screen) {
+      @include float-span(1, $grid: 4, $gutter: .05);
+    }
+  }
+
+  .views-row:nth-child(3n+3)  {
+    // 3 column grid @ 48em/768px
+    @include breakpoint($weird-screen)  {
+      margin-right: 0;
+    }
+    // reset grid to 4 column grid @ 60em/960px
+    @include breakpoint($standard-screen) {
+      @include float-span(1, $grid: 4, $gutter: .05);
+    }
+  }
+
+  // 4 column grid @ 60em/960px
+  .views-row:nth-child(4n+4)  {
+    @include breakpoint($standard-screen)  {
+      margin-right: 0;
+    }
+  }
+
+}
+
+%list-display{
+  .views-row{
+    @include list-divider($spacing-bottom: ms());
+    @include clearfix(true);
+    margin-bottom: ms();
+  }
+  .views-row-first{
+    padding-top: 0;
+  }
+  .views-row-last{
+    margin-bottom: 0;
+  }
+  h2,h3{
+    a{
+      color: $dark-grey;
+      &:hover{
+        color:  $brand-color;
+      }
+    }
+  }
+
+  .field-name-body,
+  .views-field-body{
+    margin-top: ms(-1);
+    p{
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

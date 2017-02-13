@@ -1,0 +1,54 @@
+
+
+/* =============================================================================
+    ISLADORA BOOKMARK BLOCK
+   ========================================================================== */
+
+#block-islandora-bookmark-islandora-bookmark {
+  float: right;
+
+  header {
+    display: none;
+  }
+
+  h3 {
+    font-size: .8em;
+    text-transform: uppercase;
+    color: $brand1;
+    margin-bottom: .5em;
+    font-weight: $xbold;
+  }
+
+  @include breakpoint(0 335px) {
+
+    .form-type-select,
+    select,
+    input.form-submit {
+      width: 100%;
+    }
+  }
+}
+
+
+// if in sidebar
+
+.sidebar #block-islandora-bookmark-islandora-bookmark {
+  h3 {
+    margin: -.7em -.7em .7em;
+    background-color: #f7f7f7;
+    padding: 0.78615em 1em;
+    font-size: 1em;
+    border-bottom: 1px solid #d7d7d7;
+    font-weight: 700;
+    color: #000;
+    line-height: normal;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    text-transform: none;
+  }
+
+  input {
+    margin-right: 0;
+    width: auto;
+  }
+}

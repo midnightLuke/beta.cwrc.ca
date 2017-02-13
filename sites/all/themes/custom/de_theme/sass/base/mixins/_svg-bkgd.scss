@@ -1,0 +1,12 @@
+
+
+// SVG with PNG fallback for icon backgrounds
+@mixin no-svg { .no-svg & { @content } }
+
+@mixin svg-bkgd($folder, $filename, $extension: '.png') {
+  $filename: $folder + '/' + $filename;
+  background-image: image-url($filename + '.svg');
+  background-repeat: no-repeat;
+  @include no-svg { background-image: image-url($filename + $extension); }
+}
+

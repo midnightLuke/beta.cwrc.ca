@@ -1,0 +1,131 @@
+/* =============================================================================
+    Dashboard - Bookmark Lists
+   ========================================================================== */
+#block-cwrc-dashboards-user-bookmark-lists h2:first-of-type:before {
+  @extend %icon-book;
+}
+
+#block-cwrc-dashboards-user-bookmark-lists .content {
+
+   padding: 0;
+
+  //my lists
+
+  .my-lists h2 {
+    display: inline-block;
+    margin-bottom: 0;
+    width: auto;
+    top: 8px;
+    position: relative;
+    line-height: 22px;
+
+    &:before {
+      @extend %icon-bookmark;
+      top: -2px !important;
+      left: 0;
+      margin-right: .5em !important;
+      font-size: 1em !important;
+    }
+  }
+
+  ul {
+    float: left;
+
+     &:last-child {
+       margin-bottom: 0;
+     }
+  }
+
+  //shared with me
+
+ .heading-before-list.shared-w-me  {
+  padding: .8em .7em;
+
+  h2 {
+    margin-bottom: 0;
+    line-height: 23px;
+
+    &:before {
+      @extend %icon-bookmarks;
+      left: 0;
+      margin-right: .5em !important;
+      font-size: 1em !important;
+    }
+  }
+ }
+
+ ul.user-shared-bookmark-lists-list.lists-with-actions {
+  border-bottom: none;
+  @extend %border-radius-bottom-right;
+  @extend %border-radius-bottom-left;
+
+  li:last-child{
+    @extend %border-radius-bottom-right;
+    @extend %border-radius-bottom-left;
+  }
+ }
+
+
+  //ADD NEW BOOKMARK
+
+  .new-bookmark a {
+    @extend %btn-w-icon;
+    float: right;
+    display: inline-block;
+    margin-bottom: .7em;
+    margin-right: 0;
+
+    &:before {
+      @extend %icon-add-bookmarks;
+    }
+  }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

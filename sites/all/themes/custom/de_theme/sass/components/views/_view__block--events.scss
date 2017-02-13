@@ -1,0 +1,17 @@
+
+
+/* =============================================================================
+   VIEW BLOCK EVENTS
+   ========================================================================== */
+
+.block-views .view-events .views-field-title a{
+  &:before {
+    @include circle-icon;
+    @extend %icon-calendar;
+  }
+}
+
+#block-views-events-block {
+  padding-bottom: .7em !important;
+}
+

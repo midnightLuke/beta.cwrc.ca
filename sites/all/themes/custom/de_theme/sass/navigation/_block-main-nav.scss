@@ -1,0 +1,129 @@
+/* navigation/_main-nav.scss */
+
+//region for mobile
+.region-navigation {
+  @include breakpoint(max-width 730px) {
+    border-bottom: none;
+
+    .container {
+      padding: 0;
+    }
+  }
+}
+
+#block-menu-block-9 {
+  float: right;
+  width: 100%;
+}
+
+.menu-name-main-menu{
+  // general menu styles and resets
+  /*
+  float: left;
+  margin-left: ms(1);
+
+  ul.menu{
+    @include reset;
+    @include clearfix(true);
+    @include navigation-list;
+  }
+
+  ul.menu {
+    width: 100%;
+  }
+
+  ul.menu li {
+    //width: 20%;
+    line-height: 28px;
+    @include reset;
+    @include breakpoint(max-width 730px) {
+      width: 50%;
+      border-bottom: 2px solid lighten($brand3, 9%);
+
+      a{
+        font-size: ms(-.4);
+      }
+
+      &.menu-mlid-912, &.menu-mlid-916 {
+        a {
+          border-right: none !important;
+        }
+      }
+
+      &.last {
+        width: 100%;
+        a{
+          text-align: center !important;
+        }
+      }
+    }
+  }
+
+  ul.menu a{
+    text-decoration: none;
+    text-transform: lowercase;
+    display: block;
+    text-align: center;
+    color: $brand1;
+    font-weight: $normal;
+    margin-right: ms(1);
+    // padding: ms(-3) ms();
+    // border-radius: 2px;
+    // transition: all 0.3s ease-out;
+    // background-color: $dark-grey;
+    // color: white;
+    &:hover{
+      color: $brand2;
+      // background-color: shade($brand-color, 18%);
+      // color: tint(white,15%);
+    }
+    &.active,
+    &.active-trail,
+    &:active{
+      color: $brand2;
+      // background-color: $brand-color;
+      // color: white;
+    }
+  }
+
+  ul.menu li.last a{
+    border-right: none;
+  }*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

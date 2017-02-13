@@ -1,0 +1,226 @@
+
+
+
+//Critical Edition Container Content Model
+
+  .left-wrapper.islandora-criticaleditioncontainercmodel a.has-image:hover,
+  .left-wrapper.islandora-criticaleditioncontainercmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-folder-open;
+      content:'\e914';
+    }
+  }
+
+//TEI-RDF Content Model
+
+  .left-wrapper.islandora-tei-rdfcmodel a.has-image:hover,
+  .left-wrapper.islandora-tei-rdfcmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-clipboard;
+      content:'\e91f';
+    }
+  }
+
+//Transcription Content Model Content Model
+
+  .left-wrapper.islandora-transcriptioncmodel a.has-image:hover,
+  .left-wrapper.islandora-transcriptioncmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-file-text2;
+      content:'\e90d';
+    }
+  }
+
+//Version Content Model
+
+  .left-wrapper.islandora-versioncmodel a.has-image:hover,
+  .left-wrapper.islandora-versioncmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-pencil;
+      content:'\e907';
+    }
+  }
+
+//Islandora Audio Content Model
+
+  .left-wrapper.islandora-sp-audiocmodel a.has-image:hover,
+  .left-wrapper.islandora-sp-audiocmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-file-music;
+      content:'\e90f';
+    }
+  }
+
+//Islandora Collection Content Model
+
+  .left-wrapper.islandora-collectioncmodel a.has-image:hover,
+  .left-wrapper.islandora-collectioncmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-files-empty;
+      content:'\e90c';
+    }
+  }
+
+//Islandora Basic Image Content Model
+
+  .left-wrapper.islandora-sp-basic-image a.has-image:hover,
+  .left-wrapper.islandora-sp-basic-image a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-file-picture;
+      content:'\e90e';
+    }
+  }
+
+//Islandora Internet Archive Book Content Model
+
+  .left-wrapper.islandora-bookcmodel a.has-image:hover,
+  .left-wrapper.islandora-bookcmodel a .no-image .no-image-icon {
+    &:before {
+      // @extend %icon-internet-archive;
+      font-size: 35px;
+      content:'\e941';
+    }
+  }
+
+  .left-wrapper.islandora-bookcmodel a.has-image:hover:before {
+    font-size: 18px;
+  }
+
+//Islandora Page Content Model
+
+  .left-wrapper.islandora-pagecmodel a.has-image:hover,
+  .left-wrapper.islandora-pagecmodel a .no-image .no-image-icon {
+    &:before {
+      content:'\e90b';
+    }
+  }
+
+//Islandora Compound Object Content Model
+
+  .left-wrapper.islandora-compoundcmodel a.has-image:hover,
+  .left-wrapper.islandora-compoundcmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-object;
+      font-size: 2.2em !important;
+      content:'\e943';
+    }
+  }
+
+//CWRC Organization Entity Content Model
+
+  .left-wrapper.cwrc-organization-entitycmodel a.has-image:hover,
+  .left-wrapper.cwrc-organization-entitycmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-drawer;
+      top: -4px !important;
+      content:'\e91a';
+    }
+  }
+
+//CWRC Person Entity Content Model
+
+  .left-wrapper.cwrc-person-entitycmodel a.has-image:hover,
+  .left-wrapper.cwrc-person-entitycmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-person;
+      font-size: 35px;
+      content:'\e93d';
+    }
+  }
+
+  .left-wrapper.cwrc-person-entitycmodel a.has-image:hover:before {
+    font-size: 15px;
+  }
+
+//CWRC Place Entity Content Model
+
+  .left-wrapper.cwrc-place-entitycmodel a.has-image:hover,
+  .left-wrapper.cwrc-place-entitycmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-location;
+      content:'\e917';
+    }
+  }
+
+//CWRC Schema Content Model
+
+  .left-wrapper.cwrc-schemacmodel a.has-image:hover,
+  .left-wrapper.cwrc-schemacmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-libreoffice;
+      content:'\e924';
+    }
+  }
+
+//Islandora Large Image Content Model
+
+  .left-wrapper.islandora-sp-large-image-cmodel a.has-image:hover,
+  .left-wrapper.islandora-sp-large-image-cmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-file-picture;
+      content:'\e90e';
+    }
+  }
+
+//Islandora PDF Content Mode
+
+  .left-wrapper.islandora-sp-pdf a.has-image:hover,
+  .left-wrapper.islandora-sp-pdf a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-file-pdf;
+      content:'\e923';
+    }
+  }
+
+//Islandora Video Content Model
+
+  .left-wrapper.islandora-sp-videocmodel a.has-image:hover,
+  .left-wrapper.islandora-sp-videocmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-file-play;
+      content:'\e923';
+    }
+  }
+
+//CWRC Document Content Model
+
+  .left-wrapper.cwrc-documentcmodel a.has-image:hover,
+  .left-wrapper.cwrc-documentcmodel a .no-image .no-image-icon{
+    &:before {
+      //@extend %icon-file-text;
+      //content:'\e910';
+      content:'</>';
+      font-family: impact;
+    }
+  }
+
+
+//Citation Content Model
+
+  .left-wrapper.cwrc-citationcmodel a.has-image:hover,
+  .left-wrapper.cwrc-citationcmodel a .no-image .no-image-icon,
+  .left-wrapper.ir-citationcmodel a.has-image:hover,
+  .left-wrapper.ir-citationcmodel a .no-image .no-image-icon {
+    &:before {
+      content:'\e927';
+    }
+  }
+
+  .left-wrapper.cwrc-citationcmodel a .no-image .no-image-icon,
+  .left-wrapper.ir-citationcmodel a .no-image .no-image-icon {
+    font-size: 25px;
+  }
+
+
+
+//Markup Editor C Model
+
+  .left-wrapper.islandora-markupeditorschemacmodel a.has-image:hover,
+  .left-wrapper.islandora-markupeditorschemacmodel a .no-image .no-image-icon {
+    &:before {
+      //@extend %icon-pencil-2;
+      content:'\e976';
+    }
+  }
+
+

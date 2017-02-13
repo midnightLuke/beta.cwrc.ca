@@ -1,0 +1,19 @@
+/* =============================================================================
+    PROJECT DASHBOARD - PENDING APPLICATIONS
+   ========================================================================== */
+
+#block-views-pending-applications-block .content {
+  p {
+    margin-bottom: 0;
+    font-size: 1.1em;
+  }
+
+  fieldset.form-wrapper .fieldset-wrapper input.form-submit {
+    border-right: none;
+    border-bottom-right-radius: 5px;
+  }
+
+  span.no-results {
+    font-size: 13px;
+  }
+}

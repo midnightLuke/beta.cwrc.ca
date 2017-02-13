@@ -1,0 +1,469 @@
+/* components/_user-profile.scss */
+
+// customizations for the user profile page layout
+
+.logged-in.page-user-view .content-section{
+  background-color: transparent;
+  border-radius: none;
+  box-shadow: none;
+  border: none;
+}
+
+.logged-in.page-user-view .region-content{
+  padding: 0;
+}
+
+article.profile{
+  @include clearfix(true);
+
+  // groups
+
+  #group-user-details{
+    @include breakpoint($narrow-screen) {
+      @include float-span(8);
+    }
+  }
+
+  #group-user-links{
+    @include breakpoint($narrow-screen) {
+      @include float-span(4,'last');
+    }
+  }
+
+  #group-employee-details{
+    @extend %box-ui-light;
+    @include clearfix(true);
+    margin-bottom: ms();
+  }
+
+  // field data
+
+  .field-name-field-photo{
+    line-height: 0;
+    margin-bottom: ms();
+    @include breakpoint($weird-screen) {
+      @include float-span(4);
+      margin-bottom: 0;
+    }
+    img{
+      width: 100%;
+    }
+  }
+
+  #group-position-details{
+    @include breakpoint($weird-screen) {
+      @include float-span(8,'last');
+    }
+  }
+
+    .group-position-details{
+      .field{
+        @include list-divider($border-color: shade(white, 5%), $spacing-top: ms(-1.25), $spacing-bottom: ms(-1.25));
+        @include adjust-font-size-to(14px);
+        line-height: ms(.75);
+      }
+      .field-label{
+        font-weight: $normal;
+        margin-right: ms();
+        vertical-align: top;
+      }
+      .field-item{
+        color: $light-grey;
+      }
+    }
+
+  .field-name-field-links,
+  .field-name-field-about-me,
+  .field-name-field-contact-me{
+    .field-label{
+      font-weight: $normal;
+      @include adjust-font-size-to(20px);
+      @include list-divider($spacing-top: 0);
+      margin-bottom: ms(-2);
+    }
+  }
+
+  .field-name-field-contact-me{
+    @extend %box-ui-light;
+    margin-bottom: ms();
+    @include breakpoint($narrow-screen)   {
+      margin-bottom: 0;
+    }
+    .field-item{
+      @include adjust-font-size-to(14px);
+      line-height: ms(.75);
+      color: $light-grey;
+    }
+  }
+
+  .field-name-field-about-me{
+    @extend %box-ui-light;
+    margin-bottom: ms();
+    .field-item{
+      @include adjust-font-size-to(14px);
+      line-height: ms(.75);
+      color: $light-grey;
+    }
+  }
+
+  .field-name-field-links{
+    @extend %box-ui-light;
+    .field-label{
+      margin-bottom: 0;
+    }
+    .field-item{
+      @include list-divider($border-color: shade(white, 5%), $spacing-top: ms(-1.25), $spacing-bottom: ms(-1.25));
+      @include adjust-font-size-to(14px);
+      line-height: ms(.75);
+    }
+    a{
+      text-decoration: none;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+
+// edit user profile page
+
+.not-front.page-user-edit .content-section{
+  background-color: white;
+  border-radius: 3px 3px 0px 0px;
+  box-shadow: $ui-borders-color 0px 0px 5px;
+  border: 1px solid $ui-borders-color;
+}
+
+.not-front.page-user-edit .region-content{
+  padding: ms(-1) ms();
+}
+
+.page-user-edit{
+  #page-title{
+    @include breakpoint($narrow-screen) {
+      text-align: center;
+    }
+  }
+}
+
+#user-profile-form{
+  th,td{
+    @include reset-font;
+  }
+
+  .form-textarea{
+    @extend %form-item-text;
+    background-color: white;
+    border: 1px solid $shade3;
+
+  }
+
+  label{
+    font-weight: $bold;
+    &.option{
+      font-weight: $normal;
+    }
+  }
+
+  .form-item-roles,
+  .form-item-status{
+    @include clearfix(true);
+    .form-item{
+      margin-right: ms();
+      float:  left;
+    }
+  }
+
+  div.password-strength,
+  div.password-confirm{
+    @include adjust-font-size-to(14px);
+    font-weight:  $bold;
+  }
+
+  div.form-item div.password-suggestions{
+    @extend %box-ui-light-simple;
+    @include ui-borders($border-width: 0px);
+    @include ui-box($box-padding: ms(1));
+    font-weight: $bold;
+    ul{
+      margin-top: ms();
+      margin-bottom: 0;
+    }
+  }
+
+  .field-name-field-photo{
+    .file,
+    .file-size{
+      @include adjust-font-size-to(14px);
+    }
+  }
+
+  .delta-order {
+    vertical-align: top;
+  }
+
+  .field-name-field-links{
+    margin-bottom: ms();
+    table{
+      @include reset-font;
+      @include trailer(.5);
+      margin-bottom: ms(-1);
+    }
+
+    th{
+      padding-left: ms(-1);
+    }
+
+    .link-field-url{
+      @include breakpoint($medium-screen) {
+        margin-left: ms();
+      }
+    }
+
+    .link-collection-remove-button{
+      @include adjust-font-size-to(14px);
+    }
+
+    .field-multiple-table td.field-multiple-drag a.tabledrag-handle{
+      @include reset;
+    }
+
+    .link-field-column{
+      width: 100%;
+      float: none;
+      @include breakpoint($medium-screen) {
+        width: 48%;
+        float: left;
+      }
+    }
+  }
+
+  #edit-cancel{
+    margin-left: ms();
+    @include button-input-styles(
+      $bg-color: shade(white,10%),
+      $bg-color-hover: $neutral-grey,
+      $bg-color-active: shade(white, 20%),
+      $text-color: $dark-grey,
+      $text-color-hover: $dark-grey
+    );
+  }
+
+  // .field-add-more-submit{
+  //   @include button-input-styles(
+  //     $bg-color: $light-grey,
+  //     $bg-color-hover: $dark-grey,
+  //     $bg-color-active: black,
+  //     $text-color: white,
+  //     $text-color-hover: white
+  //   );
+  // }
+}
+
+
+
+/* =============================================================================
+    USER PROFILE
+   ========================================================================== */
+
+   article.profile {
+    margin: 0;
+
+    header.top {
+      margin-bottom: .7em;
+    }
+
+    h2.top {
+      margin: -.7em -.7em 1em -.7em;
+    }
+
+    .top-info-section  {
+      float: left;
+      width: 100%;
+      border-bottom: 1px solid $shade3;
+      margin-bottom: 2em;
+
+      .profile-info-wrapper {
+        float: left;
+        font-size: .9em;
+        margin-left: 1em;
+        @include breakpoint(0 760px) {
+          width: 100%;
+          margin-bottom: 1em;
+          margin-left: 0;
+        }
+      }
+
+      //information feilds
+
+      .profile-info {
+        margin-bottom: .8em;
+        //float: left;
+        width: 100%;
+        display: inline-block;
+
+
+        .field-items {
+          float: left;
+        }
+      }
+    }
+
+    //LISTS
+
+    .info-item-wrapper {
+      width: 100%;
+
+
+    .field {
+      float: left;
+      width: 32%;
+      margin-right: 2%;
+      border: 1px solid $shade3;
+      border-radius: 5px;
+      @include breakpoint(0 760px) {
+        width: 100%;
+        margin-bottom: 1em;
+      }
+
+      &:nth-child(3) {
+        margin-right: 0;
+      }
+
+      .field-item {
+        border-bottom: 1px solid $shade3;
+        padding: .4em .4em;
+        &:last-child {
+          border-bottom: none;
+        }
+
+        a {
+          text-decoration: none;
+        }
+      }
+
+      .field-label {
+        border-bottom: 1px solid $shade3;
+        padding: .7em;
+        background: $bck-grey;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+      }
+    }
+  }
+
+    //PICTURE
+
+    .user-picture {
+      float: left;
+      border-right: 1px solid $shade3;
+      padding-right: 2em;
+      min-height: 133px;
+      margin-bottom: 2em;
+        @include breakpoint(0 760px) {
+        border-right: none;
+        height: auto;
+        min-height: 100%;
+        margin-bottom: 1em;
+      }
+    }
+
+    //NAME
+
+    .field-name-field-full-name:before{
+      @include circle-icon;
+      @extend %icon-profile;
+      font-size: 1.4em !important;
+      margin-bottom: 1em;
+    }
+
+    //HISTORY
+
+    .user-profile-category {
+
+      &:before {
+        @include circle-icon;
+        @extend %icon-history;
+        padding-right: .2em;
+        margin-bottom: 1em;
+        margin-right: 1.6em !important;
+      }
+
+      h2 {
+        padding: 0;
+        background-color: #fff;
+        border-bottom: none;
+        color: $brand1;
+        margin: 0 !important;
+      }
+
+      dt {
+        float: left;
+        font-weight: normal;
+        &:after {content: ":"; margin: 0 .3em;}
+      }
+
+      dd {
+        display: block;
+        float: left;
+      }
+
+      dl, dd {
+        margin-bottom: 0;
+      }
+    }
+
+
+    //SEND MSG
+
+    .contact-btn {
+      float: left;
+    }
+
+    a.privatemsg-send-link {
+      @include btn-w-icon;
+      margin-right: 0;
+
+        &:before {
+          @extend %icon-message;
+        }
+    }
+
+    .info {
+      float: left;
+      margin-top: 1em;
+      width: 100%;
+
+      dd {
+        margin-bottom: 0;
+      }
+    }
+
+   } //-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

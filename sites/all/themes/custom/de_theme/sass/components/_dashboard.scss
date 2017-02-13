@@ -1,0 +1,265 @@
+@import 'dashboard/dashboard__block--private-messages';
+@import 'dashboard/dashboard__block--whos-online';
+@import 'dashboard/dashboard__block--my-projects';
+@import 'dashboard/dashboard__block--bookmark-lists';
+@import 'dashboard/dashboard__block--workflow-reports';
+@import 'dashboard/dashboard__block--saved-searches';
+@import 'dashboard/dashboard-project';
+@import 'dashboard/dashboard-project__block--utilities';
+@import 'dashboard/dashboard-project__block--project-members';
+@import 'dashboard/dashboard-project__block--pending-applications';
+@import 'dashboard/dashboard__block--recently-edited-objects';
+@import 'dashboard/dashboard-project__block--disk-quota';
+@import 'dashboard/dashboard-project__block--credit-visualizations';
+
+/* =============================================================================
+    PAGE USER SECTION - GENERAL STYLES
+   ========================================================================== */
+
+
+//PAGE BACKGROUND AND SECTION STYLES
+
+.page-user {
+
+  .user-picture-header {
+    float: left;
+    margin-right: 1em;
+    img{border-radius: 50px; border: 1px solid $shade3;}
+  }
+}
+
+
+
+/* =============================================================================
+    GENREAL BLOCK STYLES
+   ========================================================================== */
+
+
+//GENERAL
+
+.page-user-dashboard,
+.page-node-dashboard {
+  .section-content .block h2 {
+    margin: 0 !important;
+  }
+}
+
+//BUTTONS / INPUT
+
+.section-content #main input.form-submit {
+  margin: ms(0) 0 0;
+}
+
+//HEADERS
+
+#block-islandora-saved-searches-saved-searches {
+  h2:before {
+    @extend %icon-floppy-disk;
+  }
+}
+
+#block-islandora-saved-searches-saved-searches {
+  h2:before {
+    @extend %icon-floppy-disk;
+  }
+}
+
+#block-block-2 {
+  h2:before {
+    @extend %icon-pie-chart;
+  }
+}
+
+#block-cwrc-dashboards-user-recently-edited {
+  h2:before {
+    @extend %icon-pencil;
+  }
+}
+
+#block-cwrc-dashboards-user-assigned-to-me {
+  h2:before {
+    @extend %icon-star;
+  }
+}
+
+//BLOCKS
+
+.page-user.page-node-dashboard .section-content .block,
+.page-user.page-user-dashboard .section-content .block {
+  padding: 0;
+
+  h2 {
+    a {
+      color: $brand1 !important;
+    }
+  }
+
+  h2:first-of-type:before {
+    font-size: 16px !important;
+    left: -5px;
+    margin-right: .3em !important;
+  }
+}
+
+
+
+
+
+//HEADING BEFORE LIST Example: bookmark list0
+
+%header-w-circle-icon,
+.page-user .section-content .block .heading-before-list {
+  padding: .7em .7em 0em;
+  float: left;
+  width: 100%;
+  border-bottom: 1px solid $shade3;
+
+    h2 {
+      float: left;
+      width: 100%;
+      text-transform: uppercase;
+
+      &:before {
+      @extend %circle-icon;
+      @extend %icon-bookmark;
+      font-size: 1em !important;
+      }
+    }
+  }
+
+%header-w-circle-icon-div {
+  padding: .5em .7em;
+  float: left;
+  width: 100%;
+  border-bottom: 1px solid $shade3;
+  background: #fff;
+}
+
+%header-w-circle-icon-element {
+  float: left;
+  width: 100%;
+  text-transform: uppercase;
+  text-transform: uppercase;
+  display: block;
+  font-weight: $bold;
+  font-size: .75em;
+  line-height: 23px;
+
+  &:before {
+    @extend %circle-icon;
+    @extend %icon-bookmark;
+    font-size: 1em !important;
+    top: -1.5px !important;
+    position: relative;
+    }
+}
+
+
+
+ // UL background of lists with actions
+
+.page-user .section-content .block  ul.lists-with-actions {
+    background: #F7FCFF;
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid $shade3;
+  }
+
+.page-user .section-content .block  ul.lists-with-actions > li {
+    padding: .5em 1em;
+    margin-bottom: 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:nth-child(even) {
+      background: #EEF5F9;
+    }
+
+    a {
+      font-weight: 400;
+      color: $brand1;
+    }
+  }
+
+  //text in lists with actions
+
+.page-user .section-content .block .txt-item-in-list {
+    top: 2px;
+    position: relative;
+  }
+
+
+//ADMIN ACESS WRAPPER EXAMPLE: Workflow report admin button area
+
+  .admin-access-wrapper {
+    float: right;
+    width: 100%;
+    border-top: 1px solid $shade3;
+    padding: .7em;
+  }
+
+  .admin-access-wrapper a{
+    @extend %btn-w-icon;
+    margin-bottom: 0;
+    margin-right: 0;
+    float: left;
+
+    &:before {
+     @extend %icon-profile;
+    }
+  }
+
+
+
+/* =============================================================================
+    ELEMENTS INCLUDED IN THIS SECTION
+   ========================================================================== */
+
+
+   //BADGE / NOTIFICATIONS
+
+   .badge {
+    @include badge;
+   }
+
+
+   //ACTION LISTS
+
+   .lists-with-actions{
+    @include lists-w-actions;
+   }
+
+
+   //FLAGGED / STARRED ITEMS
+
+   .flag-wrapper {
+    @include flagged-item;
+   }
+
+
+   //NO RESULT TEXT
+
+  span.no-results {
+    padding: .7em;
+    display: block;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

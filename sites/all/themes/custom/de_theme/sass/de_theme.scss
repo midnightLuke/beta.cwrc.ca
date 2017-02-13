@@ -1,0 +1,66 @@
+//  Author: Digital Echidna, <authors>
+
+//  @Project Structure Overview
+//  Imports are setup to help chunk different types of styles
+//  for projects but also resemble a single stylesheet layed
+//  out to take advantage of cascade
+//
+//  New sass partial files can be created to serve other purposes,
+//  such as an extensive events section
+
+///////////////////////////////////////////////
+// If a specific install will not be
+// using certain functionlaity or styles
+// ensure that the partials are commented
+// out and not imported OR code is commented
+// out within individual files. This theme
+// has been built with the idea in mind that
+// items can be removed or added efficiently
+///////////////////////////////////////////////
+
+// @digital echidna intranet base file
+// _base.scss contains references to mixins, settings, variables, 3rd party imports
+@import 'base';
+
+// @authors unclassed element styles
+// _elements.scss contains authors unclassed HTML element styles such as h1, h2, table, etc
+@import 'elements';
+
+// @authors do not edit. drupal overide styles of exisiting components.
+// _drupal.scss contains echidnas default drupal style overrides and baseline styles for default CORE drupal functionlaity eg. webform overrides, basic search result styles.
+@import 'drupal';
+
+// @authors design structure styles
+// _layout.scss contains the design structure styles, including responsive design implementation
+@import 'layout';
+
+// @placehodlers
+// _playceholders.scss contains re-usable code that cuts down on code duplication but allows the flexibility of using the same code blocks in different files. Also helpful when direct access to elements in Drupal cannot be accessed to add classes to
+//@import 'placeholders';
+
+// @authors generic, underlying design patterns for component styling
+// _objects.scss contains generic, underlying design patterns and their extensions. eg. basic styles for all sidebar blocks or list displays of content
+@import 'objects';
+
+// @import echidna drupal module sass files
+@import 'modules';
+
+// @authors specific component styling
+// _components.scss contains styles for components constructed from objects and their extensions, or detailed page design. eg. a sidebar call to action that is styled specifically for events
+@import 'components';
+
+// @authors navigation system styles
+// _navigation.scss contains styles for all navigation systems. eg. main navigation, sub navigation, pagination, breadcrumbs, footer sitemap menus
+@import 'navigation';
+
+// @authors editor styles
+// _wysiwyg.scss contains styles for the editor experience. eg. float images left or right, headline and highlight typography
+@import 'wysiwyg/wysiwyg-styles';
+
+// @internet explorer browser fixes (contains all browser versions in partials located in the sass/ie directory)
+@import 'ie';
+
+// @internet explorer browser fixes (contains all browser versions in partials located in the sass/ie directory)
+@import 'wireframe';
+
+//@import 'print';

@@ -1,0 +1,105 @@
+/* block examples */
+
+.region-sidebar-second .block{
+  //padding: ms(-1);
+  margin-bottom: ms();
+ // border: 1px solid $border-grey;
+
+    @include breakpoint($small-screen) {
+      margin-bottom: 1em;
+      @include float-span(6,1);
+      &:nth-child(2n+2) {
+        @include float-span(6,'last');
+      }
+    }
+
+
+  /////////////////////////////////////////////
+  // blocks for a layout WITH a
+  // narrow screen nav in sidebar first
+
+  @include breakpoint($narrow-screen) {    // uncomment: yes sidebar first small screen nav
+    margin-bottom: 1em;
+    @include column-reset;
+    // @include float-span(6,1);
+    &:nth-child(2n+2) {
+    @include column-reset;
+      // @include float-span(6,'last');
+    }
+  }
+
+
+  @include breakpoint($weird-screen) {
+    @include float-span(4,1);
+    &:nth-child(2n+2) {
+      @include float-span(4,1);
+    }
+    &:nth-child(3n+3) {
+      @include float-span(4,'last');
+    }
+  }
+
+  @include breakpoint($medium-screen) {  // uncomment:  sidebar first small screen nav
+    margin-bottom: ms();
+    @include column-reset;
+    &:nth-child(2n+2) {
+      @include column-reset;
+    }
+    &:nth-child(3n+3) {
+      @include column-reset;
+    }
+  }
+
+  &:last-child{
+    margin-bottom: 0 !important;
+  }
+
+  h2{
+    @include adjust-font-size-to(16px);
+    font-weight: $bold;
+  }
+}
+
+.two-sidebars{
+  .region-sidebar-second .block{
+    /////////////////////////////////////////////
+    // blocks for a layout WITHOUT a
+    // narrow screen nav in sidebar first
+
+
+    // @include breakpoint($weird-screen) {
+    //   @include float-span(4,1);
+    //   &:nth-child(2n+2) {
+    //     @include float-span(4,1);
+    //   }
+    //   &:nth-child(3n+3) {
+    //     @include float-span(4,'last');
+    //   }
+    // }
+
+
+    // @include breakpoint($medium-screen) {
+    //   @include column-reset;
+    //   margin-bottom: ms();
+    //   &:nth-child(2n+2) {
+    //     @include column-reset;
+    //   }
+    //   &:nth-child(3n+3) {
+    //     @include column-reset;
+    //   }
+    // }
+    /////////////////////////////////////////////
+  }
+}
+
+.one-sidebar.sidebar-second {
+  .region-sidebar-second .block{
+    @include breakpoint($weird-screen) {
+      @include column-reset;
+      margin-bottom: ms();
+      &:nth-child(2n+2) {
+        @include column-reset;
+      }
+    }
+  }
+}

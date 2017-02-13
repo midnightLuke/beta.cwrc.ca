@@ -1,0 +1,165 @@
+
+/* =============================================================================
+    CWRC WRITER
+   ========================================================================== */
+
+   #cwrc_wrapper {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    background-color: #f7f7f7 !important;
+    padding: 0.78615em 1em !important;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+   }
+
+  #cwrc_header {
+    background-color: $brand2 !important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-position: 8px 7px !important;
+    background-size: auto 21px !important;
+  }
+
+  #cwrc_header h1 {
+    margin-top: .1em !important;
+    font-size: 13px;
+    line-height: 33px;
+    color: #fff;
+    font-weight: $xbold;
+    margin-left: 25px !important;
+    margin-left: 36px !important;
+  }
+
+  #cwrc_header h2 {
+    padding: 10px 15px 0px 0px;
+    color: #fff !important;
+  }
+
+#islandora-cwrc-document-display-cwrc-writer .tabs a{
+  padding: 0px 1em !important;
+}
+
+ul.jstree-container-ul.jstree-no-icons.jstree-no-dots.jstree-wholerow-ul {
+  padding-left: .5em;
+}
+
+#cwrc_wrapper {
+  ::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+  }
+}
+
+@-moz-document url-prefix() {
+
+  #westTabsContent #tree.iu-layout-center.jstree {
+    width: 400px;
+  }
+
+  #westTabs.tabs {
+    margin-bottom: 0;
+    overflow-x:hidden;
+    overflow-y: hidden;
+    width: 325px;
+    position: relative;
+    height: 948px;
+  }
+
+  #westTabsContent {
+    position: relative;
+    width: 350px;
+    height: 980 !important;
+  }
+
+  #cwrc_main.ui-layout-center.ui-layout-pane {
+    overflow-x: hidden !important;
+    position: relative !important;
+  }
+
+  #cwrc_main.ui-layout-center.ui-layout-pane .ui-layout-center {
+    position: relative !important;
+    width: 104% !important;
+    padding-right: 0.5em;
+  }
+
+  .jstree-cwrc > .jstree-no-dots .jstree-open > .jstree-ocl {
+    position: absolute;
+  }
+
+  .jstree-cwrc > .jstree-no-dots .jstree-closed > .jstree-ocl {
+    position: absolute;
+  }
+
+  i.jstree-icon.jstree-ocl {
+    position: absolute;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

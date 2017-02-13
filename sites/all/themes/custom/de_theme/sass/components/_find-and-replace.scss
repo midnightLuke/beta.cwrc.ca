@@ -1,0 +1,138 @@
+
+/* =============================================================================
+    FIND AND REPLACE SECTION
+   ========================================================================== */
+
+
+  .islandora-solr-content {
+    float: left;
+    width: 100%;
+
+    table {
+      @extend %blue-table;
+      margin-bottom: ms(0) !important;
+    }
+
+    form{
+      h3 {
+        font-size: ms(-.5);
+        text-transform: uppercase;
+        font-weight: $xbold;
+      }
+
+      h2 {
+          text-decoration: none;
+          font-weight: $xbold;
+          font-size: ms(.4);
+          margin: 2em 0 1em;
+
+        a {
+          text-decoration: none;
+
+          &:before {
+            content: none;
+          }
+        }
+      }
+
+      h2:first-child {
+        margin: .5em 0 .5em;
+      }
+    }
+
+    .form-submit {
+      margin-bottom: ms(0) !important;
+    }
+
+    ul.pager {
+      margin: 1em 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding-top: .5em;
+    }
+  }
+
+//top items
+
+#islandora-solr-top {
+  border-bottom: 1px solid $shade3;
+  margin-bottom: 1.5em;
+  float: left;
+  width: 100%;
+
+  ul#secondary-display-profiles li a{
+    //background: red;
+    @include btn;
+  }
+
+  #islandora-solr-result-count {
+    font-style: italic;
+    font-size: ms(-.4);
+  }
+}
+
+
+//CONTENT FILEDS
+
+.islandora-solr-content form {
+  #xquery_inputs,
+  .form-type-select,
+  .form-type-checkboxes,
+  .form-type-textfield {
+    border: 1px solid $light-grey;
+    border-radius: 5px;
+    padding: .7em;
+    background-color: #FBFBFB;
+  }
+}
+
+.page-islandora-xquery-preview {
+  ul.islandora-xquery-preview-control-list li {
+    display: inline-block;
+    width: auto;
+    margin-top: ms(0);
+
+   a{
+      @include btn;
+    }
+  }
+}
+
+//blue table
+
+.page-islandora-search.og-context {
+  table{
+    @extend %blue-table;
+    margin-bottom: ms(0);
+  }
+}
+
+
+
+/* =============================================================================
+    QUERY PREVIEW
+   ========================================================================== */
+
+.islandora-xquery-preview {
+  .islandora-xquery-help {
+    background-color: #E7FFE7;
+    border: 1px solid #BAEFBA;
+    padding: .7em;
+    border-radius: 5px;
+  }
+
+  .islandora-xquery-diff {
+    border: 1px solid $shade3;
+    padding: .7em;
+    border-radius: 5px;
+    margin: ms(0) 0 ms(0);
+  }
+
+  a.islandora-xquery-original-ds-link {
+    font-weight: $xbold;
+    font-size: 1.2em;
+    text-decoration: none;
+    margin-bottom: 1em;
+    display: block;
+  }
+}

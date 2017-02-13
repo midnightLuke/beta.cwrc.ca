@@ -1,0 +1,189 @@
+/* ie/_ie7.scss */
+
+.lt-ie8{
+
+
+  audio,
+  canvas,
+  progress,
+  video {
+    display: inline;
+    zoom: 1;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    vertical-align: baseline;
+    vertical-align: middle;
+  }
+
+  button,
+  html input[type="button"],
+  input[type="reset"],
+  input[type="submit"] {
+    overflow: visible;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    height: 13px;
+    width: 13px;
+  }
+
+  .block-main-nav{
+
+    .menu-block-1 > .menu > li{
+      margin-right: rhythm(.25);
+    }
+
+    .menu-block-1 > .menu > li .menu-wrapper > .menu{
+      @include rhythm-borders(1px,0,$base-font-size,solid);
+      border-color: darken(white,30);
+    }
+
+    .menu-block-1 .menu-wrapper{
+      background-image: url('../images/misc-icons/arrow-up5.png') !important;
+    }
+
+  }
+
+  // .no-boxsizing{}
+
+  // .no-svg{}
+
+  // use this or IE classes to fix IE7, such as displaying menus if hidden via small screen functions in JS
+  // .no-mediaqueries h1{
+  //   color:  blue;
+  // }
+
+  // headlines rotator
+  .block-headline-rotator{
+    .view-display-id-banner_nav{
+      .more-link a{
+        @include leading-border(1px,0,$base-font-size,none);
+        border-color: shade(white,20%);
+      }
+    }
+  }
+
+
+  .not-front .content-section {
+    @include rhythm-borders(1px,0,$base-font-size,solid);
+    border-color: shade(white,15%);
+  }
+
+
+
+  // IE FIXES FOR TABLES
+  table{
+    thead th{
+      @include trailing-border(2px,0,14px,solid);
+      border-bottom-color: $brand-color;
+    }
+    tbody td{
+      @include trailing-border(1px,0,14px,solid);
+      border-color: shade(white,20%);
+    }
+  }
+
+
+
+
+  .block-headlines-secondary{
+    .views-row{
+      width:  24.9% !important;
+    }
+  }
+
+
+  // drop down
+
+  #echidnetmenu{
+    border: 1px solid shade(#ccc,3%);
+    #link-list-panel{
+      width:  59.5%;
+    }
+  }
+
+  .de-gallery{
+    .slides li{
+      float:  left;
+    }
+    .colorbox-thumb{
+      width:  auto;
+    }
+  }
+
+
+  .tools #block-intra-user-my-echidnet .content-wrapper .content{
+    @include rhythm-borders(1px,0,$base-font-size,solid);
+    border-color: shade(white,15%);
+  }
+
+  .block-sub-nav-sitewide{
+    h2{
+      text-transform: capitalize;
+    }
+  }
+
+
+  .block-headline-rotator{
+    .view-display-id-banner_nav{
+      .views-field-title  {
+        _height:  8.125em;
+      }
+    }
+  }
+
+
+  #block-views-headlines-block-2.block-recent-headlines{
+    .item-list{
+      _height: 28.1125em;
+    }
+  }
+
+
+  .block-headlines-secondary{
+    .views-field-title{
+      _height: rhythm(2);
+    }
+  }
+
+  img{
+    -ms-interpolation-mode: bicubic;
+  }
+
+  #site-name,.front #page-title, article#node-10{
+    display:  none;
+  }
+
+  .view-staff-directory{
+    table{
+      td a{
+        word-wrap: break-word !important;
+      }
+    }
+  }
+
+  .block-watercooler{
+    clear:  none !important;
+  }
+
+  .block-watercooler-photo-gallery{
+    width:  100% !important;
+    float:  right;
+    clear:  right;
+    margin-right: 0;
+    .view-content{
+      @include clearfix;
+    }
+  }
+
+  .photo-gallery-landing{
+    .views-row{
+      clear:  none !important;
+    }
+  }
+}

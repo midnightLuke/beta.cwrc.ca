@@ -1,0 +1,27 @@
+// _drupal.scss contains echidnas default drupal style overrides and
+// baseline styles for default CORE drupal functionlaity eg. webform overrides,
+// basic search result styles.
+//
+// Project specific styles should be added to
+// existing partials (eg. /components/_file.scss) if customize theming
+// must be done.
+// If you are overriding a contributed module styles, please create a component
+// scss partial and start with your overrides/styles
+// (eg. flags module CSS overrides shouls be their own ._flag.scss file)
+
+// The SASS partial naming convention should be the same as the CSS stylesheet filename used by Drupal,
+// eg. comments.css - _comments.scss
+
+// @import "drupal/comments";
+// @import "drupal/date";
+// @import "drupal/file";
+@import "drupal/forms";
+@import "drupal/messages";
+// @import "drupal/search";
+@import "drupal/system-theme";
+@import "drupal/tabs";
+// @import "drupal/user";
+
+
+
+

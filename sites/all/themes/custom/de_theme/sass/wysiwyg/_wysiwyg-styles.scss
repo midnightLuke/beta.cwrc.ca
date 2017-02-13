@@ -1,0 +1,79 @@
+/* wysiwyg/_wysiwyg-styles.scss */
+// contains styles for the editor experience. eg. float images left or right, headline and highlight typography
+
+/* document this */
+// may need to be more specific to the editor area
+
+.inline-image-left,
+.inline-image-right{
+  @include image-style;
+}
+
+.inline-image-left{
+  @include image-style-left;
+}
+
+.inline-image-right{
+  @include image-style-right;
+}
+
+/* could be better */
+// .inline-image-full-width{
+//   border:   1px solid #ccc;
+// }
+
+/* could be better */
+.inline-image-full-width{
+  @include ui-borders;
+  @include ui-box($box-padding: ms(-2));
+  // border:   1px solid #ccc;
+  // @extend %box-ui-light-simple;
+  // margin-left: auto;
+  // margin-right: auto;
+  // width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+
+
+/* generally for use on the first paragraph. Can be used through the page if required as intro text to new sections. Helps the user get a summary of what's to come  http://desktoppub.about.com/od/glossary/g/head.htm */
+.headline-type{
+  //color: $dark-grey;
+  @include adjust-font-size-to(22px);
+  line-height: ms(.5);
+  margin-bottom: ms(-1);
+  @include breakpoint($medium-screen) {
+    @include adjust-font-size-to(26px);
+    line-height: ms(.75);
+  }
+  a{
+    //color: $dark-grey;
+  }
+  b,strong{
+    font-weight: $normal;
+  }
+}
+
+/* emphasis to a paragaph or section */
+.highlight-type{
+  font-weight:  $bold;
+  /* font size */
+  /* font color */
+}
+
+.highlight-box{
+  margin-bottom: ms();
+  @include breakpoint(max-width $narrow-screen) {
+    padding: ms();
+  }
+  @extend %box-ui-light-simple;
+  @include ui-box($box-padding: ms(1),$bg-color: $light-grey);
+  @include adjust-font-size-to(18px);
+  p{
+   &:last-child{
+      margin-bottom: 0;
+    }
+  }
+}

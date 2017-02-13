@@ -1,0 +1,5 @@
+// ui-box
+@mixin ui-box($bg-color:white, $box-padding: ms(-1)){
+  background-color: $bg-color;
+  padding: $box-padding;
+}

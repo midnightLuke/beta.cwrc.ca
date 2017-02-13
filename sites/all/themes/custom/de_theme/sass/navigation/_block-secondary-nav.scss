@@ -1,0 +1,115 @@
+/* navigation/_secondary-nav.scss */
+
+.block-secondary-nav{
+
+  // remove in development
+  @include breakpoint(max-width $medium-screen) {
+    margin-top: 0 !important;
+  }
+  /////
+margin-bottom: ms(-1);
+@include breakpoint($narrow-screen) {
+  margin-bottom: 0;
+}
+
+  @include breakpoint($narrow-screen) {
+    @include float-span(6,1);
+  }
+
+  @include breakpoint($medium-screen) {
+    @include float-span(3,6);
+margin-bottom: 0;
+  }
+  .menu{
+    @include reset;
+    @include clearfix(true);
+
+text-align: center;
+@include breakpoint($narrow-screen) {
+  text-align: left;
+}
+
+  }
+  // all list items
+  .menu li {
+    display: inline;
+    @include reset;
+    list-style: none;
+    margin-right: ms(-1);
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+
+  // all links
+  .menu li a{
+    color: white;
+    @include adjust-font-size-to(14px);
+  }
+}
+
+
+.sidebar .block-menu-block {
+  padding: 0;
+
+  ul {
+    width: 100%;
+
+    li {
+      margin: 0;
+      width: 100%;
+      float: left;
+
+     a {
+        background-color: #fff;
+        color: $brand2;
+        padding: 1.2em 1em !important;
+        display: block;
+        border-radius: 0;
+        border-bottom: 1px solid $shade3;
+
+        &:hover {
+          background: $brand4;
+          color: #fff;
+        }
+
+        &.active {
+          background: $brand4;
+          color: #fff;
+        }
+      }
+    &.last {border-bottom: none !important;}
+    &.first a {border-top-right-radius: 5px; border-top-left-radius: 5px;}
+    &.last a {border-bottom-right-radius: 5px !important; border-bottom-left-radius: 5px !important; border-bottom: none;}
+    &.expanded > a {border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important; border-bottom: 1px solid #fff;}
+
+//LEVEL 2
+
+      ul li {
+
+        a {
+          background: #FBFBFB;
+          font-size: .6em !important;
+          padding: 1.2em 1em 1.2em 2em !important;
+          font-weight: normal;
+        }
+
+        &.last {border-bottom: 1px solid $shade3; a{border-radius: 0px;}}
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+{
+  "name": "de_theme",
+  "version": "0.0.1",
+  "description": "Digital Echidna Default Theme",
+  "author": "Mike Pace - Digital Echidna",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.6.4",
+    "compass-options": "^0.1.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-autoprefixer": "^2.1.0",
+    "gulp-compass": "^2.0.3",
+    "gulp-concat": "^2.5.2",
+    "gulp-plumber": "^0.6.6",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.4"
+  },
+  "scripts": {
+    "postinstall": "find node_modules/ -name \"*.info\" -type f -delete"
+  }
+}

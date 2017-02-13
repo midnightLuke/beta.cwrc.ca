@@ -1,0 +1,101 @@
+
+.block-main-nav{
+  .menu a{
+    text-decoration: none;
+    @include adjust-font-size-to(13px);
+    padding: ms(-3) ms();
+    border-radius: 2px;
+    transition: all 0.3s ease-out;
+    background-color: $dark-grey;
+    color: white;
+    &:hover{
+      background-color: shade($brand-color, 18%);
+      color: tint(white,15%);
+    }
+    &.active,
+    &.active-trail,
+    &:active{
+      background-color: $brand-color;
+      color: white;
+    }
+  }
+}
+
+.block-sub-nav{
+
+    // 1st level links
+
+    .menu-block-wrapper > .menu > li > a{
+      border-radius: 2px;
+      background-color: $light-grey;
+      color: $dark-grey;
+      padding: ms(-3) ms();
+      transition: background-color 0.3s ease-out, color 0.3s ease-out;
+      &:hover{
+        background-color: $neutral-grey;
+      }
+      &:active{
+        background-color: $neutral-grey;
+      }
+      &.active-trail{
+        background-color: $dark-grey;
+        color: white;
+        // &:hover{
+        // }
+        // &:active{
+        // }
+      }
+    }
+
+    // 2nd level links
+    .menu-block-wrapper > .menu > .active-trail > .menu > li > a{
+      border-radius: 2px;
+      border: 1px solid $light-grey;
+      color: $dark-grey;
+      padding: ms(-3) ms();
+      transition: background-color 0.3s ease-out, color 0.3s ease-out, border-color 0.3s ease-out;
+      &:hover{
+        background-color: $light-grey;
+      }
+      &:active{
+        background-color: $neutral-grey;
+        border-color: $neutral-grey;
+      }
+      &.active-trail{
+        background-color: $dark-grey;
+        color: white;
+        &:hover{
+        }
+        &:active{
+        }
+      }
+    }
+
+    // THIRD LEVEL
+    .menu-block-wrapper > .menu > .active-trail > .menu > li.expanded > .menu > li a{
+      border-radius: 2px;
+      border: 1px solid $light-grey;
+      color: $dark-grey;
+      padding: ms(-3) ms();
+      transition: background-color 0.3s ease-out, color 0.3s ease-out, border-color 0.3s ease-out;
+      &:hover{
+        background-color: $light-grey;
+      }
+      &:active{
+        background-color: $neutral-grey;
+        border-color: $neutral-grey;
+      }
+      &.active-trail{
+        background-color: $dark-grey;
+        color: white;
+        &:hover{
+        }
+        &:active{
+        }
+      }
+    }
+}
+
+.block-secondary-nav{
+
+}
