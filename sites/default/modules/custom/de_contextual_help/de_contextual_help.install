@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * The de_contextual_help.install file.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function de_contextual_help_schema() {
+  $schema['contextual_help_rules'] = [
+    'description' => 'Table that stores the rules for mapping where the contextual help link will go, depending on the page it is displayed.',
+    'fields' => [
+      'rule_id' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'url_pattern' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Local URL Pattern',
+      ],
+      'link_destination' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The destination help link.',
+      ],
+      'weight' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Weight of the rule within the rule set.',
+      ],
+      'status' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+        'description' => 'Rule enabled status.',
+      ],
+    ],
+    'primary key' => ['rule_id'],
+  ];
+  return $schema;
+}

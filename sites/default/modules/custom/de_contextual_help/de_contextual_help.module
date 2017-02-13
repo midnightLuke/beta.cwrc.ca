@@ -1,0 +1,283 @@
+<?php
+
+/**
+ * @file
+ * Contextual Help module file.
+ */
+
+/* Hooks. */
+
+/**
+ * Implements hook_menu().
+ */
+function de_contextual_help_menu() {
+  $items = array();
+  $items['admin/config/contextual_help'] = array(
+    'title' => 'Contextual Help',
+    'description' => 'Configuration for Contextual Help module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('contextual_help_rules_admin_form'),
+    'access arguments' => array('administer contextual help'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'contextual_help.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function de_contextual_help_permission() {
+  return array(
+    'administer contextual help' => array(
+      'title' => t('Administer Contextual Help Module'),
+      'description' => t('Create new Rules and change settings for the Contextual Help Module.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function de_contextual_help_block_info() {
+  $blocks = array();
+  $blocks['contextual_help_link'] = array(
+    'info' => t('Contextual Help Link'),
+    'cache' => DRUPAL_CACHE_PER_PAGE | DRUPAL_CACHE_PER_USER,
+  );
+  $blocks['help_drop_down'] = array(
+    'info' => t('Help and Bug Reporting Toolbar'),
+    'cache' => DRUPAL_CACHE_PER_PAGE | DRUPAL_CACHE_PER_USER,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function de_contextual_help_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'contextual_help_link':
+      $block['subject'] = '';
+      $block['content'] = de_contextual_help_get_applicable_help_link();
+      break;
+
+    case 'help_drop_down':
+      $block['subject'] = t('Help and Bug Reporting');
+      $block['content'] = de_contextual_help_get_toolbar_block();
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function de_contextual_help_theme() {
+  return array(
+    'contextual_help_rules_admin_form' => array(
+      'render element' => 'form',
+      'file' => 'contextual_help.admin.inc',
+    ),
+  );
+}
+
+/**
+ * Implements hook_features_api().
+ */
+function de_contextual_help_features_api() {
+  return array(
+    'de_contextual_help_config' => array(
+      'name' => 'Contextual Help Config',
+      'file' => drupal_get_path('module', 'de_contextual_help') . '/de_contextual_help.features.inc',
+      'default_hook' => 'de_contextual_help_config_features_default_settings',
+      'feature_source' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function de_contextual_help_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  global $user;
+  $replacements = array();
+
+  if ($type == "cwrc") {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'group-role':
+          $context = og_context();
+          $admin = user_role_load_by_name("administrator");
+          $is_admin = $admin != NULL && isset($user->roles[$admin->rid]);
+
+          // When outside of context, unauthenticated, or a known anonymous user
+          // just give them the public scope.
+          if (empty($context) || empty($user) || in_array("anonymous user", $user->roles)) {
+
+            if ($is_admin) {
+              $replacements[$original] = "administrator";
+              break;
+            }
+
+            $replacements[$original] = "public";
+            break;
+          }
+
+          $roles = og_get_user_roles($context['group_type'], $context['gid']);
+
+          if (count($roles) == 0 || in_array("non-member", $roles)) {
+
+            if ($is_admin) {
+              $replacements[$original] = "administrator";
+              break;
+            }
+
+            $replacements[$original] = "public";
+            break;
+          }
+
+          // This may need to be changed depending on client requirements.
+          $key = max(array_keys($roles));
+          $role = $roles[$key];
+
+          $replacements[$original] = str_replace(" ", "-", $role);
+
+          break;
+      }
+    }
+  }
+
+  return $replacements;
+}
+
+/* Helper functions. */
+
+/**
+ * Displays a Help and Bug Reporting block.
+ *
+ * Returns the "Help and Bug Reporting" block using a configuration variable
+ * for which webform is the bug reporting one for this block.
+ */
+function de_contextual_help_get_toolbar_block() {
+  // Can't do anything without the bug webform.
+  $bug_webform = variable_get('de_contextual_help_bug_webform_nid', NULL);
+  if ($bug_webform === NULL) {
+    return FALSE;
+  }
+
+  // Build the render array.
+  $build = array(
+    '#theme' => 'item_list',
+    '#type' => 'ul',
+    '#attributes' => array('class' => array('dropdown-menu')),
+    '#items' => array(
+      de_contextual_help_get_applicable_help_link(),
+      l(t('Report a Bug'), 'node/' . $bug_webform),
+    ),
+    '#prefix' => l('<span class="help-menu">' . t('Help and Bug Reporting') . '</span>', '', array(
+      'fragment' => 'help',
+      'html' => TRUE,
+      'attributes' => array(
+        'role' => 'button',
+        'class' => array('dropdown-toggle'),
+      ),
+    )),
+  );
+
+  return render($build);
+}
+
+/**
+ * Helper function return applicable Contextual Help Link for the current page.
+ *
+ * First, it consults the rules that are saved on the admin config form. It
+ * allows other modules that implement hook_set_applicable_help_link() to
+ * override the rules.
+ */
+function de_contextual_help_get_applicable_help_link() {
+  $chrules = contextual_help_rules();
+  $last_matched_rule = '';
+  // Pattern Match the current path with the rules set on the admin config form.
+  foreach ($chrules as $rule) {
+    if (drupal_match_path(current_path(), $rule->url_pattern)) {
+      $last_matched_rule = $rule;
+    }
+  }
+  // Allow other modules that implement hook_set_applicable_help_link_alter() to
+  // override the link.
+  foreach (module_implements('set_applicable_help_link') as $module) {
+    // We pass in the $last_matched_rule in case a module implementation
+    // needs to know the matching rule.
+    $last_matched_rule = module_invoke($module, 'set_applicable_help_link', $last_matched_rule);
+  }
+
+  // If there is no match we still want to draw the block.
+  if (!is_object($last_matched_rule)) {
+    return '&nbsp;';
+  }
+
+  // Rendering the link.
+  return de_contextual_help_build_links($last_matched_rule);
+}
+
+/**
+ * This renders the markup for the contents of the Contextual Help Link Block.
+ *
+ * @param object $matched_rule
+ *   The matched rule.
+ *
+ * @return string
+ *   HTML for a help link.
+ */
+function de_contextual_help_build_links($matched_rule) {
+  // We'll likely change the markup here later.
+  $rendered_link = l(
+    t('Help Documentation'),
+    token_replace($matched_rule->link_destination, array(
+      'rule' => $matched_rule,
+    ))
+  );
+  return $rendered_link;
+}
+
+/**
+ * This loads the Contextual Help Rules.
+ */
+function contextual_help_rules() {
+  // Check to see if rules are cached here?
+  $contextual_help_rules = db_select('contextual_help_rules', 'chrules')
+    ->fields('chrules', array(
+      'rule_id',
+      'url_pattern',
+      'link_destination',
+      'weight',
+      'status',
+    ))
+    ->orderBy('weight', 'ASC')
+    ->execute()
+    ->fetchAll();
+  return $contextual_help_rules;
+}
+
+/**
+ * Saves new Contextual Help Rules.
+ *
+ * @param object $chrule
+ *   New Rule to be saved.
+ *
+ * @return \DatabaseStatementInterface|int
+ *   Returns the $rule_id.
+ *
+ * @throws \Exception
+ */
+function contextual_help_rule_save($chrule) {
+  $rule_id = db_insert('contextual_help_rules')
+    ->fields(array(
+      'url_pattern' => $chrule->url_pattern,
+      'link_destination' => $chrule->link_destination,
+      'weight' => (int) $chrule->weight,
+    ))
+    ->execute();
+  return $rule_id;
+}
