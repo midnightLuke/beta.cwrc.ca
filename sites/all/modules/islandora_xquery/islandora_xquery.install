@@ -1,0 +1,227 @@
+<?php
+
+/**
+ * @file
+ * Defines the install and uninstall hooks for this module.
+ * @todo
+ *   Factor out association_id and use the machine_name as key.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function islandora_xquery_schema() {
+  $schema['islandora_xquery_associations'] = array(
+    'description' => 'Table that stores saved template names.',
+    'fields' => array(
+      'association_id' => array(
+        'description' => 'Unique ID given to each association',
+        'type' => 'serial',
+        'length' => 11,
+        'not null' => TRUE,
+      ),
+      'template_name' => array(
+        'description' => 'The name of the template',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'template_description' => array(
+        'description' => 'The description of the template',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => FALSE,
+      ),
+      'machine_name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'The machine readable name for this association',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('association_id'),
+  );
+  $schema['islandora_xquery_xquery'] = array(
+    'description' => 'Table that stores XQuery values.',
+    'fields' => array(
+      'association_id' => array(
+        'description' => 'Unique ID given to each association',
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+      ),
+      'xquery' => array(
+        'description' => 'Holds the XQuery defined for an association',
+        'type' => 'blob',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary_key' => array('association_id'),
+  );
+  $schema['islandora_xquery_tokens'] = array(
+    'description' => 'Table that stores token information.',
+    'fields' => array(
+      'association_id' => array(
+        'description' => 'Unique ID given to each association',
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+      ),
+      'token_name' => array(
+        'description' => 'The name of the token',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'token_description' => array(
+        'description' => 'The description of the token',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
+      'token_default' => array(
+        'description' => 'The default value of the token',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('association_id', 'token_name'),
+  );
+  $schema['islandora_xquery_diffs'] = array(
+    'description' => "Table that stores diffs of the xquery results for viewing before user confirmation.",
+    'fields' => array(
+      'id' => array(
+        'description' => "Unique ID",
+        'type' => 'serial',
+        'unsigned' => TRUE,
+      ),
+      'batch_id' => array(
+        'description' => 'ID of batch running the find/replace operation.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'pid' => array(
+        'description' => "PID of object to run find/replace.",
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'dsid' => array(
+        'description' => "ID of datastream to run find/replace on.",
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'diff' => array(
+        'description' => "Diff after find/replace.",
+        'type' => 'blob',
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'Status of find/replace. PENDING, APPLIED, etc...',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => 'PENDING',
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'index_batch_id' => array('batch_id'),
+      'index_pid' => array('pid'),
+      'index_dsid' => array('dsid'),
+      'index_status' => array('status'),
+    ),
+  );
+  $schema['islandora_xquery_batches'] = array(
+    'description' => "Table that stores batch id's and creation timestamps for returning or cleaning up diffs.",
+    'fields' => array(
+      'batch_id' => array(
+        'description' => 'ID of batch running the find/replace operation.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'batch_created' => array(
+        'description' => "Creation time of the find/replace batch.",
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'batch_ended' => array(
+        'description' => "End time of the find/replace batch.",
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'xquery' => array(
+        'description' => 'Xquery being applied in this batch',
+        'type' => 'blob',
+        'not null' => TRUE,
+      ),
+      'redirect' => array(
+        'description' => 'Where to go when the process is finished.',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary_key' => array('batch_id'),
+    'indexes' => array(
+      'index_batch_created' => array('batch_created'),
+      'index_batch_ended' => array('batch_ended'),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function islandora_xquery_requirements($phase) {
+  module_load_include('inc', 'islandora_xquery', 'includes/utilities');
+  $requirements = array();
+  // Ensure translations don't break during installation.
+  $t = get_t();
+  switch ($phase) {
+    case 'runtime':
+      $zorba_version = islandora_xquery_get_zorba_version();
+      if ($zorba_version === FALSE) {
+        $requirements['zorba'] = array(
+          'title' => $t('Zorba'),
+          'value' => $t('Zorba could not be found. Islandora XQuery requires Zorba %version.', array('%version' => ISLANDORA_XQUERY_ZORBA_MINIMUM_VERSION)),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+      elseif (version_compare($zorba_version, ISLANDORA_XQUERY_ZORBA_MINIMUM_VERSION, '<=')
+        && version_compare($zorba_version, ISLANDORA_XQUERY_ZORBA_MAXIMUM_VERSION, '>')) {
+        $requirements['zorba'] = array(
+          'title' => $t('Zorba'),
+          'value' => $t('Islandora XQuery requires Zorba %required_version. Version %version is currently installed.', array(
+            '%required_version' => ISLANDORA_XQUERY_ZORBA_MINIMUM_VERSION,
+            '%version' => $zorba_version,
+            )
+          ),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+      else {
+        $requirements['zorba'] = array(
+          'title' => $t('Zorba'),
+          'value' => $zorba_version,
+          'severity' => REQUIREMENT_OK,
+        );
+      }
+      break;
+  }
+  return $requirements;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_xquery_uninstall() {
+  $variables = array(
+    'islandora_xquery_zorba',
+  );
+  array_walk($variables, 'variable_del');
+}
