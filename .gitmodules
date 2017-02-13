@@ -1,6 +1,3 @@
-[submodule "sites/all/modules/austese_collation"]
-        path = sites/all/modules/austese_collation
-        url = git://github.com/discoverygarden/austese_collation.git
 [submodule "sites/all/modules/austese_repository"]
         path = sites/all/modules/austese_repository
         url = git://github.com/discoverygarden/austese_repository.git
