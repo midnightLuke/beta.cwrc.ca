@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ *
+ * Hooks and callbacks for this module.
+ */
+
+define('ISLANDORA_MIGRATE', 'migrate objects between fedora repositories');
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_migrate_menu() {
+  $items = array();
+  $items['islandora/migrate'] = array(
+    'title' => 'Migrate books from .49 to .50',
+    'description' => 'Single use migration - site specific.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('migrate_books_by_collection_form'),
+    'file' => 'includes/islandora_migrate.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['islandora/migrate_images'] = array(
+    'title' => 'Migrate images from .49 to .50',
+    'description' => 'Single use migration - site specific.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('migrate_images_by_collection_form'),
+    'file' => 'includes/migrate_images.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['islandora/migrate_ocr'] = array(
+    'title' => 'Migrate OCR from .49 Critical Editions to .50 Books',
+    'description' => 'Single use migration - site specific.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('migrate_ocr_by_collection_form'),
+    'file' => 'includes/migrate_ocr.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['islandora/migrate_single_book'] = array(
+    'title' => 'Migrate single .49 book to .50 collection',
+    'description' => 'Single use migration - site specific.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('migrate_single_form'),
+    'file' => 'includes/migrate_single.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+    $items['admin/islandora/migrate']   = array(
+      'title' => 'Migration Module',
+      'description' => 'Migrate Objects from one Fedora to another.',
+      'page callback' => 'drupal_get_form',
+      'access arguments' => array('administer site configuration'),
+      'page arguments' => array('islandora_migrate_admin'),
+      'file' => 'includes/islandora_migrate.admin.inc',
+      'type' => MENU_NORMAL_ITEM,
+    );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function islandora_migrate_permission() {
+  return array(
+    ISLANDORA_MIGRATE => array(
+      'title' => t(ISLANDORA_MIGRATE),
+      'description' => t('Non-detructively migrate objects from one Fedora to another.'),
+    ),
+  );
+}
