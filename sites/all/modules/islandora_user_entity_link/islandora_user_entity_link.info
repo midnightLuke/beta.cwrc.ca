@@ -1,0 +1,8 @@
+name = "Islandora User Entity Linker"
+description = "A default Islandora module to handle the management of a one to one relationship between users and entities."
+dependencies[] = islandora
+dependencies[] = islandora_solr
+dependencies[] = islandora_entities
+package = Islandora
+version = 7.x-dev
+core = 7.x

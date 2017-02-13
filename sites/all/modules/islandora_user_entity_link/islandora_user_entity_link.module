@@ -1,0 +1,205 @@
+<?php
+
+/**
+ * @file
+ * Hooks and callbacks for this module.
+ */
+
+// RELS.
+define('ISLANDORA_USER_ENTITY_LINK_LINK_RELATIONSHIP', 'represents_drupal_user');
+
+// Permissions.
+define('ISLANDORA_USER_ENTITY_LINK_MANAGE_LINKS', 'manage user entity links');
+
+/**
+ * Implements hook_permission().
+ */
+function islandora_user_entity_link_permission() {
+  return array(
+    ISLANDORA_USER_ENTITY_LINK_MANAGE_LINKS => array(
+      'title' => t('Administer user entity links'),
+      'description' => t("Create/delete Drupal user to Islandora entity links."),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_user_entity_link_menu() {
+  $items = array();
+
+  $items['islandora_user_entity_link/autocomplete'] = array(
+    'page callback' => 'islandora_user_entity_link_autocomplete',
+    'access arguments' => array(ISLANDORA_USER_ENTITY_LINK_MANAGE_LINKS),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * @global $user
+ */
+function islandora_user_entity_link_form_user_profile_form_alter(&$form, &$form_state) {
+  module_load_include('inc', 'islandora_user_entity_link', 'includes/utilities');
+  $form['islandora_user_entity_link_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Person Entity'),
+    '#weight' => 50,
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $linked_object = islandora_user_entity_link_user_get_linked_object($form_state['user']->uid);
+  if ($linked_object) {
+    $username = $form_state['user']->name;
+    $form['islandora_user_entity_link_fieldset']['user_entity'] = array(
+      '#type' => 'item',
+      '#title' => t('User is linked to:'),
+      '#description' => l(check_plain($linked_object['label']), "islandora/object/{$linked_object['object']}"),
+    );
+  }
+  elseif (user_access(ISLANDORA_USER_ENTITY_LINK_MANAGE_LINKS)) {
+    $form['islandora_user_entity_link_fieldset']['entity_object'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Add link to Entity record:'),
+      '#size' => 50,
+      '#autocomplete_path' => 'islandora_user_entity_link/autocomplete',
+      '#default_value' => '',
+      '#weight' => 1,
+    );
+    $form['#submit'][] = 'islandora_user_entity_link_form_user_profile_form_submit';
+    $form['#validate'][] = 'islandora_user_entity_link_form_user_profile_form_validate';
+  }
+}
+
+/**
+ * Validation handler for user_profile_form.
+ *
+ * @param array $form
+ *   The Drupal form definition.
+ * @param array $form_state
+ *   The Drupal form state.
+ */
+function islandora_user_entity_link_form_user_profile_form_validate($form, &$form_state) {
+  module_load_include('inc', 'islandora_user_entity_link', 'includes/utilities');
+  if ($form_state['values']['entity_object']) {
+    $potential_pid  = islandora_user_entity_link_decode_autocomplete($form_state['values']['entity_object']);
+    $islandora_object = islandora_object_load($potential_pid);
+    if (!$islandora_object) {
+      form_set_error('entity_object', t('A valid entry was not specified for the user-entity link.'));
+    }
+    elseif (islandora_user_entity_link_object_get_link($islandora_object)) {
+      form_set_error('entity_object', t('The entity @pid is already linked to a user.', array('@pid' => $potential_pid)));
+    }
+  }
+}
+
+/**
+ * Submit handler for user_profile_form.
+ *
+ * @param array $form
+ *   The Drupal form definition.
+ * @param array $form_state
+ *   The Drupal form state.
+ */
+function islandora_user_entity_link_form_user_profile_form_submit($form, &$form_state) {
+  module_load_include('inc', 'islandora_user_entity_link', 'includes/utilities');
+  if ($form_state['values']['entity_object']) {
+    $islandora_object_id = islandora_user_entity_link_decode_autocomplete($form_state['values']['entity_object']);
+    islandora_user_entity_link_add_link($islandora_object_id, $form_state['values']['uid']);
+  }
+}
+
+/**
+ * Autocomplete callback implementation for the user/object link.
+ *
+ * @param string $to_complete
+ *   The string that needs to be autocompleted.
+ */
+function islandora_user_entity_link_autocomplete($to_complete) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
+  $matches = array();
+  $solr_results = islandora_entities_solr_search_entities(
+    ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL,
+    $to_complete);
+
+  if (isset($solr_results['response']['objects'])) {
+    foreach ($solr_results['response']['objects'] as $object_response) {
+      $autocomplete = "{$object_response['object_label']} '{$object_response['PID']}'";
+      $matches[$autocomplete] = $autocomplete;
+    }
+  }
+
+  drupal_json_output($matches);
+}
+
+/**
+ * Implements hook_islandora_overview_object_alter().
+ */
+function islandora_user_entity_link_islandora_overview_object(AbstractObject $object) {
+  return drupal_render(drupal_get_form('islandora_user_entity_link_object_to_user_form', $object));
+}
+
+/**
+ * Form for viewing/editing user links on objects.
+ *
+ * @param array $form
+ *   The Drupal form definition.
+ * @param array $form_state
+ *   The Drupal form state.
+ * @param AbstractObject $islandora_object
+ *   The object to build the form for.
+ *
+ * @return array
+ *   The Drupal form definition.
+ */
+function islandora_user_entity_link_object_to_user_form($form, &$form_state, AbstractObject $islandora_object) {
+  module_load_include('inc', 'islandora_user_entity_link', 'includes/utilities');
+  $link_user = islandora_user_entity_link_object_get_link($islandora_object);
+
+  if ($link_user) {
+    $user = user_load($link_user);
+    $username = $user->name;
+
+    $form['islandora_user_entity_link_fieldset'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Linked User Account'),
+      '#weight' => 40,
+    );
+    $form['islandora_user_entity_link_fieldset']['druapl_user'] = array(
+      '#type' => 'item',
+      '#title' => t('Entity is linked to:'),
+      '#description' => l(check_plain($username), "user/$link_user"),
+    );
+    if (user_access(ISLANDORA_USER_ENTITY_LINK_MANAGE_LINKS)) {
+      $form['islandora_user_entity_link_fieldset']['remove_link'] = array(
+        '#type' => 'submit',
+        '#value' => t('Clear Link'),
+      );
+      $form_state['storage']['uid'] = $link_user;
+      $form_state['storage']['object_id'] = $islandora_object->id;
+    }
+  }
+
+  return $form;
+}
+
+/**
+ * Form submit for viewing/editing user links on objects.
+ *
+ * @param array $form
+ *   The Drupal form definition.
+ * @param array $form_state
+ *   The Drupal form state.
+ *
+ * @return array
+ *   The Drupal form definition.
+ */
+function islandora_user_entity_link_object_to_user_form_submit($form, &$form_state) {
+  module_load_include('inc', 'islandora_user_entity_link', 'includes/utilities');
+  islandora_user_entity_link_remove_link($form_state['storage']['object_id'], $form_state['storage']['uid']);
+}
