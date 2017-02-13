@@ -1,0 +1,6 @@
+name = Organic Groups Global Roles
+description = Maps OG roles to global roles for use with external systems that only recognize global roles (ie islandora's XACML editor).
+core = 7.x
+package = Organic groups
+
+dependencies[] = og
