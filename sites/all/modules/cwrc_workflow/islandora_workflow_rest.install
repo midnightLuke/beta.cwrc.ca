@@ -1,0 +1,259 @@
+<?php
+
+/**
+ * @file
+ * Hooks for installing/uninstalling this module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function islandora_workflow_rest_schema() {
+  $schema['islandora_workflow_rest_stamps'] = array(
+    'description' => 'Table that stores lists of custom workflow stamps.',
+    'fields' => array(
+      'lid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The UID for a custom stamp.',
+      ),
+      'stamp' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'The human readable name of the stamp.',
+      ),
+      'descr' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The description of the current stamp.',
+      ),
+    ),
+    'primary key' => array('lid'),
+  );
+
+  $schema['islandora_workflow_rest_ds_logs'] = array(
+    'description' => 'Table that stores Datastream modification logs.',
+    'fields' => array(
+      'lid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The UID for a ds modification.',
+      ),
+      'type' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Modified, added or deleted.',
+      ),
+      'usr' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The userID who last touched the data stream.',
+      ),
+      'dsid' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The modified datastream ID.',
+      ),
+      'delay' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The time, in seconds, where similar events will not be logged.',
+      ),
+      'pid' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The object pid that has been modified.',
+      ),
+      'object_label' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The label of the modified object.',
+      ),
+      'timestamp' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'time of modification.',
+      ),
+      'state' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'State of log entry.  Should be new, skipped, or tagged.',
+      ),
+      'last_stamp' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Last stamp at time of datastream update.',
+      ),
+    ),
+    'primary key' => array('lid'),
+  );
+
+  $schema['islandora_workflow_rest_ds_log_admin'] = array(
+    'description' => 'Table that stores Datastream admin configurations.',
+    'fields' => array(
+      'lid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The UID for a ds modification.',
+      ),
+      'dsid' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The modified datastream ID.',
+      ),
+      'delay' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The time, in seconds, that similar events will not be logged.',
+      ),
+      'pid' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The content model pid.',
+      ),
+      'label' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The content model label.',
+      ),
+    ),
+    'primary key' => array('lid'),
+  );
+
+  $schema['islandora_workflow_rest_reports'] = array(
+    'description' => 'Table that stores report queries.',
+    'fields' => array(
+      'lid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The UID for the report.',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The name of the report.',
+      ),
+      'project' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The name of the project this report belongs to.',
+      ),
+      'createdby' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The user the report was created by.',
+      ),
+      'editroles' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The roles allowed to edit the report.',
+      ),
+      'viewroles' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'The roles allowed to view the report.',
+      ),
+      'query' => array(
+        'type' => 'varchar',
+        'length' => 2047,
+        'not null' => FALSE,
+        'description' => 'The solr query which produces the report.',
+      ),
+      'terms' => array(
+        'type' => 'varchar',
+        'length' => 2047,
+        'not null' => FALSE,
+        'description' => 'The serialized terms array used to build the solr query.',
+      ),
+      'solr_terms' => array(
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => FALSE,
+        'description' => 'The serialized solr terms array used to build the display.',
+      ),
+    ),
+    'primary key' => array('lid'),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_workflow_rest_uninstall() {
+  variable_del('workflow_solr_field');
+  variable_del('islandora_workflow_rest_enable_namespace');
+  variable_del('islandora_workflow_rest_server_identifier');
+}
+
+/**
+ * Implements hook_install().
+ */
+function islandora_workflow_rest_install() {
+  module_load_include('inc', 'islandora_workflow_rest', 'includes/utilities');
+  module_load_include('inc', 'islandora', 'includes/utilities');
+  module_load_include('inc', 'islandora_basic_collection', 'includes/utilities');
+  // Add default stamp records.
+  $stamps = array(
+    "cwrc:cre" => "repository item created",
+    "cwrc:dep" => "repository item deposited",
+    "cwrc:cvr" => "content edited",
+    "cwrc:evr" => "content added",
+    "cwrc:ckd" => "Checked/Corrected",
+    "cwrc:tag" => "tagged by public",
+    "cwrc:rights_asg" => "Copyright/license",
+    "cwrc:pub" => "Undergoing Publishing",
+    "cwrc:rev" => "Peer-reviewed",
+    "cwrc:wdr" => "Removed from published state",
+    "cwrc:del" => "Deleted from the repository",
+    "orlando:SUB" => "Submitted",
+    "orlando:RWT" => "Researched / Written / Tagged",
+    "orlando:REV" => "Revised",
+    "orlando:RBV" => "Reviewed by Volume Author",
+    "orlando:CAS" => "Checked Against Sources",
+    "orlando:CFT" => "Checked for Tagging",
+    "orlando:CFB" => "Checked for Bibliographic Practices",
+    "orlando:PUB" => "Published",
+    "orlando:ENH" => "Enhanced",
+    "orlando:TC" => "Tag Cleanup",
+    "orlando:PUBR" => "Publication Readthrough",
+    "niso:AO" => "Author's Original",
+    "niso:SMUR" => "Manuscript Under Review",
+    "niso:AM" => "Accepted Manuscript",
+    "niso:P" => "Proof",
+    "niso:VoR" => "Version of Record",
+    "niso:CVoR" => "Corrected Version",
+    "niso:EVoR" => "Enhanced Version",
+  );
+
+  // This hook fires on install.
+  foreach ($stamps as $key => $value) {
+    $stamp = islandora_workflow_rest_get_stamp($key);
+    if (!isset($stamp) || $stamp == "") {
+      islandora_workflow_rest_set_stamp($key, $value);
+    }
+  }
+}
