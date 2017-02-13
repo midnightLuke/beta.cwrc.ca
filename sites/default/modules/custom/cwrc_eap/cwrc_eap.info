@@ -1,0 +1,8 @@
+name = CWRC: Entity Aggregation Pages
+description = Provides the EAP functionality and configuration.
+core = 7.x
+package = CWRC
+
+dependencies[] = islandora_cwrc_basexdb
+dependencies[] = islandora_cwrc_writer
+dependencies[] = cwrc_entities

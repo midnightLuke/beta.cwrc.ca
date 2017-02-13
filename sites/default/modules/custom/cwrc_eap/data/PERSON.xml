@@ -1,0 +1,81 @@
+<?xml-model href="http://cwrc.ca/schemas/entities.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"
+?>
+<entity>
+  <person>
+    <recordInfo>
+      <accessCondition type="use and reproduction"/>
+      <originInfo>
+        <recordChangeDate>2016-05-07</recordChangeDate>
+        <projectId>orlando</projectId>
+        <projectId>ceww</projectId>
+      </originInfo>
+      <personTypes>
+        <personType>creator</personType>
+        <personType>orl:IBW</personType>
+      </personTypes>
+    </recordInfo>
+    <identity>
+      <preferredForm>
+        <namePart partType="fullName">Public, Joseph</namePart>
+        <namePart partType="given">Joseph</namePart>
+      </preferredForm>
+      <displayLabel>Joe Public</displayLabel>
+      <variantForms>
+        <variant>
+          <namePart partType="given">Heyo</namePart>
+          <variantType>birthName</variantType>
+          <authorizedBy>
+            <projectId>cwrc</projectId>
+          </authorizedBy>
+        </variant>
+        <variant>
+          <variantType>styledName</variantType>
+          <namePart partType="given">JP</namePart>
+        </variant>
+      </variantForms>
+      <sameAs cert="1">http://viaf.org/viaf/29528457</sameAs>
+    </identity>
+    <description>
+      <existDates>
+        <dateSingle cert="4">
+          <standardDate qualifier="approximate">1308-12-21</standardDate>
+          <dateType>birth</dateType>
+          <note>Definitely born on this day.</note>
+        </dateSingle>
+        <dateSingle cert="3">
+          <standardDate qualifier="approximate">2026-05-14</standardDate>
+          <dateType>flourish</dateType>
+          <note>FLOURISHING FTW</note>
+        </dateSingle>
+      </existDates>
+      <factuality>real</factuality>
+      <genders>
+        <gender cert="4">male</gender>
+        <gender cert="2">unknown</gender>
+      </genders>
+      <occupations>
+        <occupation>
+          <term cert="4">Web developer</term>
+          <note>This was his one and only occupation.</note>
+        </occupation>
+      </occupations>
+      <activities>
+        <activity>
+          <term cert="4">Made websites for CWRC</term>
+        </activity>
+      </activities>
+      <researchInterests>
+        <interest>
+          <term cert="1">Islandora</term>
+        </interest>
+      </researchInterests>
+      <descriptiveNotes>
+        <note>He liked tacos and trains.</note>
+        <note>He knew lots of other Drupal developers.</note>
+      </descriptiveNotes>
+      <relatedResources>
+        <resource>This is a related resource? What are this.</resource>
+      </relatedResources>
+    </description>
+  </person>
+</entity>

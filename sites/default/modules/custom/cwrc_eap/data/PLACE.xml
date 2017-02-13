@@ -1,0 +1,68 @@
+<?xml-model
+href="http://cwrc.ca/schemas/entities.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"
+?>
+<entity>
+  <place>
+    <recordInfo>
+      <accessCondition type="use and reproduction">
+        Use of this public-domain resource is governed by the
+        <a href="http://creativecommons.org/licenses/by-nc/4.0/" rel="license">
+          Attribution-NonCommercial 4.0 International License
+        </a>
+        .
+      </accessCondition>
+      <originInfo>
+        <recordChangeDate>2016-05-17</recordChangeDate>
+        <projectId>Google Maps</projectId>
+        <projectId>cwrc</projectId>
+      </originInfo>
+      <placeTypes>
+        <placeType>currentNaturalPlace</placeType>
+        <placeType>currentHumanPlace</placeType>
+      </placeTypes>
+    </recordInfo>
+    <identity>
+      <preferredForm>
+        <namePart>dfgskjhdfkjhs kgsfkg kljsdgdsh jklgsdfgh</namePart>
+      </preferredForm>
+      <variantForms>
+        <variant>
+          <namePart>asdfasdfasdf</namePart>
+          <variantType>historic</variantType>
+          <authorizedBy>
+            <projectId>orlando</projectId>
+          </authorizedBy>
+        </variant>
+      </variantForms>
+      <sameAs cert="1">sdfasdfsadfsadfsaf</sameAs>
+    </identity>
+    <description>
+      <existDates>
+        <dateSingle cert="1">
+          <standardDate qualifier="approximate">2013-05-21</standardDate>
+          <dateType>establishment</dateType>
+          <note>asdkjfgaskjfjksahl sadfhjksadhfkhsadklflsa hkl</note>
+        </dateSingle>
+      </existDates>
+      <factuality>real</factuality>
+      <latitude>111.02</latitude>
+      <longitude>111.02</longitude>
+      <featureClass>Populated Place Feature</featureClass>
+      <featureCodeLabel>seat of a first-order administrative division</featureCodeLabel>
+      <countryName>Canada</countryName>
+      <firstAdministrativeDivision>Alberta</firstAdministrativeDivision>
+      <secondAdministrativeDivision>Middlesex County</secondAdministrativeDivision>
+      <elevation>5,959</elevation>
+      <averageElevation>5,959</averageElevation>
+      <timeZoneOffset>-4.0</timeZoneOffset>
+      <descriptiveNotes>
+        <note>Lot's of fields on this bad boy.</note>
+        <note>This is still pretty constant though, LAWL.</note>
+      </descriptiveNotes>
+      <relatedResources>
+        <resource>weferterwt</resource>
+        <resource>sadfasfsa</resource>
+      </relatedResources>
+    </description>
+  </place>
+</entity>

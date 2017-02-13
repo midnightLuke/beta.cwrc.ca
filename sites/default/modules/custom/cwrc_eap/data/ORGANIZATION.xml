@@ -1,0 +1,67 @@
+<?xml-model
+href="http://cwrc.ca/schemas/entities.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"
+?>
+<entity>
+  <organization>
+    <recordInfo>
+      <accessCondition type="use and reproduction">
+        Use of this public-domain resource is governed by the
+        <a href="http://creativecommons.org/licenses/by-nc/4.0/" rel="license">
+          Attribution-NonCommercial 4.0 International License
+        </a>
+        .
+      </accessCondition>
+      <originInfo>
+        <recordChangeDate>2016-05-17</recordChangeDate>
+        <projectId>GeoNames</projectId>
+        <projectId>VIAF</projectId>
+      </originInfo>
+      <orgTypes>
+        <orgType>labour</orgType>
+        <orgType>professional</orgType>
+      </orgTypes>
+    </recordInfo>
+    <identity>
+      <preferredForm>
+        <namePart>Some place somewhere</namePart>
+        <namePart>fggfdhsdfs</namePart>
+      </preferredForm>
+      <variantForms>
+        <variant>
+          <namePart>Timespace</namePart>
+          <variantType>usedForm</variantType>
+          <authorizedBy>
+            <projectId>canwwr</projectId>
+          </authorizedBy>
+        </variant>
+        <variant>
+          <namePart>rtterteryrujy</namePart>
+        </variant>
+      </variantForms>
+      <sameAs cert="2">asfsafdsaf</sameAs>
+      <sameAs cert="2">sdfsdagsdffsdgdfs</sameAs>
+    </identity>
+    <description>
+      <existDates>
+        <dateSingle cert="4">
+          <standardDate qualifier="approximate">2010-02-02</standardDate>
+          <dateType>establishment</dateType>
+          <note>asfsadsagsfgeshdsfg</note>
+        </dateSingle>
+        <dateSingle cert="1">
+          <standardDate qualifier="questionable">2013-05-31</standardDate>
+          <dateType>dissolution</dateType>
+          <note>Trains are cool.</note>
+        </dateSingle>
+      </existDates>
+      <factuality>real</factuality>
+      <descriptiveNotes>
+        <note>dsfsadfgasdfg</note>
+      </descriptiveNotes>
+      <relatedResources>
+        <resource>sadfasdfasd</resource>
+        <resource>sdfasfsadfagasgjytumtyty</resource>
+      </relatedResources>
+    </description>
+  </organization>
+</entity>
