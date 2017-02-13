@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file
+ * Install hooks for this module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * @see islandora_cwrc_document_islandora_required_objects()
+ */
+function islandora_cwrc_document_install() {
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  // Install required object(s).
+  islandora_install_solution_pack('islandora_cwrc_document');
+}
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_cwrc_document_uninstall() {
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  islandora_uninstall_solution_pack('islandora_cwrc_document');
+}

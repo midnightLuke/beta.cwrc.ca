@@ -1,0 +1,8 @@
+name = "Islandora CWRC-Writer Document"
+description = "Provides required objects to model data used to interact with the CWRC-Writer."
+dependencies[] = islandora
+dependencies[] = islandora_cwrc_writer
+dependencies[] = islandora_object_lock_rest
+core = 7.x
+version = 7.x-dev
+package = Islandora Tools
