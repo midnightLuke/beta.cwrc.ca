@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CWRC Basic page feature.
+ */
+
+include_once 'cwrc_node_page.features.inc';
