@@ -1,0 +1,233 @@
+<?php
+
+/**
+ * @file
+ * Code for the cwrc_theme_compat feature.
+ */
+
+include_once 'cwrc_theme_compat.features.inc';
+
+/* Hooks. */
+
+/**
+ * Implements MODULE_preprocess_HOOK() for islandora_basic_collection().
+ */
+function cwrc_theme_compat_preprocess_islandora_basic_collection(&$variables) {
+  _cwrc_theme_compat_add_collection_classes($variables);
+}
+
+/**
+ * Implements MODULE_preprocess_HOOK() for islandora_basic_collection_grid().
+ */
+function cwrc_theme_compat_preprocess_islandora_basic_collection_grid(&$variables) {
+  _cwrc_theme_compat_add_collection_classes($variables);
+}
+
+/**
+ * Implements hook_views_bulk_operations_form_alter().
+ */
+function cwrc_theme_compat_views_bulk_operations_form_alter(&$form, &$form_state, $vbo) {
+  if (array_key_exists('operation', $form_state)) {
+    $op = $form_state['operation']->operationId;
+
+    switch ($op) {
+      case "action::og_user_roles_action":
+        drupal_set_title(t('Modify User Roles'));
+        break;
+
+      case "action::og_set_state_action":
+        drupal_set_title(t('Approve Membership Status'));
+        break;
+
+      case "action::og_membership_delete_action":
+        drupal_set_title(t('Remove Group Member'));
+        break;
+    }
+
+    if ($op == "action::og_user_roles_action") {
+
+      if ($form_state['step'] == "views_bulk_operations_config_form") {
+
+        $groups = $form['add_roles']['#options'];
+
+        $form['selected_roles'] = array(
+          '#type' => 'checkboxes',
+          '#options' => $groups,
+          '#title' => t('Member roles'),
+          '#description' => t('Choose one or more roles you would like to assign to the selected users.'),
+        );
+
+        array_unshift($form['actions']['submit']['#validate'], 'cwrc_theme_compat_vbo_validate');
+
+        unset($form['add_roles']);
+        unset($form['remove_roles']);
+      }
+      elseif ($form_state['step'] == "views_bulk_operations_confirm_form") {
+
+      }
+    }
+
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function cwrc_theme_compat_form_alter(&$form, &$form_state) {
+  if (array_key_exists('#form_id', $form) && $form['#form_id'] == "og_ui_add_users") {
+    $form['actions']['submit']['#value'] = t('Add User');
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function cwrc_theme_compat_block_info() {
+  $blocks['user_picture_block'] = array(
+    'info' => t('User Picture Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['sponsors_homepage_block'] = array(
+    'info' => t('Homepage Sponsors Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cwrc_theme_compat_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'user_picture_block':
+      $block['subject'] = t('User Picture');
+
+      $user = menu_get_object('user', 1);
+      if ($user == NULL) {
+        return NULL;
+      }
+
+      $picture = $user->picture;
+      if ($picture == NULL || empty($picture)) {
+        return NULL;
+      }
+
+      $block['content'] = "<div class=\"user-picture-header\"><img src=\"" . image_style_url('user_header_picture', $picture->uri) . "\" alt=\"" . realname_load($user) . "\"></div>";
+
+      break;
+
+    case 'sponsors_homepage_block':
+      $block['content'] = theme('cwrc_sponsors_block');
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cwrc_theme_compat_theme($exsting, $type, $theme, $path) {
+  return array(
+    'cwrc_sponsors_block' => array(
+      'template' => 'templates/cwrc-sponsors-block',
+      'variables' => array(),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function cwrc_theme_compat_block_view_alter(&$data, $block) {
+  if ($block->module == "cwrc_search_bar" && $block->delta == "search") {
+    if (arg(0) == "notfound" || arg(0) == "r4032login") {
+      $data['content']['#action'] = url('<front>');
+    }
+  }
+
+  // Hide the system-main block if it uses #markup and is empty.
+  if ($block->module == "system" && $block->delta == "main") {
+    if (count($data['content']) == 1 && array_key_exists(0, $data['content']) && array_key_exists('#markup', $data['content'][0]) && empty($data['content'][0]['#markup'])) {
+      $data['content'] = NULL;
+    }
+  }
+
+  // Always show the contact information footer on the project pages
+  // Note: this hash is used because the views block delta is > 32 characters
+  // so views MD5s it and uses that instead. As long as the block isn't renamed
+  // this should be consistent.
+  if ($block->module == "views" && $block->delta == "dd0cd778927866856aefa269a3cfc970") {
+    if ($data == NULL || empty($data)) {
+      $node = menu_get_object('node');
+      if ($node != NULL && $node->type == 'project') {
+        $data = array('content' => array('#markup' => ''), 'subject' => '');
+      }
+    }
+  }
+}
+
+/* Form handlers. */
+
+/**
+ * Form validation handler for views_bulk_operations_form().
+ *
+ * @see cwrc_theme_compat_views_bulk_operations_form_alter()
+ */
+function cwrc_theme_compat_vbo_validate(&$form, &$form_state) {
+  $add_roles = array();
+  $all_roles = $form['selected_roles']['#options'];
+  $remove_roles = array();
+  $add_roles_num = array();
+  $remove_roles_num = array();
+
+  foreach ($all_roles as $rid => $rname) {
+    if (array_key_exists($rid, $form['selected_roles']['#value'])) {
+      // It is selected.
+      $add_roles[$rid] = $rname;
+      $add_roles_num[$rid] = $rid;
+    }
+    else {
+      $remove_roles[$rid] = $rname;
+      $remove_roles_num[$rid] = $rid;
+    }
+  }
+
+  // Modifying $form_state['input'] to ensure all modules see the new values.
+  // Note that *reading* from $form_state['input'] poses a security risk (see
+  // https://www.drupal.org/node/2489304 for more information); but we are
+  // *writing* to it here.
+  $form_state['input']['add_roles'] = array_keys($add_roles);
+  $form_state['input']['remove_roles'] = array_keys($remove_roles);
+  $form_state['values']['add_roles'] = $add_roles_num;
+  $form_state['values']['remove_roles'] = $remove_roles_num;
+
+  $form['add_roles'] = array(
+    '#value' => $add_roles_num,
+    '#options' => $all_roles,
+    '#multiple' => TRUE,
+    '#type' => 'select',
+  );
+  $form['remove_roles'] = array(
+    '#value' => $remove_roles_num,
+    '#options' => $all_roles,
+    '#multiple' => TRUE,
+    '#type' => 'select',
+  );
+}
+
+/* Helper functions. */
+
+/**
+ * Helper function to add classes to Islandora object HTML.
+ */
+function _cwrc_theme_compat_add_collection_classes(&$variables) {
+  foreach ($variables['associated_objects_array'] as $pid => $obj) {
+    if (!array_key_exists('object', $obj)) {
+      return;
+    }
+
+    foreach ($obj['object']->models as $model) {
+      $variables['associated_objects_array'][$pid]['class'] .= ' ' . str_replace('.', '-', strtolower(str_replace(':', '-', $model)));
+    }
+  }
+}

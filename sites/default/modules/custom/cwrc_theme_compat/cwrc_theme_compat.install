@@ -1,0 +1,15 @@
+<?php
+/**
+ * @file
+ * Installation file for the cwrc_theme_compat feature.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function cwrc_theme_compat_install() {
+  theme_enable(array('de_theme'));
+  variable_set('theme_default', 'de_theme');
+  theme_disable(array('bartik'));
+
+}
