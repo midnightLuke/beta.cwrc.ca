@@ -1,0 +1,7 @@
+name = CWRC: Visualization Framework
+description = Provides an extensible framework around visualization tools for CWRC.
+core = 7.x
+package = CWRC
+
+dependencies[] = islandora
+dependencies[] = islandora_plotit

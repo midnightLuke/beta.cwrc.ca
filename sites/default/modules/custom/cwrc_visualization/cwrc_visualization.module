@@ -1,0 +1,222 @@
+<?php
+
+/**
+ * @file
+ * Hooks and helper functions for the cwrc_visualization module.
+ */
+
+/* Hooks. */
+
+/**
+ * Implements hook_menu().
+ */
+function cwrc_visualization_menu() {
+  // Uses all implementations of hook_cwrc_visualization_info to build menu
+  // items for the visualize tab.
+  $items = array();
+  $bookmark_first = TRUE;
+
+  foreach (cwrc_visualization_info_tools() as $name => $info) {
+    // Add under "View" tab for islandora objects.
+    $items['islandora/object/%islandora_object/view/' . $name] = array(
+      'title' => $info['label'],
+      'page callback' => 'cwrc_visualization_render',
+      'page arguments' => array(2, $name),
+      'access callback' => isset($info['access callback']) ? $info['access callback'] : 'cwrc_visualization_access',
+      'access arguments' => array(2, $name),
+      'type' => MENU_LOCAL_TASK,
+      'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+      'weight' => $info['weight'],
+    );
+
+    // Handle visualization tool information for bookmarks.
+    if (isset($info['bookmark path'])) {
+      if ($bookmark_first) {
+        $bookmark_first = FALSE;
+        $items['islandora-bookmark/listid/%/visualize'] = array(
+          'title' => 'Visualize',
+          'page callback' => 'cwrc_visualization_bookmark_render',
+          'page arguments' => array(2, $name),
+          'weight' => -1,
+          'access callback' => 'islandora_bookmark_access',
+          'access arguments' => array(2),
+          'type' => MENU_LOCAL_TASK,
+          'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+        );
+        $items['islandora-bookmark/listid/%/visualize/' . $name] = array(
+          'title' => $info['label'],
+          'type' => MENU_DEFAULT_LOCAL_TASK,
+          'weight' => $info['weight'],
+        );
+      }
+      else {
+        $items['islandora-bookmark/listid/%/visualize/' . $name] = array(
+          'title' => $info['label'],
+          'page callback' => 'cwrc_visualization_bookmark_render',
+          'page arguments' => array(2, $name),
+          'access callback' => 'islandora_bookmark_access',
+          'access arguments' => array(2),
+          'type' => MENU_LOCAL_TASK,
+          'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+          'weight' => $info['weight'],
+        );
+      }
+    }
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function cwrc_visualization_menu_alter(&$items) {
+  // For some reason these changes only work in a hook_menu_alter() and not the
+  // hook_menu() proper.
+  $items['islandora-bookmark/listid/%/plotit']['type'] = MENU_CALLBACK;
+
+  // This is needed to show tabs for islandora bookmark.
+  $items['islandora-bookmark/listid/%/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cwrc_visualization_theme($existing, $type, $theme, $path) {
+  return array(
+    'cwrc_visualization' => array(
+      'template' => 'templates/cwrc-visualization',
+      'variables' => array('url' => NULL),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_list_alter().
+ */
+function cwrc_visualization_block_list_alter(&$blocks) {
+  // Removes the save search form from the visualizations.
+  foreach ($blocks as $delta => $block) {
+    if ($block->module == 'islandora_saved_searches' && $block->delta == 'save_search') {
+      // Get active display and check for likely cwrc_search match.
+      $display = isset($_GET['display']) ? $_GET['display'] : FALSE;
+      if ($display && substr($display, 0, 12) == 'cwrc_search_') {
+        $displays = cwrc_search_islandora_solr_primary_display();
+        $active = $displays[$display];
+
+        // We are hiding facets and therefore the saved search block.
+        if (isset($active['hide_facets']) && $active['hide_facets'] === TRUE) {
+          unset($blocks[$delta]);
+        }
+      }
+    }
+  }
+}
+
+/* Menu callbacks. */
+
+/**
+ * Access callback: check if this cmodel should render the visualization.
+ */
+function cwrc_visualization_access($islandora_object, $tool_name) {
+  if ($tool = cwrc_visualization_info_tools($tool_name)) {
+    foreach ($tool['available cmodels'] as $cmodel) {
+      if (in_array($cmodel, $islandora_object->models)) {
+        return TRUE;
+      }
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Page callback: Displays an iframe for a visualization tool.
+ *
+ * Generates the iframe url and then uses the template to render the iframe for
+ * the visualization tool.
+ *
+ * @see cwrc_visualization_menu()
+ */
+function cwrc_visualization_render($islandora_object, $tool_name) {
+  $tool = cwrc_visualization_info_tools($tool_name);
+
+  if (isset($tool['url pattern'])) {
+    $url = cwrc_visualization_url_generate($tool['url pattern'], $islandora_object);
+  }
+  elseif (isset($tool['url callback'])) {
+    $url = call_user_func($tool['url callback'], $islandora_object);
+  }
+  else {
+    return FALSE;
+  }
+
+  return array(
+    '#theme' => 'cwrc_visualization',
+    '#url' => $url,
+  );
+}
+
+/**
+ * Page callback: Displays an iframe for a bookmark visualization tool.
+ *
+ * Generates the iframe url and then uses the template to render the iframe for
+ * the visualization tool.
+ *
+ * @see cwrc_visualization_menu()
+ */
+function cwrc_visualization_bookmark_render($list_id, $tool_name) {
+  $tool = cwrc_visualization_info_tools($tool_name);
+
+  if (isset($tool['bookmark path'])) {
+    $url = url(str_replace('%list_id%', $list_id, $tool['bookmark path']), array('absolute' => TRUE));
+  }
+  else {
+    return FALSE;
+  }
+
+  return array(
+    '#theme' => 'cwrc_visualization',
+    '#url' => $url,
+  );
+}
+
+/* Helper functions. */
+
+/**
+ * Function to generate a url from a given object and pattern.
+ *
+ * This is separated out for potential future improvements, currently provides
+ * a simple text replacement.
+ */
+function cwrc_visualization_url_generate($pattern, $islandora_object) {
+  return str_replace('%object_pid%', $islandora_object->id, $pattern);
+}
+
+/**
+ * Helper function to return available tool information.
+ *
+ * @param string $tool_name
+ *   The name of a specific tool to retrieve information above. If not specified
+ *   then this function will return information about all available tools.
+ *
+ * @return array
+ *   Information about all available tools, or information about a specific tool
+ *   if $tool_name is set.
+ */
+function cwrc_visualization_info_tools($tool_name = NULL) {
+  $tools = module_invoke_all('cwrc_visualization_info');
+  drupal_alter('cwrc_visualization_info', $tools);
+  if (isset($tool_name)) {
+    if (isset($tools[$tool_name])) {
+      return $tools[$tool_name];
+    }
+    else {
+      return NULL;
+    }
+  }
+  return $tools;
+}
