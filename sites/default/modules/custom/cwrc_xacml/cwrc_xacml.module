@@ -1,0 +1,273 @@
+<?php
+
+/**
+ * @file
+ * Code for the CWRC: XACML Modifications feature.
+ */
+
+include_once 'cwrc_xacml.features.inc';
+
+/* Hooks. */
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cwrc_xacml_form_islandora_xacml_editor_form_alter(&$form, &$form_state) {
+  // Heavily alters and re-arranges the islandora xacml editor form to be more
+  // user friendly and less intimidating.
+  //
+  // Firstly filter out global roles from all "role" select boxes.
+  _og_global_roles_filter_select($form['access']['roles']['#options']);
+  _og_global_roles_filter_select($form['manage']['roles']['#options']);
+  _og_global_roles_filter_select($form['dsid_mime']['roles']['#options']);
+
+  // Kill root "tree" variable, we are rearranging things.
+  $form['#tree'] = FALSE;
+
+  // Chosen-ify the select boxes.
+  $form['access']['users']['#chosen'] = TRUE;
+  $form['access']['roles']['#chosen'] = TRUE;
+  $form['manage']['users']['#chosen'] = TRUE;
+  $form['manage']['roles']['#chosen'] = TRUE;
+  $form['dsid_mime']['users']['#chosen'] = TRUE;
+  $form['dsid_mime']['roles']['#chosen'] = TRUE;
+
+  // Override some ajax settings, as they will return null after this.
+  if (isset($form['dsid_mime']['rules']['remove_selected'])) {
+    $form['dsid_mime']['rules']['remove_selected']['#ajax']['callback'] = 'cwrc_xacml_editor_remove_selected';
+  }
+  if (isset($form['dsid_mime']['rules']['remove_all'])) {
+    $form['dsid_mime']['rules']['remove_all']['#ajax']['callback'] = 'cwrc_xacml_editor_remove_all';
+  }
+  $form['dsid_mime']['new_dsid']['#ajax']['callback'] = 'cwrc_xacml_editor_add_dsid_js';
+  $form['dsid_mime']['new_dsid_add']['#ajax']['callback'] = 'cwrc_xacml_editor_add_dsid_js';
+  $form['dsid_mime']['dsid_regex']['#ajax']['callback'] = 'cwrc_xacml_editor_add_dsid_regex_js';
+  $form['dsid_mime']['dsid_regex_add']['#ajax']['callback'] = 'cwrc_xacml_editor_add_dsid_regex_js';
+  $form['dsid_mime']['new_mime']['#ajax']['callback'] = 'cwrc_xacml_editor_add_mime_js';
+  $form['dsid_mime']['new_mime_add']['#ajax']['callback'] = 'cwrc_xacml_editor_add_mime_js';
+  $form['dsid_mime']['mime_regex']['#ajax']['callback'] = 'cwrc_xacml_editor_add_mime_regex_js';
+  $form['dsid_mime']['mime_regex_add']['#ajax']['callback'] = 'cwrc_xacml_editor_add_mime_regex_js';
+
+  // Replace usernames with realnames.
+  _cwrc_xacml_replace_usernames($form['access']['users']['#options']);
+  _cwrc_xacml_replace_usernames($form['manage']['users']['#options']);
+  _cwrc_xacml_replace_usernames($form['dsid_mime']['users']['#options']);
+
+  // Get group options available to this user.
+  $group_options = _cwrc_xacml_get_group_options();
+
+  // Iterate over projects and create options.
+  $group_widget = array(
+    '#type' => 'select',
+    '#multiple' => TRUE,
+    '#chosen' => TRUE,
+    '#options' => $group_options,
+    '#title' => t('Group access'),
+  );
+
+  // Add group access widets.
+  $form['access']['groups'] = array_merge(array(
+    '#default_value' => $form['access']['roles']['#default_value'],
+  ), $group_widget);
+  $form['manage']['groups'] = array_merge(array(
+    '#default_value' => $form['manage']['roles']['#default_value'],
+  ), $group_widget);
+  $form['dsid_mime']['groups'] = array_merge(array(
+    '#default_value' => $form['dsid_mime']['roles']['#default_value'],
+  ), $group_widget);
+
+  // DSID group widget is out of order.
+  $form['dsid_mime']['users']['#weight'] = -3;
+  $form['dsid_mime']['roles']['#weight'] = -2;
+  $form['dsid_mime']['groups']['#weight'] = -1;
+
+  // Now put stuff into verical tabs.
+  $form['cwrc_xacml_vertical_tabs'] = array(
+    '#type' => 'vertical_tabs',
+    '#default_tab' => 'edit-access',
+    '#weight' => -5,
+  );
+
+  // Create new fieldsets for sub-grouping fields.
+  $form['access_fieldset'] = array(
+    'access_enabled' => $form['access_enabled'],
+    'access' => $form['access'],
+    '#group' => 'cwrc_xacml_vertical_tabs',
+    '#type' => 'fieldset',
+    '#title' => t('Object viewing'),
+  );
+  $form['manage_fieldset'] = array(
+    'manage_enabled' => $form['manage_enabled'],
+    // Added tree here, cleaning up some code from islandora xacml.
+    'manage' => $form['manage'] + array('#tree' => TRUE),
+    '#group' => 'cwrc_xacml_vertical_tabs',
+    '#type' => 'fieldset',
+    '#title' => t('Object management'),
+  );
+  $form['dsid_mime_fieldset'] = array(
+    'dsid_mime_enabled' => $form['dsid_mime_enabled'],
+    'dsid_mime' => $form['dsid_mime'],
+    '#group' => 'cwrc_xacml_vertical_tabs',
+    '#type' => 'fieldset',
+    '#title' => t('DSID and MIME types (advanced)'),
+  );
+
+  // Unset un-grouped fields now.
+  unset($form['access_enabled']);
+  unset($form['access']);
+  unset($form['manage_enabled']);
+  unset($form['manage']);
+  unset($form['dsid_mime_enabled']);
+  unset($form['dsid_mime']);
+
+  // Add validation handler.
+  $form['#validate'][] = 'cwrc_xacml_form_validate';
+}
+
+/**
+ * Implements hook_library_alter().
+ */
+function cwrc_xacml_library_alter(&$libraries, $module) {
+  // Adds support for chosen "include_group_label_in_selected" through a
+  // variable.
+  //
+  // NOTE: This doesn't work with the version of chosen that this module
+  // downloads you need to manually update chosen to >=v1.4.0 for this to be
+  // useful.
+  if ($module == 'chosen' && isset($libraries['drupal.chosen'])) {
+    $libraries['drupal.chosen']['js'][0]['data']['chosen']['options']['include_group_label_in_selected'] = (bool) variable_get('chosen_include_group_label_in_selected', TRUE);
+  }
+}
+
+/* Form handlers. */
+
+/**
+ * Form validation handler for islandora_xacml_editor_form().
+ *
+ * Our widget is really a wrapper around the "roles" widget, to ensure we get
+ * added to the xacml policy and all subsequent batches we need to inject the
+ * values directly into the default roles arrays.
+ *
+ * @see cwrc_xacml_form_islandora_xacml_editor_form_alter()
+ */
+function cwrc_xacml_form_validate($form, &$form_state) {
+  foreach (array('access', 'manage', 'dsid_mime') as $category) {
+    foreach ($form_state['values'][$category]['groups'] as $key => $value) {
+      $form_state['values'][$category]['roles'][$key] = $value;
+    }
+  }
+}
+
+/**
+ * AJAX callback to remove the selected filters from the rules table.
+ */
+function cwrc_xacml_editor_remove_selected($form, $form_state) {
+  return $form['dsid_mime_fieldset']['dsid_mime']['rules'];
+}
+
+/**
+ * AJAX callback to remove all filters from the rules table.
+ */
+function cwrc_xacml_editor_remove_all($form, $form_state) {
+  return $form['dsid_mime_fieldset']['dsid_mime']['rules'];
+}
+
+/**
+ * AJAX callback to add a DSID Regex to the rules table.
+ */
+function cwrc_xacml_editor_add_dsid_regex_js($form, $form_state) {
+  return $form['dsid_mime_fieldset']['dsid_mime']['rules'];
+}
+
+/**
+ * AJAX callback to add a DSID to the rules table.
+ */
+function cwrc_xacml_editor_add_dsid_js($form, $form_state) {
+  return $form['dsid_mime_fieldset']['dsid_mime']['rules'];
+}
+
+/**
+ * AJAX callback to add a MIME Regex to the rules table.
+ */
+function cwrc_xacml_editor_add_mime_regex_js($form, $form_state) {
+  return $form['dsid_mime_fieldset']['dsid_mime']['rules'];
+}
+
+/**
+ * AJAX callback to add a MIME Type to the rules table.
+ */
+function cwrc_xacml_editor_add_mime_js($form, $form_state) {
+  return $form['dsid_mime_fieldset']['dsid_mime']['rules'];
+}
+
+/* Helper functions. */
+
+/**
+ * Helper to replace XACML options with realnames from the realname module.
+ *
+ * Uses bulk queries and loaders for as much static caching optimization as
+ * possible.
+ */
+function _cwrc_xacml_replace_usernames(&$options) {
+  // Get users from the database in one query.
+  $uids = db_select('users', 'u')
+    ->fields('u', array('uid'))
+    ->condition('u.name', array_keys($options), 'IN')
+    ->execute()
+    ->fetchAllAssoc('uid');
+
+  // Load accounts and realnames.
+  $accounts = user_load_multiple(array_keys($uids));
+  $realnames = realname_load_multiple($accounts);
+
+  // Index realnames by username.
+  foreach ($realnames as $uid => $realname) {
+    $realnames[$accounts[$uid]->name] = $realname;
+    unset($realnames[$uid]);
+  }
+
+  // Iterate over options and replace with realnames.
+  foreach ($options as &$option) {
+    if (isset($realnames[$option])) {
+      $option = $realnames[$option];
+    }
+  }
+}
+
+/**
+ * Helper function that returns group role options for the XACML widget.
+ */
+function _cwrc_xacml_get_group_options() {
+  $options = array();
+
+  // Get projects.
+  $query = new EntityFieldQuery();
+  $return = $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'project')
+    ->fieldCondition(OG_GROUP_FIELD, 'value', 1, '=')
+    ->execute();
+  $groups = entity_load('node', array_keys($return['node']));
+
+  // Iterate over projects, checking access and building options.
+  foreach ($groups as $group) {
+    // Check access.
+    if (node_access('view', $group)) {
+      $options[$group->title] = array();
+
+      // Get role map for this group.
+      $role_map = db_select(OG_GLOBAL_ROLES_TABLE, 'g')
+        ->condition('g.gid', $group->nid)
+        ->fields('g')
+        ->execute()
+        ->fetchAllAssoc('global_rid');
+
+      // Set options as og_role.
+      foreach ($role_map as $role) {
+        $og_role = og_role_load($role->og_rid);
+        $options[$group->title][$og_role->group_type . ':' . $group->nid . ':' . $og_role->rid . ':' . $og_role->name] = $og_role->name;
+      }
+    }
+  }
+  return $options;
+}
