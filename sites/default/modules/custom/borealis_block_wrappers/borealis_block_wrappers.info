@@ -1,0 +1,6 @@
+name = Borealis Block Wrappers
+description = Couple of customizations to the Borealis semantic block module.
+core = 7.x
+package = Echidna Custom
+dependencies[] = borealis
+dependencies[] = borealis_sb
