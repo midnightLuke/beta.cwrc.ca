@@ -1,0 +1,368 @@
+<?php
+
+/**
+ * @file
+ * Hooks and helper functions for the CWRC Islandora Tweaks module.
+ */
+
+/* Constants. */
+
+/**
+ * The query fragment used to change how a basic collection is sorted.
+ *
+ * Extracting this to a constant makes changing the sorting query fragment
+ * relatively easy if we discover that it collides with something else.
+ */
+define('CWRC_ISLANDORA_TWEAKS_SORT_FRAGMENT', 'sort');
+
+/* Hooks. */
+
+/**
+ * Implements hook_islandora_basic_collection_query_param_alter().
+ */
+function cwrc_islandora_tweaks_islandora_basic_collection_query_param_alter(&$query_filters, &$query_statements, &$params, &$query_optionals) {
+  // Parse the URL to see if there is a sort parameter. Default to sorting by
+  // title if the value of the parameter is not something else we recognize.
+  if (isset($_GET[CWRC_ISLANDORA_TWEAKS_SORT_FRAGMENT])) {
+    if ($_GET[CWRC_ISLANDORA_TWEAKS_SORT_FRAGMENT] === 'date_modified') {
+      $params['order_by'] = '?date_modified';
+    }
+    else {
+      $params['order_by'] = '?title';
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function cwrc_islandora_tweaks_module_implements_alter(&$implementations, $hook) {
+  // Moves our implementations to the end of the run-list.
+  static $hooks = array(
+    'islandora_collectionCModel_islandora_object_ingested',
+    'islandora_ap_audioCModel_islandora_object_ingested',
+  );
+  if (in_array($hook, $hooks)) {
+    $group = $implementations['cwrc_islandora_tweaks'];
+    unset($implementations['cwrc_islandora_tweaks']);
+    $implementations['cwrc_islandora_tweaks'] = $group;
+  }
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function cwrc_islandora_tweaks_page_alter(&$page) {
+  module_load_include('inc', 'islandora_object_lock', 'includes/utilities');
+
+  $object = menu_get_object('islandora_object', 2);
+  if (!$object) {
+    return;
+  }
+
+  if (arg(3) != "manage") {
+    return;
+  }
+
+  if (!islandora_object_lock_is_locked($object)) {
+    return;
+  }
+
+  $msg = islandora_object_lock_get_locked_message($object);
+
+  if (!_cwrc_islandora_tweaks_message_exists($msg)) {
+    drupal_set_message($msg, 'warning', FALSE);
+  }
+
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_object_ingested().
+ */
+function cwrc_islandora_tweaks_islandora_collectioncmodel_islandora_object_ingested(AbstractObject $object) {
+  // The cmodel-specific implementations are fired last, so we need to implement
+  // the same hook to block the default TN datastream here.
+  cwrc_islandora_tweaks_islandora_object_ingested($object);
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_object_ingested().
+ */
+function cwrc_islandora_tweaks_islandora_sp_audiocmodel_islandora_object_ingested(AbstractObject $object) {
+  // The cmodel-specific implementations are fired last, so we need to implement
+  // the same hook to block the default TN datastream here.
+  cwrc_islandora_tweaks_islandora_object_ingested($object);
+}
+
+/* Form handlers. */
+
+/**
+ * Form builder function for sort order form on basic collections.
+ *
+ * @see cwrc_islandora_tweaks_sort_form_submit()
+ */
+function cwrc_islandora_tweaks_sort_form($form, &$form_state) {
+  return array(
+    'sort' => array(
+      '#type' => 'select',
+      '#title' => t('Sort by'),
+      '#options' => array(
+        'title' => t('Title'),
+        'date_modified' => t('Modified'),
+      ),
+      '#default_value' => (isset($_GET[CWRC_ISLANDORA_TWEAKS_SORT_FRAGMENT]) ? $_GET[CWRC_ISLANDORA_TWEAKS_SORT_FRAGMENT] : 'title'),
+    ),
+    'submit' => array(
+      '#type' => 'submit',
+      '#value' => t('Change'),
+    ),
+  );
+}
+
+/**
+ * Form submission handler for cwrc_islandora_tweaks_sort_form().
+ */
+function cwrc_islandora_tweaks_sort_form_submit($form, &$form_state) {
+  // Simply performs a redirect to the same page with the appropriate sort
+  // parameter. For use in sort order forms.
+  $path = current_path();
+  $query = drupal_get_query_parameters();
+  $query['sort'] = $form_state['values']['sort'];
+  drupal_goto($path, array('query' => $query));
+}
+
+/* Theme functions. */
+
+/**
+ * Prepares variables for Islandora basic collection templates.
+ *
+ * Default template: islandora-basic-collection.tpl.php.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - islandora_object: A PHP object containing information about the Fedora
+ *     data object that is this collection.
+ *   - collection_results: An array of Fedora data object stubs that are in this
+ *     collection.
+ */
+function cwrc_islandora_tweaks_preprocess_islandora_basic_collection(&$variables) {
+  // Loop through each object in the collection, find it's URL, and add a Read
+  // More link.
+  $results = $variables['collection_results'];
+  $display = (empty($_GET['display'])) ? variable_get('islandora_basic_collection_default_view', 'grid') : $_GET['display'];
+  $build = array(
+    '#theme' => 'item_list',
+    '#type' => 'ul',
+    '#items' => array(),
+    '#attributes' => array(),
+  );
+
+  // Use default grid layout.
+  if ($display == 'grid') {
+    $build['#attributes']['class'][] = 'grid-layout';
+    foreach ($results as $result) {
+      $content = array(
+        '#theme' => 'cwrc_search_teaser_grid',
+        '#object' => $result['object']['value'],
+      );
+      $build['#items'][] = render($content);
+    }
+
+    // Use default list layout.
+  }
+  else {
+    $build['#attributes']['class'][] = 'list-layout';
+    foreach ($results as $result) {
+      $content = array(
+        '#theme' => 'cwrc_search_teaser_list',
+        '#object' => $result['object']['value'],
+      );
+      $build['#items'][] = render($content);
+    }
+  }
+
+  $variables['collection_results'] = $build;
+
+  $variables['order_by'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Sort'),
+  );
+  $variables['order_by']['sort_options'] = drupal_get_form('cwrc_islandora_tweaks_sort_form');
+}
+
+/**
+ * Prepares variables for html templates.
+ *
+ * Default template: html.tpl.php.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - classes_array: An array of classes for the HTML page's body tag.
+ */
+function cwrc_islandora_tweaks_preprocess_html(&$variables) {
+  $menu_item = menu_get_item();
+  if ($menu_item['path'] == 'islandora/object/%/print') {
+    $variables['classes_array'][] = 'islandora-print';
+  }
+}
+
+/**
+ * Prepares variables for Islandora basic collection templates, grid view.
+ *
+ * Default template: islandora-basic-collection-grid.tpl.php.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - islandora_object: A PHP object containing information about the Fedora
+ *     data object that is this collection.
+ *   - collection_results: An array of Fedora data object stubs that are in this
+ *     collection.
+ */
+function cwrc_islandora_tweaks_preprocess_islandora_basic_collection_grid(&$variables) {
+  cwrc_islandora_tweaks_preprocess_islandora_basic_collection($variables);
+}
+
+/* Helper functions. */
+
+/**
+ * Gets a path out of a URL.
+ *
+ * Essentially a wrapper around parse_url() with a Drupal-specific failure
+ * state.
+ *
+ * @param string $uri
+ *   The URL to parse.
+ *
+ * @return string
+ *   The path from the URL, or '<front>' if the URL was too mangled to parse.
+ */
+function _cwrc_islandora_tweaks_parse_path($uri) {
+  $parsed_uri = parse_url($uri);
+
+  // If the URL was so badly mangled that PHP couldn't parse it, or we couldn't
+  // find the path fragement, return the URL to the homepage of the site.
+  if ($parsed_uri === FALSE || !isset($parsed_uri['path'])) {
+    return '<front>';
+  }
+
+  return ltrim($parsed_uri['path'], '/');
+}
+
+/**
+ * Get an array of query parameters out of a URL.
+ *
+ * Essentially a wrapper around parse_url() with some extra functionality to
+ * put the query parameters into an array.
+ *
+ * @param string $uri
+ *   The URL to parse.
+ *
+ * @return array
+ *   An array of query parameters from the URL, or an empty array the URL was
+ *   too mangled to parse or query parameters could not be found in a parsable
+ *   URL.
+ */
+function _cwrc_islandora_tweaks_parse_query($uri) {
+  $answer = array();
+  $parsed_uri = parse_url($uri);
+
+  // If the URL was so badly mangled that PHP couldn't parse it, or we couldn't
+  // find the query fragement, return an empty array of query parameters.
+  if ($parsed_uri === FALSE || !isset($parsed_uri['query'])) {
+    return array();
+  }
+
+  // Technically, according to RFC 1866, the semicolon (;) is a valid way to
+  // separate parameters, but it's not widely used in Drupal, so we'll ignore
+  // it for simplicity's sake.
+  $query_variables = explode('&', $parsed_uri['query']);
+
+  // Reconstruct an array of query parameters by deconstructing the string we
+  // got back from parse_url().
+  foreach ($query_variables as $variable) {
+    $var_parts = explode('=', $variable, 2);
+    $key = $var_parts[0];
+    $value = $var_parts[1];
+    $answer[$key] = $value;
+  }
+
+  return $answer;
+}
+
+/**
+ * A helper function to determine if a message has already been queued.
+ *
+ * @param string $msg
+ *   The message to check.
+ *
+ * @return bool
+ *   TRUE if the message has been queued for display; FALSE otherwise.
+ */
+function _cwrc_islandora_tweaks_message_exists($msg) {
+  $messages = drupal_get_messages(NULL, FALSE);
+  foreach ($messages as $msgs) {
+    if (in_array($msg, $msgs)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Blocks default TN datastreams for various cmodels when they are ingested.
+ */
+function cwrc_islandora_tweaks_islandora_object_ingested(AbstractObject $object) {
+  static $cmodels = array(
+    'islandora:sp-audioCModel',
+    'islandora:collectionCModel',
+  );
+
+  // This hook is probably fired twice, try not to do too much work.
+  if (in_array(_cwrc_islandora_tweaks_extract_cmodel($object->models), $cmodels)
+    && isset($object['TN'])) {
+
+    // Check the defaults for specified cmodels.
+    switch (_cwrc_islandora_tweaks_extract_cmodel($object->models)) {
+      case 'islandora:sp-audioCModel':
+        $default_path = DRUPAL_ROOT . '/' . drupal_get_path('module', 'islandora_audio') . '/images/audio-TN.jpg';
+        break;
+
+      case 'islandora:collectionCModel':
+        $default_path = DRUPAL_ROOT . '/' . drupal_get_path('module', 'islandora_basic_collection') . '/images/folder.png';
+        break;
+    }
+
+    // Hash the default and the ingested thumbnail.
+    $default = md5_file($default_path);
+    $thumbnail = md5($object['TN']->content);
+
+    // This is the default.
+    if ($default == $thumbnail) {
+      $object->purgeDatastream('TN');
+    }
+  }
+}
+
+/**
+ * Helper function that extracts a single valid cmodel from a passed array.
+ *
+ * Primarily used to filter out `fedora-system` namespace cmodels (because we
+ * just don't care about those ones).
+ *
+ * @param array $models
+ *   An array of cmodel PIDs.
+ *
+ * @return string
+ *   A single cmodel PID.
+ */
+function _cwrc_islandora_tweaks_extract_cmodel($models) {
+  foreach ($models as $key => $value) {
+    if (substr($value, 0, 13) == 'fedora-system') {
+      unset($models[$key]);
+    }
+  }
+
+  // This definitely isn't bullet-proof.
+  $return = reset($models);
+  return $return;
+}

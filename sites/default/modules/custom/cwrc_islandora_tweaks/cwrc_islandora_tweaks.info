@@ -1,0 +1,6 @@
+name = CWRC: Islandora Tweaks
+description = Islandora business logic specific to the CWRC site.
+core = 7.x
+package = CWRC
+
+dependencies[] = islandora
