@@ -1,0 +1,440 @@
+<?php
+
+/**
+ * @file
+ * Code for the CWRC: menu links feature.
+ */
+
+include_once 'cwrc_menu_links.features.inc';
+
+/* Hooks. */
+
+/**
+ * Implements hook_menu().
+ */
+function cwrc_menu_links_menu() {
+  $items = array(
+    'islandora/object/%islandora_object/share' => array(
+      'title' => 'Share',
+      'page callback' => 'islandora_view_object',
+      'page arguments' => array(2),
+      'type' => MENU_LOCAL_TASK,
+      'access callback' => 'islandora_object_access_callback',
+      'access arguments' => array(
+        'view fedora repository objects',
+        2,
+      ),
+    ),
+    'islandora/object/%islandora_object/share/share' => array(
+      'title' => 'Share with another collection',
+      'page callback' => 'cwrc_menu_links_redirect_share',
+      'page arguments' => array('islandora/object/%islandora_object/manage/object/share', 2),
+      'type' => MENU_LOCAL_TASK,
+      'access callback' => 'islandora_basic_collection_share_migrate_access',
+      'access arguments' => array(2),
+      'weight' => 4,
+    ),
+    'islandora/object/%islandora_object/share/migrate' => array(
+      'title' => 'Migrate to another collection',
+      'page callback' => 'cwrc_menu_links_redirect_share',
+      'page arguments' => array('islandora/object/%islandora_object/manage/object/migrate', 2),
+      'type' => MENU_LOCAL_TASK,
+      'access callback' => 'islandora_basic_collection_share_migrate_access',
+      'access arguments' => array(2),
+      'weight' => 5,
+    ),
+    'islandora/object/%islandora_object/share/facebook' => array(
+      'title' => 'Facebook',
+      'page callback' => 'cwrc_menu_links_redirect_social',
+      'page arguments' => array('facebook', 2),
+      'type' => MENU_LOCAL_TASK,
+      'access callback' => 'islandora_object_access_callback',
+      'access arguments' => array(
+        'view fedora repository objects',
+        2,
+      ),
+      'weight' => 1,
+    ),
+    'islandora/object/%islandora_object/share/twitter' => array(
+      'title' => 'Twitter',
+      'page callback' => 'cwrc_menu_links_redirect_social',
+      'page arguments' => array('twitter', 2),
+      'type' => MENU_LOCAL_TASK,
+      'access callback' => 'islandora_object_access_callback',
+      'access arguments' => array(
+        'view fedora repository objects',
+        2,
+      ),
+      'weight' => 2,
+    ),
+    'islandora/object/%islandora_object/share/gplus' => array(
+      'title' => 'Google Plus',
+      'page callback' => 'cwrc_menu_links_redirect_social',
+      'page arguments' => array('gplus', 2),
+      'type' => MENU_LOCAL_TASK,
+      'access callback' => 'islandora_object_access_callback',
+      'access arguments' => array(
+        'view fedora repository objects',
+        2,
+      ),
+      'weight' => 3,
+    ),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function cwrc_menu_links_menu_alter(&$items) {
+  // This is our current menu alter "kludge" that completely removes /
+  // restructures menu items as needed for our UI.
+  $items['islandora/object/%islandora_object/plotit']['access callback'] = FALSE;
+
+  // User page menu items.
+  $items['user/%user/devel']['type'] = MENU_CALLBACK;
+  $items['user/%user/connected-accounts']['type'] = MENU_CALLBACK;
+  $items['user/%user/openid-sites']['type'] = MENU_CALLBACK;
+  $items['user/%user/islandora-saved-searches']['type'] = MENU_CALLBACK;
+  $items['user/%user/imce']['type'] = MENU_CALLBACK;
+  $items['user/%user/shortcuts']['type'] = MENU_CALLBACK;
+
+  // Project dashboard menu items.
+  $items['node/%/group']['type'] = MENU_CALLBACK;
+  $items['node/%node/node_export']['type'] = MENU_CALLBACK;
+  $items['node/%node/revisions']['type'] = MENU_CALLBACK;
+  $items['node/%node/devel']['type'] = MENU_CALLBACK;
+
+  // TEI-RDF item.
+  $items['islandora/object/%islandora_object/critical_editions']['type'] = MENU_CALLBACK;
+
+  // Migrate/share object links.
+  $items['islandora/object/%islandora_object/manage/object/migrate']['type'] = MENU_CALLBACK;
+  $items['islandora/object/%islandora_object/manage/object/share']['type'] = MENU_CALLBACK;
+
+  // Object policy.
+  $items['islandora/object/%islandora_object/manage/xacml']['title'] = t('Manage Access');
+
+  // Change the titles on the menu items which let users add items to the
+  // repository.
+  $items['islandora/object/%islandora_object/manage/collection/ingest']['title'] = t('Add item');
+  $items['islandora/object/%islandora_object/manage/overview/ingest']['title'] = t('Add item');
+
+  // In the CWRC document writer, we should be clear that the "Edit" button lets
+  // the user edit the document content.
+  $items['islandora/object/%islandora_object/edit-cwrc']['title'] = t('Edit content');
+
+  // Be clear about which "View" action is the default for all repository items.
+  $items['islandora/object/%islandora_object/view/default']['title'] = t('Default view');
+
+  // Reorder the items in the menu somewhat.
+  $items['islandora/object/%islandora_object/share']['weight'] = 1;
+  $items['islandora/object/%islandora_object/manage']['weight'] = 2;
+  $items['islandora/object/%islandora_object/annotate-cwrc']['weight'] = 5;
+  $items['islandora/object/%islandora_object/manage/collection/ingest']['weight'] = 2;
+  $items['islandora/object/%islandora_object/manage/overview/ingest']['weight'] = 2;
+  $items['islandora/object/%islandora_object/edit-cwrc']['weight'] = 3;
+  $items['islandora/object/%islandora_object/view/default']['weight'] = -50;
+
+  // Move the History item into the View menu...
+  $items['islandora/object/%islandora_object/view/history'] = $items['islandora/object/%islandora_object/history'];
+  unset($items['islandora/object/%islandora_object/history']);
+
+  // ... and make it the last item.
+  $items['islandora/object/%islandora_object/view/history']['weight'] = 50;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function cwrc_menu_links_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == "islandora_xacml_editor_form") {
+    drupal_set_title(t('Manage Access'));
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cwrc_menu_links_theme($existing, $tpe, $theme, $path) {
+  return array(
+    'cwrc_menu_links_login_block' => array(
+      'template' => 'templates/cwrc-menu-links-login-block',
+      'variables' => array('owned' => array(), 'shared' => array()),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function cwrc_menu_links_block_info() {
+  $blocks = array();
+  $blocks['login_link'] = array(
+    'info' => t('CWRC Login Link Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cwrc_menu_links_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'login_link':
+      $block['subject'] = t('Login');
+      $block['content'] = l(t('Login/Join'), 'user');
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function cwrc_menu_links_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  global $theme;
+
+  // Only works with our theme.
+  if ($theme == 'de_theme') {
+    // If there are no tabs this function can safely return.
+    if (count($data['tabs']) == 0) {
+      return;
+    }
+
+    foreach ($data['tabs'] as &$tab) {
+      foreach ($tab['output'] as &$output) {
+        // Get router items with this parent (calls access callbacks).
+        $children = _cwrc_menu_links_get_children($output['#link']['tab_root'], $output['#link']['path']);
+
+        foreach ($children as $key => $html) {
+          // If we find the "Default view" item, put a subtle divider below it.
+          if (_cwrc_menu_links_points_to_path($html, 'islandora/object/%islandora_object/view/default')) {
+            $children[$key] = array(
+              'data' => $html,
+              'class' => array('class' => 'divider-below'),
+            );
+          }
+          // If we find the "History" class, put a subtle divider above it.
+          elseif (_cwrc_menu_links_points_to_path($html, 'islandora/object/%islandora_object/view/history')
+            || _cwrc_menu_links_points_to_path($html, 'islandora/object/%islandora_object/history')
+          ) {
+            $children[$key] = array(
+              'data' => $html,
+              'class' => array('class' => 'divider-above'),
+            );
+          }
+          elseif (_cwrc_menu_links_points_to_path($html, 'islandora/object/%islandora_object/share/facebook')) {
+            $children[$key] = array(
+              'data' => $html,
+              'class' => array('class' => 'facebook-action-bar'),
+            );
+          }
+          elseif (_cwrc_menu_links_points_to_path($html, 'islandora/object/%islandora_object/share/twitter')) {
+            $children[$key] = array(
+              'data' => $html,
+              'class' => array('class' => 'twitter-action-bar'),
+            );
+          }
+          elseif (_cwrc_menu_links_points_to_path($html, 'islandora/object/%islandora_object/share/gplus')) {
+            $children[$key] = array(
+              'data' => $html,
+              'class' => array('class' => 'gplus-action-bar'),
+            );
+          }
+        }
+
+        if (count($children) > 0) {
+          $output['submenu'] = $children;
+        }
+      }
+    }
+  }
+}
+
+/* Menu callbacks. */
+
+/**
+ * Page callback: Copy or move an repo object to another collection.
+ *
+ * Redirects the user to another page where they can either share an object with
+ * another collection (copy), or migrate (move) an object to another collection.
+ *
+ * @param string $path
+ *   A path to redirect to, with the placeholder string '%islandora_object'
+ *   where the object ID should be inserted.
+ * @param string|array $object
+ *   The specific ID of the object that the user wants to copy or move.
+ */
+function cwrc_menu_links_redirect_share($path, $object) {
+  drupal_goto(str_replace("%islandora_object", $object, $path));
+}
+
+/**
+ * Page callback: Share a repo object using a supported [social media] service.
+ *
+ * Redirects the user to the external service, passing the URL of the object
+ * they want to share. The exact action of the external service may vary, but
+ * typically, a new "post" is created, containing the URL of the object to be
+ * shared.
+ *
+ * @param string $service
+ *   A machine name representing the service we want to share to. The following
+ *   services are valid:
+ *
+ *   - 'facebook': the Facebook social media service
+ *   - 'twitter': the Twitter social media service
+ *   - 'gplus': the Google Plus social media service
+ *
+ *   ... any other string will result in the user being redirect to the object's
+ *   default view.
+ * @param string $object
+ *   The specific ID of the object that the user wants to share.
+ */
+function cwrc_menu_links_redirect_social($service, $object) {
+  $url = urlencode(url('islandora/object/' . $object, array('absolute' => TRUE)));
+  $exturl = NULL;
+
+  switch ($service) {
+    case "facebook":
+      $exturl = "https://www.facebook.com/sharer/sharer.php?u=" . $url;
+      break;
+
+    case "twitter":
+      $exturl = "https://twitter.com/home?status=" . $url;
+      break;
+
+    case "gplus":
+      $exturl = "https://plus.google.com/share?url=" . $url;
+      break;
+
+    default:
+      $exturl = url('islandora/object/' . $object);
+      return;
+  }
+
+  drupal_goto($exturl);
+}
+
+/* Helper functions. */
+
+/**
+ * Helper function to return child menu items.
+ *
+ * Simplifies the logic for getting children menu items for the drop-down, to
+ * optimize perfomance, as Islandora can be very touchy about loading objects.
+ *
+ * @param string $root_path
+ *   The path of the root item.
+ * @param string $path
+ *   The path of the parent item.
+ *
+ * @return array
+ *   An array of child menu items.
+ */
+function _cwrc_menu_links_get_children($root_path, $path) {
+  $children = array();
+  $results = db_select('menu_router', 'm')
+    ->fields('m')
+    ->condition('m.tab_root', $root_path)
+    ->condition('m.tab_parent', $path)
+    ->execute()
+    ->fetchAllAssoc('path');
+
+  // Check access to the local tasks.
+  foreach ($results as &$result) {
+    // Unserialize access arguments and load functions.
+    $result->access_arguments = unserialize($result->access_arguments);
+    $result->title_arguments = unserialize($result->title_arguments);
+    $result->load_functions = unserialize($result->load_functions);
+
+    // Statically map arguments to avoid loading.
+    static $arg_map = array();
+
+    // Assuming that local tasks MUST live on the same path is likely not a
+    // good idea, but can save resources so we are moving forward with it for
+    // now.
+    foreach ($result->access_arguments as $key => $arg) {
+      // This needs to load an argument, assumes the current page also has the
+      // argument in the same spot.
+      if (is_int($arg) && isset($result->load_functions[$arg]) && is_string($result->load_functions[$arg])) {
+        // Keys are [load function][position].
+        if (!isset($arg_map[$result->load_functions[$arg]][$arg])) {
+          $arg_map[$result->load_functions[$arg]][$arg] = call_user_func($result->load_functions[$arg], arg($arg));
+        }
+        $result->access_arguments[$key] = $arg_map[$result->load_functions[$arg]][$arg];
+      }
+    }
+
+    // Access check on the tab, we are suppressing notices because sometimes
+    // they bubble up but are not critical.
+    if (@call_user_func_array($result->access_callback, $result->access_arguments)) {
+      $add = TRUE;
+      // Replace path parts with appropriate parts from current path.
+      $path_parts = explode('/', $result->path);
+      $current_parts = explode('/', current_path());
+      foreach ($path_parts as $key => $part) {
+        if (substr($part, 0, 1) == '%') {
+          // Edge case where we cannot load the appropriate arg, don't add
+          // child in this case.
+          if (isset($current_parts[$key])) {
+            $path_parts[$key] = $current_parts[$key];
+          }
+          else {
+            $add = FALSE;
+          }
+        }
+      }
+      $path = implode('/', $path_parts);
+      $title = call_user_func($result->title_callback, $result->title);
+      if ($add) {
+        $children[] = l($title, $path);
+      }
+    }
+  }
+  return $children;
+}
+
+/**
+ * Helper function to determine if a local task link matches a pattern.
+ *
+ * @param string $to_search
+ *   The HTML to search.
+ * @param string $path
+ *   The "needle" to find in $to_search.
+ *
+ * @return bool
+ *   TRUE if the "needle" was found in $to_search.
+ */
+function _cwrc_menu_links_points_to_path($to_search = '', $path = '') {
+  // Break the path into it's parts.
+  $path_parts = explode('/', $path);
+
+  // Special case: if the path is simply '/', then there will be two path parts,
+  // each of which are empty strings. We want to reduce this to a single path
+  // part.
+  if (count($path_parts) === 2 && $path_parts[0] === '' && $path_parts[1] === '') {
+    unset($path_parts[1]);
+  }
+
+  // If we encounter a part of the path that is a Drupal menu system wildcard,
+  // replace it with a regular expression wildcard.
+  foreach ($path_parts as &$part) {
+    if (count($part) > 0 && substr($part, 0, 1) === '%') {
+      $part = '[^/]+?';
+    }
+  }
+
+  // Generate a new path and, from it, a regular expressions pattern. Note we
+  // use #s as delimters because they won't appear in Drupal menu system paths.
+  $regex_path = implode('/', $path_parts);
+  $pattern = '#href="' . base_path() . $regex_path . '"#';
+
+  // Note that preg_match() returns FALSE if there was an error, 0 (which is
+  // falsy; hence the ===) if the string was not found, and 1 if the string was
+  // found.
+  return preg_match($pattern, $to_search) === 1;
+}
