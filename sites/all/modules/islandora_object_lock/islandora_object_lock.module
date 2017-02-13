@@ -1,0 +1,467 @@
+<?php
+
+/**
+ * @file
+ * Functionality for locking an object for a time period via XACML.
+ */
+
+define('ISLANDORA_OBJECT_LOCK_EXPIRY_PRED', 'lock-expiry');
+define('ISLANDORA_OBJECT_LOCK_USER_PRED', 'locked-by');
+define('ISLANDORA_OBJECT_LOCK_IS_MANAGEMENT_RULE_PRED', 'isManagementRule');
+define('ISLANDORA_OBJECT_LOCK_IS_USER_MANAGEMENT_RULE_PRED', 'isUserManagementRule');
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_object_lock_menu() {
+  $items = array();
+  $items['admin/islandora/tools/object-lock'] = array(
+    'title' => 'Object locking',
+    'access arguments' => array('administer islandora object locking'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_object_lock_admin_form'),
+    'file' => 'includes/admin.form.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['islandora/object/%islandora_object/request_unlock'] = array(
+    'title' => 'Request unlock',
+    'page callback' => 'islandora_object_lock_request_unlock',
+    'page arguments' => array(2),
+    'access callback' => 'islandora_object_lock_request_unlock_access',
+    'file' => 'includes/callbacks.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['islandora/object/%islandora_object/manage/datastreams/locking/lock'] = array(
+    'title' => 'Lock object',
+    'file' => 'includes/lock.form.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_object_lock_form_lock', 2, 'lock'),
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'islandora_object_lock_access_lock',
+    'access arguments' => array(2, 'lock'),
+  );
+  $items['islandora/object/%islandora_object/manage/datastreams/locking/unlock'] = array(
+    'title' => 'Remove object lock',
+    'file' => 'includes/lock.form.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_object_lock_form_lock', 2, 'unlock'),
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'islandora_object_lock_access_lock',
+    'access arguments' => array(2, 'unlock'),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function islandora_object_lock_permission() {
+  return array(
+    'administer islandora object locking' => array(
+      'title' => t('Administer Islandora object locking'),
+    ),
+    'add or remove islandora object lock' => array(
+      'title' => t('Add or remove Islandora object locks'),
+    ),
+    'manage islandora object lock' => array(
+      'title' => t('Manage Islandora object locks'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_cron().
+ */
+function islandora_object_lock_cron() {
+  module_load_include('inc', 'islandora_object_lock', 'includes/utilities');
+
+  $repository = new IslandoraTuque();
+  $lock_uri = ISLANDORA_RELS_EXT_URI;
+  $lock_pred = ISLANDORA_OBJECT_LOCK_EXPIRY_PRED;
+  $now = gmdate("Y-m-d\TH:i:s\Z");
+  $max_per_cron = variable_get('islandora_object_lock_cron_throttle', 30);
+  $query = <<<EOQ
+    PREFIX is: <$lock_uri>
+    SELECT ?expired ?date
+    FROM <#ri>
+    WHERE {
+      ?expired is:$lock_pred ?date .
+      FILTER(?date < '$now'^^xsd:dateTime)
+    }
+    LIMIT $max_per_cron
+EOQ;
+  $results = $repository->repository->ri->sparqlQuery($query);
+  if (count($results)) {
+    $loop_count = ($max_per_cron > count($results)) ? count($results) : $max_per_cron;
+    for ($i = 0; $i < $loop_count; $i++) {
+      $pid = $results[$i]['expired']['value'];
+      islandora_object_lock_remove_object_lock($pid);
+      watchdog('islandora_object_lock', 'Object lock removed by cron for PID: @pid', array('@pid' => $pid));
+    }
+  }
+}
+
+/**
+ * Implements hook_islandora_datastream_modified().
+ *
+ * Release a lock if a datastream is modified.
+ */
+function islandora_object_lock_islandora_datastream_modified(AbstractObject $object, AbstractDatastream $datastream) {
+  if (variable_get('islandora_object_lock_lift_lock_on_modify', TRUE)) {
+    module_load_include('inc', 'islandora_object_lock', 'includes/utilities');
+
+    $excluded_datastreams = array('RELS-EXT', 'POLICY');
+    if (!in_array($datastream->id, $excluded_datastreams)) {
+      $locked = islandora_object_lock_is_locked($object);
+      if ($locked) {
+        islandora_object_lock_remove_object_lock($object->id);
+      }
+    }
+  }
+}
+
+/**
+ * Lock an object.
+ *
+ * @param string $pid
+ *   The object's PID.
+ * @param object $user
+ *   The user object for the lock owner.
+ * @param NULL|int|bool $duration
+ *   NULL if using the default configured, an integer specifying the length of
+ *   the lock in minutes or FALSE if the duration is to be indefinite.
+ */
+function islandora_object_lock_set_object_lock($pid, $user = NULL, $duration = NULL) {
+  if (is_null($user)) {
+    global $user;
+  }
+
+  if (is_null($duration)) {
+    $duration = islandora_object_lock_compute_duration($pid);
+  }
+
+  if ($duration) {
+    $expiry_time = time() + (60 * $duration);
+    $expiry_date = gmdate("Y-m-d\TH:i:s\Z", $expiry_time);
+  }
+  else {
+    $expiry_date = 'indefinite';
+  }
+
+  $object = islandora_object_load($pid);
+
+  $xacml = new IslandoraXacml($object);
+
+  $management_rule = FALSE;
+  $user_in_rule = FALSE;
+  if ($xacml->managementRule->isPopulated()) {
+    $management_rule = TRUE;
+    $users_in_rule = $xacml->managementRule->getUsers();
+    if (in_array($user->name, $users_in_rule)) {
+      $user_in_rule = TRUE;
+    }
+  }
+
+  $xacml->managementRule->addUser($user->name);
+  $xacml->writeBackToFedora();
+
+  $type = RELS_TYPE_PLAIN_LITERAL;
+  if ($duration) {
+    $type = RELS_TYPE_DATETIME;
+  }
+  $object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_EXPIRY_PRED, $expiry_date, $type);
+  $object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_USER_PRED, $user->name, RELS_TYPE_PLAIN_LITERAL);
+
+  if ($management_rule) {
+    $object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_IS_MANAGEMENT_RULE_PRED, "TRUE", RELS_TYPE_PLAIN_LITERAL);
+    if ($user_in_rule) {
+      $object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_IS_USER_MANAGEMENT_RULE_PRED, "TRUE", RELS_TYPE_PLAIN_LITERAL);
+    }
+  }
+}
+
+/**
+ * Remove a lock from an object.
+ *
+ * @param string $pid
+ *   The object's PID.
+ */
+function islandora_object_lock_remove_object_lock($pid) {
+  drupal_save_session(FALSE);
+  $original_user = $GLOBALS['user'];
+  $GLOBALS['user'] = user_load(1);
+
+  $object = islandora_object_load($pid);
+  $locking_user = islandora_object_lock_get_lock_username($object);
+
+  $xacml = new IslandoraXacml($object);
+
+  $was_management_rule = $object->relationships->get(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_IS_MANAGEMENT_RULE_PRED);
+  if (!empty($was_management_rule)) {
+    $object->relationships->remove(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_IS_MANAGEMENT_RULE_PRED);
+    $was_user_management_rule = $object->relationships->get(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_IS_USER_MANAGEMENT_RULE_PRED);
+    if (empty($was_user_management_rule)) {
+      $object->relationships->remove(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_IS_USER_MANAGEMENT_RULE_PRED);
+      $xacml->managementRule->removeUser($locking_user);
+    }
+  }
+  else {
+    $xacml->managementRule->clear();
+  }
+  $xacml->writeBackToFedora();
+
+  $object->relationships->remove(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_EXPIRY_PRED);
+  $object->relationships->remove(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_USER_PRED);
+
+  $GLOBALS['user'] = $original_user;
+  drupal_save_session(TRUE);
+}
+
+/**
+ * Access callback for setting or removing locks.
+ *
+ * @param AbstractObject $object
+ *   The object that is being locked/unlocked.
+ * @param string $op
+ *   The operation, values may be: lock, unlock.
+ *
+ * @return bool
+ *   TRUE if access is granted.
+ */
+function islandora_object_lock_access_lock(AbstractObject $object, $op = NULL) {
+  module_load_include('inc', 'islandora_object_lock', 'includes/utilities');
+  $perm = FALSE;
+
+  $locked = islandora_object_lock_is_locked($object);
+  $can_lock = user_access('add or remove islandora object lock');
+  $can_manage = user_access('manage islandora object lock');
+
+  if ($op == 'lock' && !$locked && ($can_lock || $can_manage)) {
+    $perm = TRUE;
+  }
+
+  if ($op == 'unlock' && $locked && ($can_lock || $can_manage)) {
+    $perm = TRUE;
+  }
+
+  if (is_null($op) && ($can_lock || $can_manage)) {
+    $perm = TRUE;
+  }
+
+  if (!islandora_object_access(ISLANDORA_METADATA_EDIT, $object)) {
+    $perm = FALSE;
+  }
+
+  return $perm;
+}
+
+/**
+ * Determine the duration an object should be locked for.
+ *
+ * @param string $pid
+ *   The object's PID.
+ *
+ * @return int
+ *   The duration in minutes.
+ */
+function islandora_object_lock_compute_duration($pid) {
+  $locks = array();
+  $locks[] = variable_get('islandora_object_lock_duration', 30);
+
+  if (module_exists('islandora_object_lock_length')) {
+    module_load_include('inc', 'islandora_object_lock_length', 'includes/utilities');
+    $collection_locks = islandora_object_lock_length_get_available_lock_length($pid);
+    if ($collection_locks) {
+      $locks = $collection_locks;
+    }
+  }
+  $time = max($locks);
+  if ($time) {
+    $statement = "for $time min(s)";
+  }
+  else {
+    $statement = "indefinitely";
+  }
+  drupal_set_message(t('Lock duration set @time.', array('@time' => $statement)), 'status');
+  // Take the highest lock length available, and
+  // apply that to the object being locked.
+  return $time;
+}
+
+/**
+ * Return the username of an object's lock owner.
+ *
+ * @param AbstractObject $object
+ *   The Fedora object.
+ *
+ * @return string
+ *   The username.
+ */
+function islandora_object_lock_get_lock_username(AbstractObject $object) {
+  $users = $object->relationships->get(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_USER_PRED);
+  return $users[0]['object']['value'];
+}
+
+/**
+ * Return the expiry date for a lock.
+ *
+ * @param AbstractObject $object
+ *   The Fedora object.
+ *
+ * @return string
+ *   The expiry date.
+ */
+function islandora_object_lock_get_lock_expiry(AbstractObject $object) {
+  $expiry = $object->relationships->get(ISLANDORA_RELS_EXT_URI, ISLANDORA_OBJECT_LOCK_EXPIRY_PRED);
+  return $expiry[0]['object']['value'];
+}
+
+/**
+ * Implements hook_islandora_edit_object().
+ */
+function islandora_object_lock_islandora_view_object(AbstractObject $object) {
+  module_load_include('inc', 'islandora_object_lock', 'includes/utilities');
+  islandora_object_lock_handle_possible_lock_notice($object);
+}
+
+/**
+ * Checks if the user may have management rights on objects.
+ *
+ * @return bool
+ *   TRUE if they might, FALSE if they can't.
+ */
+function islandora_object_lock_request_unlock_access() {
+  $allowable_permissions = array(
+    ISLANDORA_MANAGE_PROPERTIES,
+    ISLANDORA_METADATA_EDIT,
+    ISLANDORA_ADD_DS,
+    ISLANDORA_PURGE,
+    ISLANDORA_INGEST,
+  );
+
+  foreach ($allowable_permissions as $allowable_permission) {
+    if (user_access($allowable_permission)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_mail().
+ *
+ * @global user
+ */
+function islandora_object_lock_mail($key, &$message, $params) {
+  global $user;
+  $object = $params['object'];
+
+  switch ($key) {
+    case 'request_unlock':
+      $message['subject'] = t('@user requests unlock of @label',
+        array('@user' => $user->name, '@label' => $object->label)
+      );
+
+      $message['body'][] = t("@user wishes to edit @label, you may unlock the object: @unlock_link",
+        array(
+          '@user' => $user->name,
+          '@label' => $object->label,
+          '@unlock_link' => url(
+            "islandora/object/{$object->id}/manage/datastreams/locking/unlock",
+            array('absolute' => TRUE)
+          ),
+        )
+      );
+      break;
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_delete_datastream_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($datastream) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $datastream->parent, $datastream->id, "datastream/{$datastream->id}/delete");
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_delete_object_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($object) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $object, NULL, 'delete');
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_xml_form_builder_datastream_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($object, $dsid) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $object, $dsid, "datastream/$dsid/edit", TRUE, NULL, array('update'));
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_revert_datastream_version_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($datastream, $version) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $datastream->parent, $datastream->id, "datastream/{$datastream->id}/revert");
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_datastream_version_replace_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($datastream) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $datastream->parent, $datastream->id, "datastream/{$datastream->id}/replace");
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_regenerate_datastream_derivative_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($datastream) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $datastream->parent, $datastream->id, "datastream/{$datastream->id}/regenerate");
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_regenerate_object_derivatives_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($object) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $object, NULL, 'regenerate');
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_object_properties_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($object) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $object, NULL, 'manage/properties');
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_delete_datastream_version_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($datastream, $version) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $datastream->parent, $datastream->id, "datastream/{$datastream->id}/version/$version/delete");
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function islandora_object_lock_form_islandora_add_datastream_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'islandora_object_lock', 'includes/form_handlers');
+  list($object) = $form_state['build_info']['args'];
+  islandora_object_lock_acquire_during_alter($form, $form_state, $object, NULL, 'manage/datastreams/add');
+}
