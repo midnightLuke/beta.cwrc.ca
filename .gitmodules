@@ -356,3 +356,6 @@
 [submodule "sites/default/modules/islandora_xslt_paths"]
         path = sites/default/modules/islandora_xslt_paths
         url = https://github.com/jefferya/islandora_xslt_paths.git
+[submodule "sites/default/modules/custom/cwrc_field_filler"]
+        path = sites/default/modules/custom/cwrc_field_filler
+        url = https://github.com/cwrc/cwrc_field_filler.git
