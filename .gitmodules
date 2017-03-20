@@ -307,7 +307,7 @@
         url = https://github.com/Islandora/islandora_solution_pack_compound.git
 [submodule "sites/all/modules/islandora_solution_pack_entities"]
         path = sites/all/modules/islandora_solution_pack_entities
-        url = https://github.com/cwrc/islandora_solution_pack_entities.git
+        url = https://github.com/islandora/islandora_solution_pack_entities.git
 [submodule "sites/all/modules/islandora_solution_pack_image"]
         path = sites/all/modules/islandora_solution_pack_image
         url = git://github.com/Islandora/islandora_solution_pack_image.git
@@ -356,3 +356,6 @@
 [submodule "sites/default/modules/islandora_xslt_paths"]
         path = sites/default/modules/islandora_xslt_paths
         url = https://github.com/jefferya/islandora_xslt_paths.git
+[submodule "sites/default/modules/custom/cwrc_field_filler"]
+        path = sites/default/modules/custom/cwrc_field_filler
+        url = https://github.com/cwrc/cwrc_field_filler.git
