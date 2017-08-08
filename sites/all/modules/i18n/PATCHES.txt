@@ -1,1 +1,0 @@
-- https://www.drupal.org/files/issues/1252144-115-support-wysiwyg.patch
