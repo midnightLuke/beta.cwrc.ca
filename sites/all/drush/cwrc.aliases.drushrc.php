@@ -27,3 +27,11 @@ $aliases['beta'] = array(
   'remote-host' => 'beta.cwrc.ca',
   'remote-user' => 'cwrcdesi',
 );
+
+$aliases['vm'] = array(
+  'root' => '/var/www/html',
+  'uri' => 'localhost:8181',
+  'remote-host' => 'vagrant.localhost',
+  'remote-user' => 'vagrant',
+  'ssh-options'  => '-p 2222',
+);
