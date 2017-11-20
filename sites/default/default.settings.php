@@ -628,3 +628,23 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  * @see drupal_clean_css_identifier()
  */
 # $conf['allow_css_double_underscores'] = TRUE;
+
+/**
+ * Load local development override configuration, if available.
+ *
+ * We skip this if we detect an Acquia or Pantheon environment so that we don't
+ * have to pay the cost of the file_exists().
+ *
+ * Use settings.local.php to override variables on secondary (staging,
+ * development, etc) installations of this site. Typically used to disable
+ * caching, JavaScript/CSS compression, re-routing of outgoing e-mails, and
+ * other things that should not happen on development and testing sites.
+ *
+ * Keep this code block at the end of this file to take full effect.
+ */
+if (!isset($_ENV['AH_SITE_ENVIRONMENT']) && !defined('PANTHEON_ENVIRONMENT')) {
+  $conf_path = conf_path();
+  if (file_exists(DRUPAL_ROOT . '/' . $conf_path . '/settings.local.php')) {
+    include DRUPAL_ROOT . '/' . $conf_path . '/settings.local.php';
+  }
+}

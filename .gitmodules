@@ -359,3 +359,6 @@
 [submodule "sites/default/modules/custom/cwrc_field_filler"]
         path = sites/default/modules/custom/cwrc_field_filler
         url = https://github.com/cwrc/cwrc_field_filler.git
+[submodule "sites/default/modules/islandora_cwrc_credit_visualization"]
+	path = sites/default/modules/islandora_cwrc_credit_visualization
+	url = https://github.com/cwrc/islandora_cwrc_credit_visualization.git
