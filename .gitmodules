@@ -362,3 +362,6 @@
 [submodule "sites/default/modules/islandora_cwrc_credit_visualization"]
 	path = sites/default/modules/islandora_cwrc_credit_visualization
 	url = https://github.com/cwrc/islandora_cwrc_credit_visualization.git
+[submodule "sites/all/modules/islandora_bagit_extension"]
+	path = sites/all/modules/islandora_bagit_extension
+	url = https://github.com/cwrc/islandora_bagit_extension.git
